@@ -3,6 +3,7 @@ package entities;
 import java.time.LocalDate;
 import java.util.Date;
 public abstract class Account {
+
     protected Long Id;
     protected String accountNumber;
     protected String routingNumber;
@@ -11,14 +12,14 @@ public abstract class Account {
     protected Double interestRate;
     public Account() {
     }
-    public Account(Long id, String accountNumber, String routingNumber, Double balance, LocalDate dateOfOpening, Double interestRate) {
-        Id = id;
-        this.accountNumber = accountNumber;
-        this.routingNumber = routingNumber;
-        this.balance = balance;
-        this.dateOfOpening = dateOfOpening;
-        this.interestRate = interestRate;
-    }
+//    public Account(Long id, String accountNumber, String routingNumber, Double balance, LocalDate dateOfOpening, Double interestRate) {
+//        Id = id;
+//        this.accountNumber = accountNumber;
+//        this.routingNumber = routingNumber;
+//        this.balance = balance;
+//        this.dateOfOpening = dateOfOpening;
+//        this.interestRate = interestRate;
+//    }
     public Long getId() {
         return Id;
     }

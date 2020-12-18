@@ -1,28 +1,30 @@
 package entities;
 
+import javax.persistence.*;
 import java.time.LocalDate;
+@Entity
 public class User {
-    private String username;
-    private String password;
+    @Id
+    private Long Id;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
     private String socialSecurity;
     private String address;
+
     public User() {
     }
-    public String getUsername() {
-        return username;
+
+
+    public Long getId() {
+        return Id;
     }
-    public void setUsername(String username) {
-        this.username = username;
+
+    public void setId(Long id) {
+        Id = id;
     }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
+
+
     public String getFirstName() {
         return firstName;
     }

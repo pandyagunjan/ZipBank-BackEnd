@@ -2,12 +2,13 @@ package controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-import services.UserServices;
+import services.LoginServices;
 
 @RestController
-public class UserController {
+public class LoginController {
+
     @Autowired
-    private UserServices userServices;
+    private LoginServices loginServices;
 
 
 }
