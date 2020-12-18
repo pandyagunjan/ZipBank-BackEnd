@@ -6,12 +6,17 @@ import javax.persistence.*;
 public class Login {
     @Id
     private Long Id;
+    private Long userId;
     private String username;
     private String password;
 
     public Long getId() {
         return Id;
     }
+
+    public Long getUserId() {   return userId;  }
+
+    public void setUserId(Long userId) {     this.userId = userId;   }
 
     public void setId(Long id) {
         Id = id;
