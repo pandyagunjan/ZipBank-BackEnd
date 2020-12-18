@@ -13,24 +13,24 @@ public class UserServices {
     @Autowired
     private UserRepo userRepo;
 
-    public Optional<User> createUser()
+    public Optional<User> createUser(User user)
     {
         //Re-direct to POST in USER controller
         return null;
     }
 
-    public Optional<User> readUser()
+    public Optional<User> readUser(Long id)
     {
         //Re-direct to GET in USER controller
         return null;
     }
-    public Boolean removeUser()
+    public Boolean deleteUser(Long id)
     {
         //Re-direct to DELETE in USER controller
         return true;
     }
 
-    public Optional<User> updateUser()
+    public Optional<User> updateUser(Long id ,User user)
     {
         //Re-direct to PUT in USER controller
         return null;

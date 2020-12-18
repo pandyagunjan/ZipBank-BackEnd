@@ -1,9 +1,11 @@
 package entities;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+@Entity
 public abstract class Account {
-
+    @Id
     protected Long Id;
     protected String accountNumber;
     protected String routingNumber;

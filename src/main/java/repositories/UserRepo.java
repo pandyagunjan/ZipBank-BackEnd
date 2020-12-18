@@ -11,7 +11,8 @@ public interface UserRepo extends CrudRepository<User,Long> {
 
     User findUserById(Integer Id);
 
-    List<User> findAll();
+  //  List<User> findAll();
+
     //update  --save
     //create -- save
     //delete --delete
