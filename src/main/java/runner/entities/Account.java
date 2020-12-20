@@ -1,5 +1,7 @@
 package runner.entities;
 
+import runner.enums.AccountType;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
