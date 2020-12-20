@@ -10,5 +10,5 @@ POSTMAN - POST
     "dateOfOpening": "2004-01-22",
     "interestRate": 12.5,
     "routingNumber": "2001445",
-    "userId": 1
+    "user": 1
 }

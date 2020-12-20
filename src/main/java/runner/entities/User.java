@@ -21,9 +21,9 @@ public class User {
     private String socialSecurity;
     private String address;
 
-//    @OneToMany(cascade=ALL,fetch=FetchType.EAGER)
-//    @JoinColumn(name="Id",referencedColumnName = "Id")
-//    private List<Account> accounts = new ArrayList<>();
+    @OneToMany(cascade=ALL,fetch=FetchType.EAGER,mappedBy = "user" )
+    //@JoinColumn(name="Id",referencedColumnName = "Id")
+    private List<Account> accounts = new ArrayList<>();
 
     public User() {
     }
