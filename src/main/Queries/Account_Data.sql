@@ -1,5 +1,5 @@
 
-insert into account values (2,'ACCOUNT-123123','CHECKING',252222.22,'2004-01-22',12.22,234234,1);
+insert into account values (1,'ACCOUNT-123123','CHECKING',252222.22,'2004-01-22',12.22,234234,1);
 
 POSTMAN - POST
 
