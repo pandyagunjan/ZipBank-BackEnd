@@ -10,7 +10,7 @@ public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String accountType;
+    private String accountNumber;
     private String transactionType;
     private Double balanceAfterTransaction;
     private LocalDate dateOfTransaction;

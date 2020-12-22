@@ -7,7 +7,6 @@ public class Login {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private Long userId;
     private String username;
     private String password;
@@ -26,8 +25,6 @@ public class Login {
     public Long getUserId() { return userId;  }
 
     public void setUserId(Long userId) {     this.userId = userId;   }
-
-
 
     public String getUsername() {
         return username;
