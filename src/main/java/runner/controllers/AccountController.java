@@ -22,4 +22,5 @@ public class AccountController {
     public ResponseEntity<Account> create(@RequestBody Account account) {
         return new ResponseEntity<>(accountServices.createAccount(account), HttpStatus.CREATED);
     }
+
 }
