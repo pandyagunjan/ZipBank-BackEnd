@@ -14,16 +14,16 @@ public class AccountServices {
     private AccountRepo accountRepo;
     //CRUD methods
 
-    public Optional<Account> createAccount()
+    public Account createAccount(Account account)
     {
         //Re-direct to POST in ACCOUNT controller
-        return null;
+        return accountRepo.save(account);
     }
 
-    public Optional<Account> readAccount()
+    public Account readAccount(Long id)
     {
         //Re-direct to GET in ACCOUNT controller
-        return null;
+        return accountRepo.findAccountById(id);
     }
     public Boolean removeAccount()
     {

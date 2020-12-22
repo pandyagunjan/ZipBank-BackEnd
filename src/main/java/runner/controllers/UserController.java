@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import runner.entities.User;
 import runner.services.UserServices;
-
+@RequestMapping("/user")
 @RestController
 public class UserController {
     @Autowired
     private UserServices userServices;
 
-    @GetMapping(value = "/user/read/{id}")
+    @GetMapping(value = "/read/{id}")
     public ResponseEntity<User> readById(@PathVariable Long id) {
         return new ResponseEntity<>(userServices.readUser(id), HttpStatus.OK);
     }

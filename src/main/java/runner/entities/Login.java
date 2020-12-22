@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Login {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long userId;
     private String username;
