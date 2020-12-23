@@ -42,29 +42,23 @@ public class User {
     @OneToMany(cascade= PERSIST,fetch = FetchType.EAGER)
     private Set<Account> accounts;
 
-//    @JsonBackReference
-//    @OneToMany(cascade=ALL,fetch=FetchType.EAGER, mappedBy = "user")
-//    private List<Account> accounts = new ArrayList<>();
-
     public User() {
     }
 
-//    public List<Account> getAccounts() {
-//        return accounts;
-//    }
-//
-//    public void setAccounts(List<Account> accounts) {
-//        this.accounts = accounts;
-//    }
+    public User(Long id, String firstName, String middleName, String lastName, String socialSecurity) {
+        this.id = id;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.socialSecurity = socialSecurity;
+    }
 
     public Set<Account> getAccounts() {
         return accounts;
     }
-
     public void setAccounts(Set<Account> accounts) {
         this.accounts = accounts;
     }
-
     public Long getId() {
         return id;
     }
@@ -89,12 +83,6 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = this.dateOfBirth;
-    }
     public String getSocialSecurity() {
         return socialSecurity;
     }
@@ -116,17 +104,15 @@ public class User {
     public Address getAddress() {
         return address;
     }
-
     public void setAddress(Address address) {
         this.address = address;
     }
-
     public Login getLogin() {
         return login;
     }
-
     public void setLogin(Login login) {
         this.login = login;
     }
-
+    public LocalDate getDateOfBirth() {   return dateOfBirth; }
+    public void setDateOfBirth(LocalDate dateOfBirth) {   this.dateOfBirth = dateOfBirth;  }
 }
