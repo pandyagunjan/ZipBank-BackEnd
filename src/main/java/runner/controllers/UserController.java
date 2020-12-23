@@ -21,11 +21,6 @@ public class UserController {
         else
             return new ResponseEntity<>(userServices.readUser(id), HttpStatus.OK);
     }
-
-//  @GetMapping(value = "/readAll")
-//    public ResponseEntity<List<User>> readAll() {
-//       return new ResponseEntity<>(userServices.readAll(), HttpStatus.OK);
-//  }
     @PostMapping(value = "/create")
     public ResponseEntity<User> create(@RequestBody User user) {
         return new ResponseEntity<>(userServices.createUser(user), HttpStatus.CREATED);
