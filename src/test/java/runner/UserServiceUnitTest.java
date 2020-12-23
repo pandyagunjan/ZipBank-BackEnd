@@ -17,7 +17,7 @@ import runner.services.UserServices;
 public class UserServiceUnitTest {
     @Autowired
     private UserServices userServices;
-    UserServices mock = Mockito.mock(UserServices.class);
+   // UserServices mock = Mockito.mock(UserServices.class);
 
     @Test
     public void readUserTest() {
