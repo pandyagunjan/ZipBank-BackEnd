@@ -1,44 +1,55 @@
 package runner.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import runner.enums.AccountType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long id;
-    //@Column(name = "user_id")
-    @ManyToOne
-    private User user;
-    @Column(name = "account_number")
-    protected String accountNumber;
-    @Column(name = "routing_number")
-    protected String routingNumber;
+    private Long id;
+    @Column(nullable = false)
+    private String accountNumber;
+    @Column(nullable = false)
+    private String routingNumber;
     @Enumerated(EnumType.STRING)
-    @Column(name = "account_type")
-    protected AccountType accountType; //enum
-    @Column(name = "balance")
-    protected Double balance;
-    @Column(name = "date_of_opening")
-    protected LocalDate dateOfOpening;
-    @Column(name = "interest_rate")
-    protected Double interestRate;
+    @Column(nullable = false)
+    private AccountType accountType; //enum
+    @Column(nullable = false)
+    private Double balance;
+    @Column(nullable = false)
+    private LocalDate dateOfOpening;
+    @Column(nullable = false)
+    private Double interestRate;
+
+    @JsonBackReference(value = "name1")
+    @OneToMany(mappedBy = "account" ,cascade= CascadeType.ALL, fetch=FetchType.EAGER)
+    private Set<Transaction> transactionsList;
+
+    @JsonBackReference (value = "name2")
+    @ManyToOne
+    @JoinColumn(name = "UserId", nullable = false)
+    private User user;
+
+//    @ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+//    private User user;
 
     public Account() {
     }
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
-     public String getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
@@ -84,5 +95,21 @@ public class Account {
 
     public void setInterestRate(Double interestRate) {
         this.interestRate = interestRate;
+    }
+
+    public Set<Transaction> getTransactionsList() {
+        return transactionsList;
+    }
+
+    public void setTransactionsList(Set<Transaction> transactionsList) {
+        this.transactionsList = transactionsList;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
