@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.PERSIST;
 
 @Entity
 public class User {
@@ -29,16 +30,16 @@ public class User {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = PERSIST,fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn //sharing primary key with address since creating a new user requires address anyways
     private Address address;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = PERSIST,fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn //sharing primary key with user login since creating a new user requires a login anyways
     private Login login;
 
     //@JsonManagedReference
-    @OneToMany(mappedBy = "user",cascade= CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(cascade= PERSIST,fetch = FetchType.EAGER)
     private Set<Account> accounts;
 
 //    @JsonBackReference

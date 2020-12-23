@@ -6,6 +6,7 @@ import java.time.LocalDate;
 @Entity
 public class Address {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "userId") //references userID from user
     private Long id;
     @Column(nullable = false)
@@ -20,7 +21,7 @@ public class Address {
     private String zipcode;
 
     @OneToOne
-    @MapsId
+   // @MapsId
     @JoinColumn(name = "userId")
     private User user;
 

@@ -35,7 +35,7 @@ public class Account {
 
     @JsonBackReference (value = "name2")
     @ManyToOne
-    @JoinColumn(name = "UserId", nullable = false)
+    @JoinColumn(name = "UserId")//, insert = "false" , update="false")
     private User user;
 
 //    @ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)

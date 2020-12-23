@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Login {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "userId") //references userID from user
     private Long id;
 //    @Column(nullable = false)
@@ -15,7 +16,7 @@ public class Login {
     private String password;
 
     @OneToOne
-    @MapsId
+    //@MapsId
     @JoinColumn(name = "userId")
     private User user;
 
