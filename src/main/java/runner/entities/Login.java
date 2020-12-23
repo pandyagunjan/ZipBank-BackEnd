@@ -5,11 +5,19 @@ import javax.persistence.*;
 @Entity
 public class Login {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "userId") //references userID from user
     private Long id;
-    private Long userId;
+//    @Column(nullable = false)
+//    private Long userId;
+    @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "userId")
+    private User user;
 
     public Login() {
     }
@@ -22,9 +30,9 @@ public class Login {
         this.id = id;
     }
 
-    public Long getUserId() { return userId;  }
-
-    public void setUserId(Long userId) {     this.userId = userId;   }
+//    public Long getUserId() { return userId;  }
+//
+//    public void setUserId(Long userId) {     this.userId = userId;   }
 
     public String getUsername() {
         return username;
