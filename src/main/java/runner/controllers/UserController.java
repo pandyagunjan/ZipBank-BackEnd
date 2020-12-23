@@ -16,7 +16,7 @@ public class UserController {
     private UserServices userServices;
 
     @GetMapping(value = "/read/{id}")
-    public ResponseEntity<Optional<User>> readById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<User> readById(@PathVariable Long id) throws Exception {
         if(new ResponseEntity<>(userServices.readUser(id), HttpStatus.OK) == null) throw new Exception("Error , the user id is null") ;
         else
             return new ResponseEntity<>(userServices.readUser(id), HttpStatus.OK);

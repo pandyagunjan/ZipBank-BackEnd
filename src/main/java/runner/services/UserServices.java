@@ -18,9 +18,9 @@ public class UserServices {
             return (User) userRepo.save(user);
     }
 
-    public Optional<User> readUser(Long id)
+    public User readUser(Long id)
     {
-      return Optional.of(userRepo.findUserById(id));
+      return userRepo.findUserById(id);
     }
     public Boolean deleteUser(Long id)
     {

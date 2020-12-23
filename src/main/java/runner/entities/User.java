@@ -26,6 +26,15 @@ public class User {
 
     public User() {
     }
+
+    public User(Long id, String firstName, String lastName, String socialSecurity, String address) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.socialSecurity = socialSecurity;
+        this.address = address;
+    }
+
     public List<Account> getAccounts() {
         return accounts;
     }
