@@ -5,14 +5,17 @@ import runner.enums.AccountType;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+import static javax.persistence.CascadeType.ALL;
+
 @Entity
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
     //@Column(name = "user_id")
-    @ManyToOne
+    @ManyToOne(cascade=ALL,fetch=FetchType.EAGER)
     private User user;
+
     @Column(name = "account_number")
     protected String accountNumber;
     @Column(name = "routing_number")
@@ -28,6 +31,14 @@ public class Account {
     protected Double interestRate;
 
     public Account() {
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getId() {
@@ -69,15 +80,10 @@ public class Account {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
-
     public LocalDate getDateOfOpening() {
         return dateOfOpening;
     }
-
-    public void setDateOfOpening(LocalDate dateOfOpening) {
-        this.dateOfOpening = dateOfOpening;
-    }
-
+    public void setDateOfOpening(LocalDate dateOfOpening) {    this.dateOfOpening = dateOfOpening;   }
     public Double getInterestRate() {
         return interestRate;
     }

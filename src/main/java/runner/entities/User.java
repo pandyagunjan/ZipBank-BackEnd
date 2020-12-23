@@ -20,22 +20,28 @@ public class User {
     @Column(name ="socialsecurity")
     private String socialSecurity;
     private String address;
-
-    @OneToMany(cascade=ALL,fetch=FetchType.EAGER,mappedBy = "user" )
+    @OneToMany(cascade=ALL,fetch=FetchType.EAGER)//,mappedBy = "user")
     //@JoinColumn(name="Id",referencedColumnName = "Id")
     private List<Account> accounts = new ArrayList<>();
 
     public User() {
     }
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+
 
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getFirstName() {
         return firstName;
     }
@@ -48,12 +54,15 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public LocalDate getDateOfBirth() {
+
+    public LocalDate getDateofbirth() {
         return dateofbirth;
     }
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+
+    public void setDateofbirth(LocalDate dateofbirth) {
         this.dateofbirth = dateofbirth;
     }
+
     public String getSocialSecurity() {
         return socialSecurity;
     }

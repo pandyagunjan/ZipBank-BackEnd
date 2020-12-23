@@ -13,27 +13,33 @@ public class UserServices {
     @Autowired
     private UserRepo userRepo;
 
-    public Optional<User> createUser(User user)
+    public User createUser(User user)
     {
-        //Re-direct to POST in USER controller
-        return null;
+            return (User) userRepo.save(user);
     }
 
-    public User readUser(Long id)
+    public Optional<User> readUser(Long id)
     {
-        //Re-direct to GET in USER controller
-        return userRepo.findUserById(id);
+      return Optional.of(userRepo.findUserById(id));
     }
     public Boolean deleteUser(Long id)
     {
-        //Re-direct to DELETE in USER controller
-        return true;
+        User userFromDB = userRepo.findUserById(id);
+        userRepo.delete(userFromDB);
+        return userRepo.existsById(id);
     }
 
-    public Optional<User> updateUser(Long id ,User user)
+    public User updateUser(Long id ,User user)
     {
-        //Re-direct to PUT in USER controller
-        return null;
+
+        User userFromDB = userRepo.findUserById(id);
+        userFromDB.setFirstName(user.getFirstName());
+        userFromDB.setLastName(user.getLastName());
+        userFromDB.setDateofbirth(user.getDateofbirth());
+        userFromDB.setSocialSecurity(user.getSocialSecurity());
+        userFromDB.setAddress(user.getAddress());
+        userFromDB.setAccounts(user.getAccounts());
+        return userFromDB;
     }
 
 }
