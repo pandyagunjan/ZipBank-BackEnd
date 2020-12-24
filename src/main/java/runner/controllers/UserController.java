@@ -6,13 +6,23 @@ import org.springframework.web.bind.annotation.*;
 import runner.entities.User;
 import runner.services.UserServices;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @RequestMapping("/user")
 @RestController
 public class UserController {
     @Autowired
     private UserServices userServices;
+
+    private final static Logger logger = Logger.getLogger(UserController.class.getName());
+
+
     @GetMapping(value = "/read/{id}")
     public ResponseEntity<User> readById(@PathVariable Long id) throws Exception {
+        logger.log(Level.INFO, "This is an information !");
+        logger.log(Level.SEVERE, "Terrible Error!");
+        logger.log(Level.WARNING, "Not So Bad Error , Its Warning!");
         if(new ResponseEntity<>(userServices.readUser(id), HttpStatus.OK) == null) throw new Exception("Error , the user id is null") ;
         else
             return new ResponseEntity<>(userServices.readUser(id), HttpStatus.OK);

@@ -16,7 +16,7 @@ import runner.services.UserServices;
 @SpringBootTest(classes = AppRunner.class)
 public class UserServiceUnitTest {
     @Autowired
-    private UserServices userServices;
+    private UserServices userServices; //Calls the mockito
    // UserServices mock = Mockito.mock(UserServices.class);
 
     @Test
