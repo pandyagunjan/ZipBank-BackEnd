@@ -115,4 +115,21 @@ public class User {
     }
     public LocalDate getDateOfBirth() {   return dateOfBirth; }
     public void setDateOfBirth(LocalDate dateOfBirth) {   this.dateOfBirth = dateOfBirth;  }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", socialSecurity='" + socialSecurity + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address=" + address +
+                ", login=" + login +
+                ", accounts=" + accounts +
+                '}';
+    }
 }

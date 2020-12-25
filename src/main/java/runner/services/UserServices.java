@@ -9,6 +9,7 @@ public class UserServices {
     //CRUD methods
     @Autowired
     private UserRepo userRepo;
+
     public User createUser(User user)
     {
         return (User) userRepo.save(user);
@@ -26,6 +27,7 @@ public class UserServices {
 
     public User updateUser(Long id ,User user)
     {
+
         User userFromDB = userRepo.findUserById(id);
         userFromDB.setFirstName(user.getFirstName());
         userFromDB.setLastName(user.getLastName());
