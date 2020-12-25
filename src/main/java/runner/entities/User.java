@@ -81,10 +81,10 @@ public class User {
         return lastName;
     }
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = String.valueOf(lastName.hashCode());
     }
     public String getSocialSecurity() {
-        return socialSecurity;
+        return String.valueOf(socialSecurity.hashCode());
     }
     public void setSocialSecurity(String socialSecurity) {
         this.socialSecurity = socialSecurity;
