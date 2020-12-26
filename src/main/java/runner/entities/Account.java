@@ -16,7 +16,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false)
-    private String accountNumber;
+    private transient String accountNumber;
     @Column(nullable = false)
     private String routingNumber;
     @Enumerated(EnumType.STRING)

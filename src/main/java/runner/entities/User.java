@@ -21,7 +21,7 @@ public class User {
     private String middleName;
     @Column(nullable = false)
     private String lastName;
-    //@Column(nullable = false)
+    @Column(nullable = false)
     private LocalDate dateOfBirth;
     @Column(nullable = false)
     private String socialSecurity;
@@ -39,7 +39,7 @@ public class User {
     private Login login;
 
     //@JsonManagedReference
-    @OneToMany(cascade= PERSIST,fetch = FetchType.EAGER)
+    @OneToMany(cascade= ALL,fetch = FetchType.EAGER)
     private Set<Account> accounts;
 
     public User() {
@@ -53,68 +53,93 @@ public class User {
         this.socialSecurity = socialSecurity;
     }
 
-    public Set<Account> getAccounts() {
-        return accounts;
-    }
-    public void setAccounts(Set<Account> accounts) {
-        this.accounts = accounts;
-    }
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getFirstName() {
         return firstName;
     }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
     public String getMiddleName() {
         return middleName;
     }
+
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
+
     public String getLastName() {
         return lastName;
     }
+
     public void setLastName(String lastName) {
-        this.lastName = String.valueOf(lastName.hashCode());
+        this.lastName = lastName;
     }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public String getSocialSecurity() {
-        return String.valueOf(socialSecurity.hashCode());
+        return socialSecurity;
     }
+
     public void setSocialSecurity(String socialSecurity) {
         this.socialSecurity = socialSecurity;
     }
+
     public String getEmail() {
         return email;
     }
-    public void setEmail(String address) {
-        this.email = address;
+
+    public void setEmail(String email) {
+        this.email = email;
     }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
     public Address getAddress() {
         return address;
     }
+
     public void setAddress(Address address) {
         this.address = address;
     }
+
     public Login getLogin() {
         return login;
     }
+
     public void setLogin(Login login) {
         this.login = login;
     }
-    public LocalDate getDateOfBirth() {   return dateOfBirth; }
-    public void setDateOfBirth(LocalDate dateOfBirth) {   this.dateOfBirth = dateOfBirth;  }
+
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
 
     @Override
     public String toString() {
@@ -132,4 +157,6 @@ public class User {
                 ", accounts=" + accounts +
                 '}';
     }
+
+
 }

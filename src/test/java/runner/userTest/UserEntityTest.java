@@ -1,6 +1,5 @@
 package runner.userTest;
 
-import org.apache.tomcat.jni.Local;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,10 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import runner.AppRunner;
-import runner.entities.Account;
-import runner.entities.Address;
-import runner.entities.Login;
-import runner.entities.User;
+import runner.entities.*;
 import runner.enums.AccountType;
 
 import java.time.LocalDate;
@@ -34,7 +30,7 @@ public class UserEntityTest {
     @Before
     public void startUp()
     {
-        user=new User();
+        user= new UserBuilder().createUser();
     }
 
     @Test

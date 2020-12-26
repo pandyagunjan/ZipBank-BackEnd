@@ -9,6 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import runner.AppRunner;
 import runner.entities.User;
+import runner.entities.UserBuilder;
 import runner.services.UserServices;
 
 @ActiveProfiles("test")
@@ -21,7 +22,7 @@ public class UserServiceUnitTest {
 
     @Test
     public void readUserTest() {
-        User user = new User(1L,"First Name", "Middle",  "Last Name", "125455");
+        User user = new UserBuilder().setId(1L).setFirstName("First Name").setMiddleName("Middle").setLastName("Last Name").setSocialSecurity("125455").createUser();
         user.setId(1L);
         String expectedName= "First Name";
         Mockito.when(userServices.readUser(1L)).thenReturn(user);
@@ -32,25 +33,25 @@ public class UserServiceUnitTest {
 
     @Test
     public void createUserTest() {
-        User user = new User(1L,"First Name", "Middle",  "Last Name", "125455");
+        User user = new UserBuilder().setId(1L).setFirstName("First Name").setMiddleName("Middle").setLastName("Last Name").setSocialSecurity("125455").createUser();
         String expectedName= "First Name";
-        Mockito.when(userServices.createUser(user)).thenReturn(new User());
+        Mockito.when(userServices.createUser(user)).thenReturn(new UserBuilder().createUser());
         String actualName = user.getFirstName();
         Assert.assertEquals(expectedName, actualName);
 
     }
     @Test
     public void deleteUserTest() {
-        User user = new User(1L,"First Name", "Middle",  "Last Name", "125455");
+        User user = new UserBuilder().setId(1L).setFirstName("First Name").setMiddleName("Middle").setLastName("Last Name").setSocialSecurity("125455").createUser();
         Boolean expected = false;
-        Mockito.when(userServices.createUser(user)).thenReturn(new User());
+        Mockito.when(userServices.createUser(user)).thenReturn(new UserBuilder().createUser());
         Boolean actual=userServices.deleteUser(1L);
         Assert.assertEquals(expected, actual);
     }
 
     @Test
-    public void updateeUserTest() {
-        User user1 = new User(1L,"First Name", "Middle",  "Last Name", "125455");
+    public void updateeUserTest() throws Exception {
+        User user1 = new UserBuilder().setId(1L).setFirstName("First Name").setMiddleName("Middle").setLastName("Last Name").setSocialSecurity("125455").createUser();
         String expectedUpdateName= "Update the First Name";
         Mockito.when(userServices.createUser(user1)).thenReturn(user1);
         user1.setFirstName(expectedUpdateName);
