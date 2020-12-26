@@ -1,4 +1,4 @@
-package runner.userTest;
+package runner.configuration;
 
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;

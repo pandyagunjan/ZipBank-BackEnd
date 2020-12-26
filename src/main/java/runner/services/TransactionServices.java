@@ -3,7 +3,7 @@ package runner.services;
 import runner.entities.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import runner.repositories.TransactionRepo;
+import runner.configuration.TransactionRepo;
 
 import java.util.Optional;
 @Service

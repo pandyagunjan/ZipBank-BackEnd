@@ -2,8 +2,7 @@ package runner.services;
 import runner.entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import runner.entities.User;
-import runner.repositories.AccountRepo;
+import runner.configuration.AccountRepo;
 import java.util.Optional;
 @Service
 public class AccountServices {

@@ -1,21 +1,23 @@
 package runner.services;
 import runner.entities.Account;
-import runner.entities.Address;
 import runner.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import runner.repositories.UserRepo;
+import runner.configuration.UserRepo;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class UserServices {
     //CRUD methods
-    @Autowired
-    private UserRepo userRepo;
 
+    private UserRepo userRepo;
+    @Autowired
+    public UserServices(UserRepo userRepo)
+    {
+        this.userRepo=userRepo;
+    }
     public User createUser(User user)
     {
         return (User) userRepo.save(user);

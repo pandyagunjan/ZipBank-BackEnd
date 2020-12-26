@@ -1,8 +1,9 @@
-package runner.userTest;
+package runner.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,10 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import runner.controllers.UserController;
 import runner.entities.User;
-import runner.entities.UserBuilder;
 
 import javax.xml.ws.Response;
 
@@ -42,39 +42,33 @@ public class UserControllerTest {
     public void setUp() {
         userController = Mockito.mock(UserController.class);
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        this.user = new UserBuilder().setId(1L).setFirstName("First Name").setMiddleName("Middle").setLastName("Last Name").setSocialSecurity("125455").createUser();
-
+        this.user = new User( 1L, "Radha" , "Ramnik","Patel","234324");
     }
 
     @Test
     public void findUserTest() throws Exception {
-
         Mockito.when(userController.readById(1L)).thenReturn(new ResponseEntity<>(user, HttpStatus.OK));
         mockMvc.perform(get("/user/read/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName", is("First Name")))
+                .andExpect(jsonPath("$.firstName", is("Radha")))
                 .andExpect(jsonPath("$.id", is(1)));
     }
 
     @Test
     public void createUserTest() throws Exception {
-        User user1 = new UserBuilder().setId(2L).setFirstName("Gunjan").setMiddleName("S").setLastName("Pandya").setSocialSecurity("454545").createUser();
+        User user1 = new User( 2L, "Rekha" , "Jagdish","Patel","234234324");
+//        BDDMockito
+//                .given(userController.create(user1))
+//                .willReturn(user1);
+
         String jsonRequest = objectMapper.writeValueAsString(user1);
-       // Mockito.when(userController.create(jsonRequest)).thenReturn(new ResponseEntity<>(user1, HttpStatus.CREATED));
-        MvcResult result = mockMvc.perform(post("/user/create")
+      //  Mockito.when(userController.create(jsonRequest)).thenReturn(new ResponseEntity<>(user1, HttpStatus.CREATED));
+                 mockMvc.perform(post("/user/create")
                 .content(jsonRequest)
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andReturn();
-
-       // System.out.println(result);
-
-        String resultContext = result.getResponse().getContentAsString();
-
-        Response response = objectMapper.readValue(resultContext,Response.class);
-        //Assert.assertTrue(response.isStatus()==Boolean.TRUE);
-
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(jsonRequest));
     }
-
 
 }
