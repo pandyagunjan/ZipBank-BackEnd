@@ -38,7 +38,6 @@ public class UserEntityTest {
         ObjectMapper objectMapper= new ObjectMapper();
         User expectedUser = new User( 1L, "Radha" , "Ramnik","Patel","234324");
         String json = objectMapper.writeValueAsString(expectedUser);
-
         User actualUser=objectMapper.readValue(json,User.class);
         Assert.assertEquals(expectedUser.getId(),actualUser.getId());
 

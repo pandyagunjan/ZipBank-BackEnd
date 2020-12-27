@@ -2,7 +2,7 @@ package runner.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import runner.configuration.LoginRepo;
+import runner.repositories.LoginRepo;
 
 @Service
 public class LoginServices {

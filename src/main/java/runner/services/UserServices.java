@@ -3,7 +3,7 @@ import runner.entities.Account;
 import runner.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import runner.configuration.UserRepo;
+import runner.repositories.UserRepo;
 
 import java.util.HashSet;
 import java.util.Set;

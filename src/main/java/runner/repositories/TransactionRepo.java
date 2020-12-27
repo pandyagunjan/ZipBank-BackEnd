@@ -1,4 +1,4 @@
-package runner.configuration;
+package runner.repositories;
 
 import runner.entities.Transaction;
 import org.springframework.data.repository.CrudRepository;

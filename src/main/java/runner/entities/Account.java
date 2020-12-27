@@ -1,13 +1,10 @@
 package runner.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import runner.enums.AccountType;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Set;
 
 @Entity
@@ -33,13 +30,14 @@ public class Account {
     @OneToMany(mappedBy = "account" ,cascade= CascadeType.ALL, fetch=FetchType.EAGER)
     private Set<Transaction> transactionsList;
 
-    @JsonBackReference (value = "name2")
-    @ManyToOne
-    @JoinColumn(name = "UserId")//, insert = "false" , update="false")
-    private User user;
-
-//    @ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+   // @JsonBackReference (value = "name2")
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")//, insert = "false" , update="false")
 //    private User user;
+
+    @ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Account() {
     }

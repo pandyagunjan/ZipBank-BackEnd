@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import runner.AppRunner;
@@ -25,7 +24,7 @@ public class UserServiceTest {
         User user = new User( 1L, "Radha" , "Ramnik","Patel","234324");
         user.setId(1L);
         String expectedName= "Radha";
-        Mockito.when(userServices.readUser(1L)).thenReturn(user);
+        //Mockito.when(userServices.readUser(1L)).thenReturn(user);
         String testName = userServices.readUser(1L).getFirstName();
         Assert.assertEquals(expectedName, testName);
     }
@@ -35,7 +34,7 @@ public class UserServiceTest {
     public void createUserTest() {
         User user = new User( 1L, "Radha" , "Ramnik","Patel","234324");
         String expectedName= "Radha";
-        Mockito.when(userServices.createUser(user)).thenReturn(new User());
+        Mockito.when(userServices.createUser(user)).thenReturn(user);
         String actualName = user.getFirstName();
         Assert.assertEquals(expectedName, actualName);
 
@@ -44,13 +43,13 @@ public class UserServiceTest {
     public void deleteUserTest() {
         User user = new User( 1L, "Radha" , "Ramnik","Patel","234324");
         Boolean expected = false;
-        Mockito.when(userServices.createUser(user)).thenReturn(new User());
+        Mockito.when(userServices.createUser(user)).thenReturn(user);
         Boolean actual=userServices.deleteUser(1L);
         Assert.assertEquals(expected, actual);
     }
 
     @Test
-    public void updateeUserTest() throws Exception {
+    public void updateUserTest() throws Exception {
         User user1 = new User( 1L, "Radha" , "Ramnik","Patel","234324");
         String expectedUpdateName= "Update the First Name";
         Mockito.when(userServices.createUser(user1)).thenReturn(user1);

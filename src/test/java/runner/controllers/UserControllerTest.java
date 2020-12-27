@@ -62,12 +62,12 @@ public class UserControllerTest {
 //                .willReturn(user1);
 
         String jsonRequest = objectMapper.writeValueAsString(user1);
-      //  Mockito.when(userController.create(jsonRequest)).thenReturn(new ResponseEntity<>(user1, HttpStatus.CREATED));
+        Mockito.when(userController.create(user1)).thenReturn(new ResponseEntity<>(user1, HttpStatus.CREATED));
                  mockMvc.perform(post("/user/create")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+               // .andExpect(MockMvcResultMatchers.status().isCreated());
                 .andExpect(MockMvcResultMatchers.content().string(jsonRequest));
     }
 
