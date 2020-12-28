@@ -1,7 +1,6 @@
 package runner.entities;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 public class Address {
@@ -23,7 +22,7 @@ public class Address {
     @OneToOne
    // @MapsId
     @JoinColumn(name = "userId")
-    private User user;
+    private Customer customer;
 
     public Long getId() {
         return id;

@@ -1,18 +1,12 @@
 package runner.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-
 import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.PERSIST;
 
 @Entity
-public class User {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -30,11 +24,11 @@ public class User {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @OneToOne(mappedBy = "user", cascade = ALL,fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn //sharing primary key with address since creating a new user requires address anyways
     private Address address;
 
-    @OneToOne(mappedBy = "user", cascade = ALL,fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn //sharing primary key with user login since creating a new user requires a login anyways
     private Login login;
 
@@ -43,10 +37,10 @@ public class User {
     @OrderBy
     private Set<Account> accounts;
 
-    public User() {
+    public Customer() {
     }
 
-    public User(Long id, String firstName, String middleName, String lastName, String socialSecurity) {
+    public Customer(Long id, String firstName, String middleName, String lastName, String socialSecurity) {
         this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;

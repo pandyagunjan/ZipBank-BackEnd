@@ -23,10 +23,10 @@
  -- INSERT INTO `transaction` VALUES (1,'1245451',10.21,'2004-01-22','testing',1);
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `customer`
 --
 
- -- INSERT INTO `user` VALUES (1,'2001-04-11','test@gmail.com','Antoine','Oakinfold',Null,'215-226-4008','112555545');
+ -- INSERT INTO `customer` VALUES (1,'2001-04-11','test@gmail.com','Antoine','Oakinfold',Null,'215-226-4008','112555545');
 
 -- /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
