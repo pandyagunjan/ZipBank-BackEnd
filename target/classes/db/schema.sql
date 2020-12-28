@@ -72,13 +72,13 @@ CREATE TABLE `transaction_history` (
 
 
 --
--- Table structure for table `user`
+-- Table structure for table `customer`
 --
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
+CREATE TABLE `customer` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `firstName` varchar(255) NOT NULL,
   `middleName` varchar(255) DEFAULT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE `user` (
 DROP TABLE IF EXISTS `address`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
+CREATE TABLE `customer` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `userId` bigint NOT NULL,
   `firstLine` date NOT NULL,

@@ -3,27 +3,22 @@ package runner.entities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import runner.AppRunner;
-import runner.entities.*;
-import runner.enums.AccountType;
 
 import javax.persistence.Entity;
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AppRunner.class)
-public class UserEntityTest {
+public class CustomerEntityTest {
 
-    private User user;
+    private Customer customer;
     private Login login;
     private Set<Account> expectedAccount;
     private Account account1;
@@ -31,15 +26,15 @@ public class UserEntityTest {
 
     @Test
     public void testClassSignatureAnnotations() {
-        Assert.assertTrue(User.class.isAnnotationPresent(Entity.class));
+        Assert.assertTrue(Customer.class.isAnnotationPresent(Entity.class));
     }
     @Test
     public void testCreateJson() throws JsonProcessingException {
         ObjectMapper objectMapper= new ObjectMapper();
-        User expectedUser = new User( 1L, "Radha" , "Ramnik","Patel","234324");
-        String json = objectMapper.writeValueAsString(expectedUser);
-        User actualUser=objectMapper.readValue(json,User.class);
-        Assert.assertEquals(expectedUser.getId(),actualUser.getId());
+        Customer expectedCustomer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
+        String json = objectMapper.writeValueAsString(expectedCustomer);
+        Customer actualCustomer =objectMapper.readValue(json, Customer.class);
+        Assert.assertEquals(expectedCustomer.getId(), actualCustomer.getId());
 
     }
 

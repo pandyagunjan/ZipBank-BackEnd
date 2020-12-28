@@ -37,7 +37,7 @@ public class Account {
 
     @ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User user;
+    private Customer customer;
 
     public Account() {
     }
@@ -98,16 +98,15 @@ public class Account {
     public Set<Transaction> getTransactionsList() {
         return transactionsList;
     }
-
     public void setTransactionsList(Set<Transaction> transactionsList) {
         this.transactionsList = transactionsList;
     }
 
-    public User getUser() {
-        return user;
+    public Customer getUser() {
+        return customer;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Customer customer) {
+        this.customer = customer;
     }
 }

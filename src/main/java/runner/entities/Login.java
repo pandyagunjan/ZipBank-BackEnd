@@ -18,7 +18,7 @@ public class Login {
     @OneToOne
     //@MapsId
     @JoinColumn(name = "userId")
-    private User user;
+    private Customer customer;
 
     public Login() {
     }
