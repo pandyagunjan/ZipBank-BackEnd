@@ -81,8 +81,11 @@ public class CustomerController {
     public ResponseEntity<Boolean> deleteById(@PathVariable Long id) {
         return new ResponseEntity<>(customerServices.deleteCustomer(id), HttpStatus.OK);
     }
-    @GetMapping(value = "/home")
-    public String displayHome() {
-        return "Hello World";
+    @GetMapping(value = "/accounts/{id}")
+    public ResponseEntity<?> getAllAccounts(@PathVariable Long id){
+        if(customerServices.getAllAccounts(id) == null)
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        else
+            return new ResponseEntity<>(customerServices.getAllAccounts(id), HttpStatus.OK);
     }
 }

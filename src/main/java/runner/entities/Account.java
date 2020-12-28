@@ -13,7 +13,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false)
-    private transient String accountNumber;
+    private String accountNumber;
     @Column(nullable = false)
     private String routingNumber;
     @Enumerated(EnumType.STRING)
@@ -30,23 +30,17 @@ public class Account {
     @OneToMany(mappedBy = "account" ,cascade= CascadeType.ALL, fetch=FetchType.EAGER)
     private Set<Transaction> transactionsList;
 
-   // @JsonBackReference (value = "name2")
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")//, insert = "false" , update="false")
-//    private User user;
-
-    @ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private Customer customer;
-
     public Account() {
     }
+
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -98,15 +92,8 @@ public class Account {
     public Set<Transaction> getTransactionsList() {
         return transactionsList;
     }
+
     public void setTransactionsList(Set<Transaction> transactionsList) {
         this.transactionsList = transactionsList;
-    }
-
-    public Customer getUser() {
-        return customer;
-    }
-
-    public void setUser(Customer customer) {
-        this.customer = customer;
     }
 }
