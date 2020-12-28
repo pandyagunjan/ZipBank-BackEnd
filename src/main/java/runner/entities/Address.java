@@ -6,7 +6,6 @@ import javax.persistence.*;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "userId") //references userID from user
     private Long id;
     @Column(nullable = false)
     private String firstLine;
@@ -18,11 +17,6 @@ public class Address {
     private String state;
     @Column(nullable = false)
     private String zipcode;
-
-    @OneToOne
-   // @MapsId
-    @JoinColumn(name = "userId")
-    private Customer customer;
 
     public Long getId() {
         return id;

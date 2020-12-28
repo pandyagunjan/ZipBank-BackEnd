@@ -8,7 +8,7 @@
 -- Dumping data for table `account`
 --
 
- -- INSERT INTO `account` VALUES (1,'1245451','INVESTMENT',500000.22,'2004-01-22',12.5,'2001445',1);
+-- INSERT INTO `account` VALUES ('INVESTMENT',500000.22,'2004-01-22',12.5,'2001445');
 
 --
 -- Dumping data for table `login`
@@ -34,4 +34,4 @@
 -- Dumping data for table `address`
 --
 
- -- INSERT INTO `address` VALUES (1,'Philadelphia','123 A st',NULL,'Pennsylvania','19147');
+--  INSERT INTO `address` VALUES (1,'Philadelphia','123 A st',NULL,'Pennsylvania','19147');

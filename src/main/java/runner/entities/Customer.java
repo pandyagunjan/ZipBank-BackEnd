@@ -1,6 +1,8 @@
 package runner.entities;
 
 import javax.persistence.*;
+import javax.swing.text.MaskFormatter;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
@@ -24,16 +26,15 @@ public class Customer {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @OneToOne(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
-    @PrimaryKeyJoinColumn //sharing primary key with address since creating a new user requires address anyways
+    @OneToOne(cascade = ALL, fetch = FetchType.EAGER)
     private Address address;
 
     @OneToOne(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn //sharing primary key with user login since creating a new user requires a login anyways
     private Login login;
 
-    //@JsonManagedReference
     @OneToMany(cascade= ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
     @OrderBy
     private Set<Account> accounts;
 
@@ -108,8 +109,12 @@ public class Customer {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNumber(String phoneNumber) throws ParseException {
+        String phoneMask= "###-###-####";
+        MaskFormatter maskFormatter= new MaskFormatter(phoneMask);
+        maskFormatter.setValueContainsLiteralCharacters(false);
+      //  maskFormatter.valueToString(phoneNumber) ;
+        this.phoneNumber =   maskFormatter.valueToString(phoneNumber) ;
     }
 
     public Address getAddress() {

@@ -34,7 +34,7 @@ public class AccountServices {
         accountFromDB.setDateOfOpening(account.getDateOfOpening());
         accountFromDB.setRoutingNumber(account.getRoutingNumber());
         accountFromDB.setBalance(account.getBalance());
-        accountFromDB.setUser(account.getUser());
+        //accountFromDB.setUser(account.getUser());
         return Optional.of(accountFromDB);
     }
     public Double withdraw(Double amount, Long Id)
