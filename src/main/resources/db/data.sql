@@ -7,12 +7,12 @@
 --
 -- Dumping data for table `account`
 --
-
-LOCK TABLES `account` WRITE;
-/*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'1245451','INVESTMENT',500000.22,'2004-01-22',12.5,'2001445',1);
-/*!40000 ALTER TABLE `account` ENABLE KEYS */;
-UNLOCK TABLES;
+#
+# LOCK TABLES `account` WRITE;
+# /*!40000 ALTER TABLE `account` DISABLE KEYS */;
+# INSERT INTO `account` VALUES (1,'1245451','INVESTMENT',500000.22,'2004-01-22',12.5,'2001445',1);
+# /*!40000 ALTER TABLE `account` ENABLE KEYS */;
+# UNLOCK TABLES;
 
 --
 -- Dumping data for table `login`

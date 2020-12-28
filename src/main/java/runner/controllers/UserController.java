@@ -7,13 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import runner.entities.User;
 import runner.services.UserServices;
-
 import java.net.URI;
-import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@RequestMapping("/user")
+@RequestMapping("/profile")
 @RestController
 public class UserController {
     @Autowired
@@ -21,12 +18,9 @@ public class UserController {
 
     private final static Logger logger = Logger.getLogger(UserController.class.getName());
 
-    @GetMapping(value = "/read/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<User> readById(@PathVariable Long id) throws Exception {
-        logger.log(Level.INFO, "This is an information !");
-        logger.log(Level.SEVERE, "Terrible Error!");
-        logger.log(Level.WARNING, "Not So Bad Error , Its Warning!");
-        if(userServices.readUser(id) == null)
+          if(userServices.readUser(id) == null)
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<>(userServices.readUser(id), HttpStatus.OK);
@@ -48,6 +42,30 @@ public class UserController {
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<User> update(@RequestBody User user,@PathVariable Long id) throws Exception {
         return new ResponseEntity<>(userServices.updateUser(id,user), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/update/{id}/phone")
+    public ResponseEntity<?> updatePhone(@RequestBody String phoneNumber,@PathVariable Long id) throws Exception {
+        int response =userServices.updateUserPhoneNumber(id,phoneNumber);
+        if(response ==0 )
+            return new ResponseEntity<>(userServices.readUser(id), HttpStatus.OK);
+        else if(response == 1 )
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        else
+           return new ResponseEntity<>("Re-send the phone number", HttpStatus.BAD_REQUEST);
+       // return new ResponseEntity<>(userServices.updateUserPhoneNumber(id,phoneNumber), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/update/{id}/email")
+    public ResponseEntity<?> updateEmail(@RequestBody String email,@PathVariable Long id) throws Exception {
+        int response =userServices.updateUserEmailId(id,email);
+        if(response ==0 )
+            return new ResponseEntity<>(userServices.readUser(id), HttpStatus.OK);
+        else if(response == 1 )
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        else
+            return new ResponseEntity<>("Re-send the email-d", HttpStatus.BAD_REQUEST);
+        // return new ResponseEntity<>(userServices.updateUserPhoneNumber(id,phoneNumber), HttpStatus.OK);
     }
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable Long id) {

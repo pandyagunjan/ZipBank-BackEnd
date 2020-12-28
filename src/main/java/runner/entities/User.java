@@ -39,7 +39,7 @@ public class User {
     private Login login;
 
     //@JsonManagedReference
-    @OneToMany(mappedBy = "user",cascade= ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade= ALL,fetch = FetchType.EAGER)
     @OrderBy
     private Set<Account> accounts;
 

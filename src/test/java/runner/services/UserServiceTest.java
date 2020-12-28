@@ -24,7 +24,7 @@ public class UserServiceTest {
         User user = new User( 1L, "Radha" , "Ramnik","Patel","234324");
         user.setId(1L);
         String expectedName= "Radha";
-        //Mockito.when(userServices.readUser(1L)).thenReturn(user);
+        Mockito.when(userServices.readUser(1L)).thenReturn(user);
         String testName = userServices.readUser(1L).getFirstName();
         Assert.assertEquals(expectedName, testName);
     }
