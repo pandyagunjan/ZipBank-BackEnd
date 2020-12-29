@@ -26,7 +26,7 @@
 -- Dumping data for table `user`
 --
 
- INSERT INTO `user` VALUES (1,'2001-04-11','test@gmail.com','Antoine','Oakinfold',Null,'215-226-4008','112555545',1);
+ INSERT INTO `customer` VALUES (1,'2001-04-11','test@gmail.com','Antoine','Oakinfold',Null,'215-226-4008','112555545',1);
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

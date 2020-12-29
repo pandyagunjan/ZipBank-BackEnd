@@ -1,10 +1,13 @@
 package runner.services;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import runner.entities.Account;
 import runner.entities.Address;
 import runner.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import runner.repositories.CustomerRepo;
+import runner.security.config.WebSecurityConfig;
+
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,10 +29,14 @@ public class CustomerServices {
         loggerService.log(Level.INFO, "The repository for customer is autowired to services");
         this.customerRepo = customerRepo;
     }
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     //save the customer in the DB
     public Customer createCustomer(Customer customer) {
         loggerService.log(Level.INFO, "The customer information is being saved");
+        customer.getLogin().setPassword(bCryptPasswordEncoder.encode(customer.getLogin().getPassword())); //encrypts the password before saving
+        customer.setSocialSecurity(bCryptPasswordEncoder.encode(customer.getSocialSecurity()));
         return (Customer) customerRepo.save(customer);
     }
 
