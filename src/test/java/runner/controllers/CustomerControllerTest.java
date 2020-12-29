@@ -1,6 +1,7 @@
 package runner.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import runner.entities.Customer;
@@ -57,13 +59,21 @@ public class CustomerControllerTest {
 //                .willReturn(user1);
 
         String jsonRequest = objectMapper.writeValueAsString(customer1);
-        Mockito.when(userController.create(customer1)).thenReturn(new ResponseEntity<>(customer1, HttpStatus.CREATED));
-                 mockMvc.perform(post("/profile/create")
+      //  Mockito.when(userController.create(customer1)).thenReturn(new ResponseEntity<>(customer1, HttpStatus.CREATED));
+
+              MvcResult result=   mockMvc.perform(post("/profile/create")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-               // .andExpect(MockMvcResultMatchers.status().isCreated());
-                .andExpect(MockMvcResultMatchers.content().string(jsonRequest));
+                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+                //.andExpect(MockMvcResultMatchers.content().string(jsonRequest));
+
+        String resultContent = result.getResponse().getContentAsString();
+        System.out.println(resultContent);
+     //   ResponseEntity response = objectMapper.readValue(resultContent,ResponseEntity.class);
+      //  System.out.println(response);
+
+       // Assert.assertTrue();
     }
 
 }

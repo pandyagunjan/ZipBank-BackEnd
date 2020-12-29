@@ -6,13 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import runner.repositories.CustomerRepo;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServices {
@@ -23,7 +25,7 @@ public class CustomerServices {
    //Autowired the customerService
     @Autowired
     public CustomerServices(CustomerRepo customerRepo) {
-        loggerService.log(Level.INFO, "The repository for customer is autowired to services");
+        loggerService.log(Level.INFO, "The repository for customer has been autowired to services");
         this.customerRepo = customerRepo;
     }
 
@@ -45,12 +47,23 @@ public class CustomerServices {
         }
     }
 
-    public Boolean deleteCustomer(Long id) {
-        Customer customerFromDB = customerRepo.findCustomerById(id);
-        loggerService.log(Level.INFO, "The customer to be deleted has been found " + customerFromDB.getId());
-        customerRepo.delete(customerFromDB);
-        loggerService.log(Level.WARNING, "The customer has been deleted ,returning flag based on IfExist check");
-        return !customerRepo.existsById(id);
+    public int deleteCustomer(Long id) {
+        Customer customer = customerRepo.findCustomerById(id);
+        Set<Account> accounts = new HashSet<>(); // To collect all accounts belonging to this customer
+        List<Account> result = new ArrayList<>(); //To collect accounts with balance greater than 0
+        if (customer != null) {
+            accounts=getAllAccounts(id);
+            result = accounts.stream().filter((account) -> account.getBalance() > 0).collect(Collectors.toList());
+            loggerService.log(Level.INFO, "Account list size " + result.size());
+            if(result.size()==0 && accounts.size()!=0) {
+                customerRepo.delete(customer);
+                loggerService.log(Level.INFO, "User has been deleted as account balacnce for all accounts =0");
+                return 0;
+            }
+            else if(result.size()>0)
+                return 2;
+        }
+       return 1;
     }
 
     public Customer updateCustomer(Long id, Customer customer) throws Exception {
@@ -88,7 +101,7 @@ public class CustomerServices {
     public int updateCustomerPhoneNumber(Long id, String phone) throws ParseException {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
         Customer customer = customerRepo.findCustomerById(id);
-        Pattern pattern = Pattern.compile("^\\d{10}$");
+        Pattern pattern = Pattern.compile("^\\d{3}\\w\\d{3}\\w\\d{4}$");
         Matcher matcher = pattern.matcher(phone);
 
         if (matcher.matches()) {
@@ -146,10 +159,9 @@ public class CustomerServices {
         Customer customer = customerRepo.findCustomerById(id);
 
         if (customer != null) {
-            loggerService.log(Level.INFO, "customer with id "+id+ " found ,account being returned");
+            loggerService.log(Level.INFO, "Accounts belonging to "+id+ " use has been found ,accounts are being returned");
              return customer.getAccounts();
         }
         return null;
-
     }
 }
