@@ -19,7 +19,7 @@ public class Login implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @JsonBackReference
+    @JsonBackReference(value = "customer")
     @OneToOne
     @PrimaryKeyJoinColumn
     private Customer customer;
