@@ -8,16 +8,21 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import runner.entities.Customer;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -59,21 +64,42 @@ public class CustomerControllerTest {
 //                .willReturn(user1);
 
         String jsonRequest = objectMapper.writeValueAsString(customer1);
-      //  Mockito.when(userController.create(customer1)).thenReturn(new ResponseEntity<>(customer1, HttpStatus.CREATED));
+       // Mockito.when(userController.create(customer1)).thenReturn(new ResponseEntity<>(customer1, HttpStatus.CREATED));
 
               MvcResult result=   mockMvc.perform(post("/profile/create")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+               // .andExpect(MockMvcResultMatchers.status().isOk())
+               // .andExpect(jsonPath("$.id",is(2)))
+                      .andReturn();
                 //.andExpect(MockMvcResultMatchers.content().string(jsonRequest));
 
-        String resultContent = result.getResponse().getContentAsString();
-        System.out.println(resultContent);
-     //   ResponseEntity response = objectMapper.readValue(resultContent,ResponseEntity.class);
-      //  System.out.println(response);
+        MockHttpServletResponse response=result.getResponse();
+        assertEquals(HttpStatus.CREATED.value(),response.getStatus());
+      //  assertEquals("http://localhost:8080/profile/create/1", response.getHeader(HttpHeaders.LOCATION));
 
-       // Assert.assertTrue();
+
+
+//        Mockito.when(
+//                studentService.addCourse(Mockito.anyString(),
+//                        Mockito.any(Course.class))).thenReturn(mockCourse);
+//
+//        // Send course as body to /students/Student1/courses
+//        RequestBuilder requestBuilder = MockMvcRequestBuilders
+//                .post("/students/Student1/courses")
+//                .accept(MediaType.APPLICATION_JSON).content(exampleCourseJson)
+//                .contentType(MediaType.APPLICATION_JSON);
+//
+//        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+//
+//        MockHttpServletResponse response = result.getResponse();
+//
+//        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+//
+//        assertEquals("http://localhost/students/Student1/courses/1",
+//                response.getHeader(HttpHeaders.LOCATION));
+
     }
 
 }
