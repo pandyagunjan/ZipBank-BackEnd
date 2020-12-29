@@ -35,7 +35,7 @@ public class AccountController {
     public ResponseEntity<Account> updateAccountWithdraw(@RequestBody Double amount,@PathVariable Long id) throws Exception {
         return new ResponseEntity<>(accountServices.withdraw(amount,id), HttpStatus.OK);
     }
-    @PutMapping(value = "/transfer/{id}")
+    @PutMapping(value = "/transfer/{fromId}/{toId}")
     public ResponseEntity<Account> updateAccountTransfer(@RequestBody Double amount,@PathVariable Long fromId, @PathVariable Long toId) throws Exception {
         return new ResponseEntity<>(accountServices.transfer(amount,fromId, toId), HttpStatus.OK);
     }

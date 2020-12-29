@@ -29,7 +29,7 @@ public class Customer {
 
     @OneToOne(cascade = ALL, fetch = FetchType.EAGER)
     private Address address;
-    @JsonBackReference
+    @JsonBackReference(value = "login")
     @OneToOne(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn //sharing primary key with user login since creating a new user requires a login anyways
     private Login login;

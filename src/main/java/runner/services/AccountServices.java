@@ -26,7 +26,7 @@ public class AccountServices {
             loggerService.log(Level.INFO, "The customer's account #" + id + "is being read'");
             return accountRepo.findAccountById(id);
         }
-        loggerService.log(Level.SEVERE, "The customer is trying to read account # " + id + "that doe not exist");
+        loggerService.log(Level.WARNING, "The customer is trying to read account # " + id + "that doe not exist");
         throw new Exception("Account does not exist");
     }
 
@@ -39,7 +39,7 @@ public class AccountServices {
             return accountRepo.existsById(id);
         } else {
 
-            loggerService.log(Level.SEVERE, "The customer had a balance greater than 0 and could not remove the account # " + id);
+            loggerService.log(Level.WARNING, "The customer had a balance greater than 0 and could not remove the account # " + id);
             throw new Exception("Balance not 0 cannot be closed");
         }
     }
@@ -57,7 +57,7 @@ public class AccountServices {
             accountFromDB.setBalance(account.getBalance());
             return Optional.of(accountFromDB);
         }
-        loggerService.log(Level.SEVERE, "The account # " + id + "does not exist to be updated");
+        loggerService.log(Level.WARNING, "The account # " + id + "does not exist to be updated");
         throw new Exception("Account does not exist");
     }
 
@@ -66,9 +66,9 @@ public class AccountServices {
         if (accountRepo.findAccountById(id).getBalance() > amount) {
             loggerService.log(Level.INFO, "The customer is making a withdraw");
             accountRepo.findAccountById(id).setBalance(accountRepo.findAccountById(id).getBalance() - amount);
-            return readAccount(id);
+            return accountRepo.save(readAccount(id));
         } else {
-            loggerService.log(Level.SEVERE, "The customer did not have sufficient funds to make the withdraw");
+            loggerService.log(Level.WARNING, "The customer did not have sufficient funds to make the withdraw");
             throw new Exception("Insufficient funds");
         }
     }
@@ -76,7 +76,7 @@ public class AccountServices {
     public Account deposit(Double amount, Long id) throws Exception {
         loggerService.log(Level.INFO, "The customer is making a deposit");
         accountRepo.findAccountById(id).setBalance(accountRepo.findAccountById(id).getBalance() + amount);
-        return readAccount(id);
+        return accountRepo.save(readAccount(id));
     }
 
     public Account transfer(Double amount, Long fromId, Long toId) throws Exception {
@@ -84,9 +84,10 @@ public class AccountServices {
             loggerService.log(Level.INFO, "The customer is making a transfer");
             accountRepo.findAccountById(fromId).setBalance(accountRepo.findAccountById(fromId).getBalance() - amount);
             accountRepo.findAccountById(toId).setBalance(accountRepo.findAccountById(toId).getBalance() + amount);
-            return readAccount(toId);
+            accountRepo.save(readAccount(toId));
+            return accountRepo.save(readAccount(fromId));
         } else {
-            loggerService.log(Level.INFO, "The customer did not have sufficient funds to make the transfer");
+            loggerService.log(Level.WARNING, "The customer did not have sufficient funds to make the transfer");
             throw new Exception("Insufficient funds");
         }
     }
