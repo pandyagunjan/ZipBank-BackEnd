@@ -11,8 +11,8 @@ import java.util.Optional;
 public class AccountController {
     @Autowired
     private AccountServices accountServices;
-    @GetMapping(value = "/read/{id}")
-    public ResponseEntity<Account> readById(@PathVariable Long id) {
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Account> readAccount(@PathVariable Long id) throws Exception {
         return new ResponseEntity<>(accountServices.readAccount(id), HttpStatus.OK);
     }
     @PostMapping(value = "/create")
@@ -20,11 +20,23 @@ public class AccountController {
         return new ResponseEntity<>(accountServices.createAccount(account), HttpStatus.CREATED);
     }
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<Optional<Account>> update(@RequestBody Account account, @PathVariable Long id) {
+    public ResponseEntity<Optional<Account>> update(@RequestBody Account account, @PathVariable Long id) throws Exception {
         return new ResponseEntity<>(accountServices.updateAccount(id,account), HttpStatus.OK);
     }
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<Boolean> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Boolean> deleteById(@PathVariable Long id) throws Exception {
         return new ResponseEntity<>(accountServices.removeAccount(id), HttpStatus.OK);
+    }
+    @PutMapping(value = "/deposit/{id}")
+    public ResponseEntity<Account> updateAccountDeposit(@RequestBody Double amount,@PathVariable Long id) throws Exception {
+        return new ResponseEntity<>(accountServices.deposit(amount,id), HttpStatus.OK);
+    }
+    @PutMapping(value = "/withdraw/{id}")
+    public ResponseEntity<Account> updateAccountWithdraw(@RequestBody Double amount,@PathVariable Long id) throws Exception {
+        return new ResponseEntity<>(accountServices.withdraw(amount,id), HttpStatus.OK);
+    }
+    @PutMapping(value = "/transfer/{id}")
+    public ResponseEntity<Account> updateAccountTransfer(@RequestBody Double amount,@PathVariable Long fromId, @PathVariable Long toId) throws Exception {
+        return new ResponseEntity<>(accountServices.transfer(amount,fromId, toId), HttpStatus.OK);
     }
 }
