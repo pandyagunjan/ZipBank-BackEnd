@@ -1,7 +1,8 @@
 package runner.entities;
 
+import org.springframework.security.core.userdetails.User;
+
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 public class Address {
@@ -19,11 +20,6 @@ public class Address {
     private String state;
     @Column(nullable = false)
     private String zipcode;
-
-    @OneToOne
-   // @MapsId
-    @JoinColumn(name = "userId")
-    private User user;
 
     public Long getId() {
         return id;

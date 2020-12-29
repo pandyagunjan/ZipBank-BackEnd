@@ -13,7 +13,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false)
-    private transient String accountNumber;
+    private String accountNumber;
     @Column(nullable = false)
     private String routingNumber;
     @Enumerated(EnumType.STRING)
@@ -37,16 +37,18 @@ public class Account {
 
     @ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User user;
+    private Customer customer;
 
     public Account() {
     }
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -103,11 +105,11 @@ public class Account {
         this.transactionsList = transactionsList;
     }
 
-    public User getUser() {
-        return user;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }
