@@ -1,10 +1,9 @@
 package runner.entities;
 
-import org.springframework.beans.factory.annotation.Value;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
-import javax.swing.text.MaskFormatter;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
@@ -30,7 +29,7 @@ public class Customer {
 
     @OneToOne(cascade = ALL, fetch = FetchType.EAGER)
     private Address address;
-
+    @JsonBackReference
     @OneToOne(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn //sharing primary key with user login since creating a new user requires a login anyways
     private Login login;
@@ -38,6 +37,7 @@ public class Customer {
     @OneToMany(cascade= ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     @OrderBy
+    @JsonBackReference
     private Set<Account> accounts;
 
     public Customer() {

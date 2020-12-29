@@ -14,7 +14,7 @@ INSERT INTO `account` VALUES (1,'CHECKING-123456','CHECKING',10000,'2004-01-22',
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` VALUES (1,'c51ChDMn','tom');
+INSERT INTO `login` VALUES (1,'$2a$10$DM98Ynu/prVcywurljSHSOko73BKJb29RFW3vCGFYT9DBAW6Jd1W2','lmcqueen0');
 
 --
 -- Dumping data for table `transaction_history`

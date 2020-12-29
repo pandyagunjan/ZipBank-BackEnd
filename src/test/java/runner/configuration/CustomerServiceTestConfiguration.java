@@ -9,10 +9,10 @@ import runner.services.CustomerServices;
 
 @Profile("test")
 @Configuration
-public class UserServiceTestConfiguration {
+public class CustomerServiceTestConfiguration {
     @Bean
     @Primary
-    public CustomerServices userServices() {
+    public CustomerServices customerServices() {
         return Mockito.mock(CustomerServices.class);
     }
 

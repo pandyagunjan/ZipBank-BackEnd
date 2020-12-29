@@ -1,4 +1,5 @@
 package runner.services;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import runner.entities.Account;
 import runner.entities.Address;
 import runner.entities.Customer;
@@ -28,10 +29,14 @@ public class CustomerServices {
         loggerService.log(Level.INFO, "The repository for customer has been autowired to services");
         this.customerRepo = customerRepo;
     }
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     //save the customer in the DB
     public Customer createCustomer(Customer customer) {
         loggerService.log(Level.INFO, "The customer information is being saved");
+        customer.getLogin().setPassword(bCryptPasswordEncoder.encode(customer.getLogin().getPassword())); //encrypts the password before saving
+        customer.setSocialSecurity(bCryptPasswordEncoder.encode(customer.getSocialSecurity()));
         return (Customer) customerRepo.save(customer);
     }
 
@@ -101,7 +106,7 @@ public class CustomerServices {
     public int updateCustomerPhoneNumber(Long id, String phone) throws ParseException {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
         Customer customer = customerRepo.findCustomerById(id);
-        Pattern pattern = Pattern.compile("^\\d{3}\\w\\d{3}\\w\\d{4}$");
+        Pattern pattern = Pattern.compile("([0-9]{10}|\\(?[0-9]{3}\\)?[- ]{0,1}[0-9]{3}[- ]{0,1}[0-9]{4})");
         Matcher matcher = pattern.matcher(phone);
 
         if (matcher.matches()) {

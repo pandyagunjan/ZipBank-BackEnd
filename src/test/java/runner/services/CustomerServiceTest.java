@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import runner.AppRunner;
 import runner.entities.Customer;
@@ -13,6 +14,9 @@ import runner.entities.Customer;
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AppRunner.class)
+@TestPropertySource(properties = {"DB_USER=newuser",
+        "DB_PASS=password",
+        "DB_URL=jdbc:mysql://localhost:3306/moneymanagement"})
 public class CustomerServiceTest {
     @Autowired
     private CustomerServices customerServices; //Calls the mockito
@@ -33,17 +37,17 @@ public class CustomerServiceTest {
         Customer customer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
         String expectedName= "Radha";
         Mockito.when(customerServices.createCustomer(customer)).thenReturn(customer);
-        String actualName = customer.getFirstName();
+        String actualName = customerServices.createCustomer(customer).getFirstName();
         Assert.assertEquals(expectedName, actualName);
 
     }
     @Test
     public void deleteUserTest() {
-//        Customer customer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
-//        Boolean expected = false;
-//        Mockito.when(customerServices.createCustomer(customer)).thenReturn(customer);
-//       // Boolean actual= customerServices.deleteCustomer(1L);
-//        Assert.assertEquals(expected, actual);
+        Customer customer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
+        int expected = 0;
+        Mockito.when(customerServices.createCustomer(customer)).thenReturn(customer);
+        int actual= customerServices.deleteCustomer(1L);
+         Assert.assertEquals(expected, actual);
     }
 
     @Test
