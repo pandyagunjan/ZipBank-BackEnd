@@ -2,54 +2,92 @@ package runner.services;
 import runner.entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import runner.enums.AccountType;
 import runner.repositories.AccountRepo;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @Service
 public class AccountServices {
+    private final static Logger loggerService = Logger.getLogger(AccountServices.class.getName());
+
     @Autowired
     private AccountRepo accountRepo;
-    //CRUD methods
-    public Account createAccount(Account account)
-    {
-        //Re-direct to POST in ACCOUNT controller
+
+    public Account createAccount(Account account) {
+        loggerService.log(Level.INFO, "The customer's new account is being saved");
         return accountRepo.save(account);
     }
-    public Account readAccount(Long id)
-    {
-        //Re-direct to GET in ACCOUNT controller
-        return accountRepo.findAccountById(id);
+
+    public Account readAccount(Long id) throws Exception{
+        loggerService.log(Level.INFO, "Attempting to read customer's account # " + id);
+        if (accountRepo.existsById(id) == true) {
+            loggerService.log(Level.INFO, "The customer's account #" + id + "is being read'");
+            return accountRepo.findAccountById(id);
+        }
+        loggerService.log(Level.SEVERE, "The customer is trying to read account # " + id + "that doe not exist");
+        throw new Exception("Account does not exist");
     }
-    public Boolean removeAccount(Long id)
-    {
-        Account accountFromDB = accountRepo.findAccountById(id);
-        accountRepo.delete(accountFromDB);
-        return accountRepo.existsById(id);
+
+    public Boolean removeAccount(Long id) throws Exception{
+        loggerService.log(Level.INFO, "Attempting to remove customer's account # " + id);
+        if (accountRepo.findAccountById(id).getBalance() == 0) {
+            loggerService.log(Level.INFO, "The customer is removing the account # " + id);
+            Account accountFromDB = accountRepo.findAccountById(id);
+            accountRepo.delete(accountFromDB);
+            return accountRepo.existsById(id);
+        } else {
+
+            loggerService.log(Level.SEVERE, "The customer had a balance greater than 0 and could not remove the account # " + id);
+            throw new Exception("Balance not 0 cannot be closed");
+        }
     }
-    public Optional<Account> updateAccount(Long id , Account account)
-    {
-        Account accountFromDB = accountRepo.findAccountById(id);
-        accountFromDB.setAccountType(account.getAccountType());
-        accountFromDB.setAccountNumber(account.getAccountNumber());
-        accountFromDB.setInterestRate(account.getInterestRate());
-        accountFromDB.setDateOfOpening(account.getDateOfOpening());
-        accountFromDB.setRoutingNumber(account.getRoutingNumber());
-        accountFromDB.setBalance(account.getBalance());
-        //accountFromDB.setUser(account.getUser());
-        return Optional.of(accountFromDB);
+
+    public Optional<Account> updateAccount(Long id, Account account) throws Exception{
+        loggerService.log(Level.INFO, "Attempting to update customer's account # " + id);
+        if (accountRepo.existsById(id) == true) {
+            loggerService.log(Level.INFO, "The customer is updating their account # " + id);
+            Account accountFromDB = accountRepo.findAccountById(id);
+            accountFromDB.setAccountType(account.getAccountType());
+            accountFromDB.setAccountNumber(account.getAccountNumber());
+            accountFromDB.setInterestRate(account.getInterestRate());
+            accountFromDB.setDateOfOpening(account.getDateOfOpening());
+            accountFromDB.setRoutingNumber(account.getRoutingNumber());
+            accountFromDB.setBalance(account.getBalance());
+            return Optional.of(accountFromDB);
+        }
+        loggerService.log(Level.SEVERE, "The account # " + id + "does not exist to be updated");
+        throw new Exception("Account does not exist");
     }
-    public Double withdraw(Double amount, Long Id)
-    {
-        //Login to withdraw from the account
-        return 0d;
+
+    public Account withdraw(Double amount, Long id) throws Exception{
+        loggerService.log(Level.INFO, "The customer is attempting to withdraw " + amount + "from account # " + id);
+        if (accountRepo.findAccountById(id).getBalance() > amount) {
+            loggerService.log(Level.INFO, "The customer is making a withdraw");
+            accountRepo.findAccountById(id).setBalance(accountRepo.findAccountById(id).getBalance() - amount);
+            return readAccount(id);
+        } else {
+            loggerService.log(Level.SEVERE, "The customer did not have sufficient funds to make the withdraw");
+            throw new Exception("Insufficient funds");
+        }
     }
-    public Double deposit(Double amount , Long Id)
-    {
-        //Login to withdraw from the account
-        return 0d;
+
+    public Account deposit(Double amount, Long id) throws Exception {
+        loggerService.log(Level.INFO, "The customer is making a deposit");
+        accountRepo.findAccountById(id).setBalance(accountRepo.findAccountById(id).getBalance() + amount);
+        return readAccount(id);
     }
-    public Double transfer(Double amount , Long fromId ,Long toId)
-    {
-        //Login to withdraw from the account
-        return 0d;
+
+    public Account transfer(Double amount, Long fromId, Long toId) throws Exception {
+        if (accountRepo.findAccountById(fromId).getBalance() > amount) {
+            loggerService.log(Level.INFO, "The customer is making a transfer");
+            accountRepo.findAccountById(fromId).setBalance(accountRepo.findAccountById(fromId).getBalance() - amount);
+            accountRepo.findAccountById(toId).setBalance(accountRepo.findAccountById(toId).getBalance() + amount);
+            return readAccount(toId);
+        } else {
+            loggerService.log(Level.INFO, "The customer did not have sufficient funds to make the transfer");
+            throw new Exception("Insufficient funds");
+        }
     }
 }
