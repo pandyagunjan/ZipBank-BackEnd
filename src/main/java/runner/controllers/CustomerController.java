@@ -21,14 +21,18 @@ public class CustomerController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Customer> readById(@PathVariable Long id) throws Exception {
-          if(customerServices.readCustomer(id) == null)
+        Customer customer =customerServices.readCustomer(id);
+          if( customer == null)
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         else
-            return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
+            return new ResponseEntity<>(customer, HttpStatus.OK);
     }
+
     @PostMapping(value = "/create")
-    public ResponseEntity<Customer> create(@RequestBody Customer customer) {
+    public ResponseEntity<?> create(@RequestBody Customer customer) {
         customer = customerServices.createCustomer(customer);
+  //Best practice is to convey the URI to the newly created resource using the Location HTTP header via Spring's ServletUriComponentsBuilder utility class.
+ //This will ensure that the client has some way of knowing the URI of the newly created Poll.
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newPollUri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -36,9 +40,9 @@ public class CustomerController {
                 .buildAndExpand(customer.getId())
                 .toUri();
         responseHeaders.setLocation(newPollUri);
+
         return new ResponseEntity<>(customer,responseHeaders, HttpStatus.CREATED);
 
-        //return new ResponseEntity<>(userServices.createUser(user), HttpStatus.CREATED);
     }
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<Customer> update(@RequestBody Customer customer, @PathVariable Long id) throws Exception {
@@ -78,8 +82,14 @@ public class CustomerController {
             return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
     }
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<Boolean> deleteById(@PathVariable Long id) {
-        return new ResponseEntity<>(customerServices.deleteCustomer(id), HttpStatus.OK);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        int flag=customerServices.deleteCustomer(id);
+        if(flag ==0)
+            return new ResponseEntity<>("User has been deleted", HttpStatus.OK);
+        else if(flag==2)
+            return new ResponseEntity<>("User has account with balance", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("No accounts/user found", HttpStatus.OK);
     }
     @GetMapping(value = "/accounts/{id}")
     public ResponseEntity<?> getAllAccounts(@PathVariable Long id){

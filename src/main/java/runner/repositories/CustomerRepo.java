@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepo<delete> extends CrudRepository<Customer,Long> {
 
     Customer findCustomerById(Long Id);
-
-   // List<User> findAll();
+    // List<User> findAll();
    //update  --save
     //create -- save
    // delete --delete

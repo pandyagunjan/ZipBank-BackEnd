@@ -1,5 +1,7 @@
 package runner.entities;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.persistence.*;
 import javax.swing.text.MaskFormatter;
 import java.text.ParseException;
@@ -109,12 +111,12 @@ public class Customer {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) throws ParseException {
-        String phoneMask= "###-###-####";
-        MaskFormatter maskFormatter= new MaskFormatter(phoneMask);
-        maskFormatter.setValueContainsLiteralCharacters(false);
-      //  maskFormatter.valueToString(phoneNumber) ;
-        this.phoneNumber =   maskFormatter.valueToString(phoneNumber) ;
+    public void setPhoneNumber(String phoneNumber)  {
+//        String phoneMask= "###-###-####";
+//        MaskFormatter maskFormatter= new MaskFormatter(phoneMask);
+//        maskFormatter.setValueContainsLiteralCharacters(false);
+//        maskFormatter.valueToString(phoneNumber) ;
+        this.phoneNumber =   phoneNumber;
     }
 
     public Address getAddress() {
