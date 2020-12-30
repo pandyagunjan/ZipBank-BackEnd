@@ -23,6 +23,8 @@ public class CustomerServiceTest {
 
     @Test
     public void readUserTest() {
+
+        //test
         Customer customer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
         customer.setId(1L);
         String expectedName= "Radha";

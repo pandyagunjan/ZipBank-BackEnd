@@ -97,7 +97,7 @@ public class CustomerServices {
             loggerService.log(Level.INFO, "Customer with Id " + customerFromDB.getId() + "has been updated");
             return customerFromDB;
         } else {
-            loggerService.log(Level.SEVERE, "Customer with Id " + id + "not found in db");
+            loggerService.log(Level.WARNING, "Customer with Id " + id + "not found in db");
             throw new Exception("id not found to be udapted");
         }
     }
