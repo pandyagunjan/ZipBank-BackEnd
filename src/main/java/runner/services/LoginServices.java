@@ -47,8 +47,8 @@ public class LoginServices implements UserDetailsService {
         return loginRepo.findLoginById(id);
     }
 
-    public Login findLoginByUsername(Login login){
-        return loginRepo.findLoginByUsername(login.getUsername());
+    public Login findLoginByUsername(String username){
+        return loginRepo.findLoginByUsername(username);
     }
 
     public Boolean logOut() {

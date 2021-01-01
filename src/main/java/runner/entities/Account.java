@@ -5,6 +5,9 @@ import runner.enums.AccountType;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,23 +15,25 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(nullable = false)
     private String accountNumber;
-    @Column(nullable = false)
     private String routingNumber;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private AccountType accountType; //enum
-    @Column(nullable = false)
     private Double balance;
-    @Column(nullable = false)
     private LocalDate dateOfOpening;
-    @Column(nullable = false)
     private Double interestRate;
+    private String encryptedUrl;
 
-    @JsonBackReference(value = "name1")
-    @OneToMany(mappedBy = "account" ,cascade= CascadeType.ALL, fetch=FetchType.EAGER)
-    private Set<Transaction> transactionsList;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "account_transaction",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "transaction_id"))
+    private Set<Transaction> transactions = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     public Account() {
     }
@@ -39,6 +44,10 @@ public class Account {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void addToTransactionsList(Transaction transaction){
+        transactions.add(transaction);
     }
 
     public String getAccountNumber() {
@@ -89,11 +98,27 @@ public class Account {
         this.interestRate = interestRate;
     }
 
-    public Set<Transaction> getTransactionsList() {
-        return transactionsList;
+    public Set<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setTransactionsList(Set<Transaction> transactionsList) {
-        this.transactionsList = transactionsList;
+    public void setTransactions(Set<Transaction> transactionsList) {
+        this.transactions = transactionsList;
+    }
+
+    public String getEncryptedUrl() {
+        return encryptedUrl;
+    }
+
+    public void setEncryptedUrl(String encryptedURL) {
+        this.encryptedUrl = encryptedURL;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

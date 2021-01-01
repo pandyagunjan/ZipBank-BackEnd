@@ -3,23 +3,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import runner.entities.Account;
 import runner.entities.Address;
 import runner.entities.Customer;
+import runner.repositories.LoginRepo;
 import runner.services.CustomerServices;
 import java.net.URI;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @RequestMapping("/profile")
 @RestController
 public class CustomerController {
+
     @Autowired
     private CustomerServices customerServices;
 
     private final static Logger logger = Logger.getLogger(CustomerController.class.getName());
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/")
     public ResponseEntity<Customer> readById(@PathVariable Long id) throws Exception {
         Customer customer =customerServices.readCustomer(id);
           if( customer == null)
@@ -49,7 +55,7 @@ public class CustomerController {
         return new ResponseEntity<>(customerServices.updateCustomer(id, customer), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/update/{id}/phone")
+    @PutMapping(value = "/update/{id}/phone") //"/phone
     public ResponseEntity<?> updatePhone(@RequestBody String phoneNumber,@PathVariable Long id) throws Exception {
         int response = customerServices.updateCustomerPhoneNumber(id,phoneNumber);
         if(response ==0 )
@@ -61,7 +67,7 @@ public class CustomerController {
        // return new ResponseEntity<>(userServices.updateUserPhoneNumber(id,phoneNumber), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/update/{id}/email")
+    @PutMapping(value = "/update/{id}/email") //"/email
     public ResponseEntity<?> updateEmail(@RequestBody String email,@PathVariable Long id) throws Exception {
         int response = customerServices.updateCustomerEmail(id,email);
         if(response ==0 )
@@ -73,7 +79,7 @@ public class CustomerController {
         // return new ResponseEntity<>(userServices.updateUserPhoneNumber(id,phoneNumber), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/update/{id}/address")
+    @PutMapping(value = "/update/{id}/address") //"/address
     public ResponseEntity<?> updateEmail(@RequestBody Address address, @PathVariable Long id) throws Exception {
         Customer responseCustomer= customerServices.updateCustomerAddress(id,address);
         if(responseCustomer == null)
@@ -91,6 +97,7 @@ public class CustomerController {
         else
             return new ResponseEntity<>("No accounts/user found", HttpStatus.OK);
     }
+
     @GetMapping(value = "/accounts/{id}")
     public ResponseEntity<?> getAllAccounts(@PathVariable Long id){
         if(customerServices.getAllAccounts(id) == null)
