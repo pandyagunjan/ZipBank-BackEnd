@@ -2,9 +2,11 @@ package runner.services;
 import runner.entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import runner.enums.AccountType;
+import runner.entities.Transaction;
 import runner.repositories.AccountRepo;
-import java.util.Optional;
+
+import java.text.DecimalFormat;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,9 +17,16 @@ public class AccountServices {
     @Autowired
     private AccountRepo accountRepo;
 
+    @Autowired
+    private TransactionServices transactionServices;
+
     public Account createAccount(Account account) {
         loggerService.log(Level.INFO, "The customer's new account is being saved");
         return accountRepo.save(account);
+    }
+
+    public Account findAccountByEncryptedUrl(String encryptedUrl){
+        return accountRepo.findAccountByEncryptedUrl(encryptedUrl);
     }
 
     public Account readAccount(Long id) throws Exception{
@@ -61,25 +70,71 @@ public class AccountServices {
         throw new Exception("Account does not exist");
     }
 
-    public Account withdraw(Double amount, Long id) throws Exception{
-        loggerService.log(Level.INFO, "The customer is attempting to withdraw " + amount + "from account # " + id);
-        if (accountRepo.findAccountById(id).getBalance() > amount) {
-            loggerService.log(Level.INFO, "The customer is making a withdraw");
-            accountRepo.findAccountById(id).setBalance(accountRepo.findAccountById(id).getBalance() - amount);
-            return accountRepo.save(readAccount(id));
-        } else {
-            loggerService.log(Level.WARNING, "The customer did not have sufficient funds to make the withdraw");
+    //iterate through set to get accounts but should only be one at any time
+    public Account iteratorReturn(Iterator<Account> iterator){
+        while(iterator.hasNext()){
+            return iterator.next();
+        }
+        return null;
+    }
+
+    public Account[] transferMoney(Transaction transaction, Account fromAccount, Account toAccount) throws Exception{
+        Double amount = transaction.getTransactionAmount();
+
+        //check balance;
+        if(amount>fromAccount.getBalance()){
             throw new Exception("Insufficient funds");
         }
+
+        //do the math, all that stuff below is to make sure the number stays 2 decimal places
+        fromAccount.setBalance(Math.round((fromAccount.getBalance() - amount)*100.0)/100.0);
+        toAccount.setBalance(Math.round((toAccount.getBalance() + amount)*100.0)/100.0);
+
+        //adding new transactions to account's transactions set
+        ArrayList<Transaction> transactionsList = transactionServices.setAllTransactions(transaction, fromAccount, toAccount);
+        Set<Transaction> fromSet = fromAccount.getTransactions();
+        Set<Transaction> toSet = toAccount.getTransactions();
+        fromSet.add(transactionsList.get(0));
+        toSet.add(transactionsList.get(1));
+        fromAccount.setTransactions(fromSet);
+        toAccount.setTransactions(toSet);
+
+        Account[] accountArray = {fromAccount,toAccount};
+        return accountArray;
     }
 
-    public Account deposit(Double amount, Long id) throws Exception {
+    //need to add method inside here to check if the routing and account numbers are valid
+    public Account deposit(Transaction transaction, String encryptedUrl) throws Exception{ //zekai
         loggerService.log(Level.INFO, "The customer is making a deposit");
-        accountRepo.findAccountById(id).setBalance(accountRepo.findAccountById(id).getBalance() + amount);
-        return accountRepo.save(readAccount(id));
+        Account toAccount = accountRepo.findAccountByEncryptedUrl(encryptedUrl);
+
+        Iterator<Account> iterator = transaction.getAccounts().iterator();
+        String accountNum = iteratorReturn(iterator).getAccountNumber();
+        Account fromAccount = accountRepo.findAccountByAccountNumber(accountNum);
+
+        Account[] myAccountArray = transferMoney(transaction,fromAccount,toAccount);
+
+        accountRepo.save(myAccountArray[0]); //1st element in list/array always account money is moving out of
+        return accountRepo.save(myAccountArray[1]); //2nd element in list/array always account money is moving into
     }
 
-    public Account transfer(Double amount, Long fromId, Long toId) throws Exception {
+    //need to add method inside here to check if the routing and account numbers are valid
+    public Account withdraw(Transaction transaction, String encryptedUrl) throws Exception{
+        loggerService.log(Level.INFO, "The customer is making a withdrawal");
+        Account fromAccount = accountRepo.findAccountByEncryptedUrl(encryptedUrl);
+
+        Iterator<Account> iterator = transaction.getAccounts().iterator();
+        String accountNum = iteratorReturn(iterator).getAccountNumber();
+        Account toAccount = accountRepo.findAccountByAccountNumber(accountNum);
+
+        Account[] myAccountArray = transferMoney(transaction,fromAccount,toAccount);
+
+        accountRepo.save(myAccountArray[1]); //1st element in list/array always account money is moving out of
+        return accountRepo.save(myAccountArray[0]); //2nd element in list/array always account money is moving into
+    }
+
+    // Not needed, transfer and withdraw have same JSON payload; so use withdraw method
+/*    public Account transfer(Double amount, Long fromId, Long toId) throws Exception {
         if (accountRepo.findAccountById(fromId).getBalance() > amount) {
             loggerService.log(Level.INFO, "The customer is making a transfer");
             accountRepo.findAccountById(fromId).setBalance(accountRepo.findAccountById(fromId).getBalance() - amount);
@@ -90,5 +145,6 @@ public class AccountServices {
             loggerService.log(Level.WARNING, "The customer did not have sufficient funds to make the transfer");
             throw new Exception("Insufficient funds");
         }
-    }
+    }*/
+
 }

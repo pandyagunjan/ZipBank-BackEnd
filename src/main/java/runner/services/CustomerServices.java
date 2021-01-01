@@ -5,14 +5,14 @@ import runner.entities.Address;
 import runner.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import runner.entities.Login;
 import runner.repositories.CustomerRepo;
+import runner.repositories.LoginRepo;
+
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class CustomerServices {
    //object for logging information,warning,error
     private final static Logger loggerService = Logger.getLogger(CustomerServices.class.getName());
-
     private CustomerRepo customerRepo;
    //Autowired the customerService
     @Autowired
@@ -29,6 +28,10 @@ public class CustomerServices {
         loggerService.log(Level.INFO, "The repository for customer has been autowired to services");
         this.customerRepo = customerRepo;
     }
+
+    @Autowired
+    private LoginRepo loginRepo;
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -169,4 +172,17 @@ public class CustomerServices {
         }
         return null;
     }
+
+    public Set<Account> getAllAccounts(String username) {
+        loggerService.log(Level.INFO, "Finding the customer to get all accounts");
+        Login login = loginRepo.findLoginByUsername(username);
+        Customer customer = customerRepo.findCustomerById(login.getId());
+
+        if (customer != null) {
+            loggerService.log(Level.INFO, "Accounts belonging to "+login.getId()+ " use has been found ,accounts are being returned");
+            return customer.getAccounts();
+        }
+        return null;
+    }
+
 }

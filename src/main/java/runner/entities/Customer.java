@@ -2,6 +2,7 @@ package runner.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -34,9 +35,9 @@ public class Customer {
     @PrimaryKeyJoinColumn //sharing primary key with user login since creating a new user requires a login anyways
     private Login login;
 
-    @OneToMany(cascade= ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
-    @OrderBy
+    @OneToMany(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
+    //@JoinColumn(name = "customer_id")
+    //@OrderBy
     @JsonBackReference
     private Set<Account> accounts;
 
