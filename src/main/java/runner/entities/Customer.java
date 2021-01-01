@@ -1,9 +1,6 @@
 package runner.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
@@ -113,10 +110,6 @@ public class Customer {
     }
 
     public void setPhoneNumber(String phoneNumber)  {
-//        String phoneMask= "###-###-####";
-//        MaskFormatter maskFormatter= new MaskFormatter(phoneMask);
-//        maskFormatter.setValueContainsLiteralCharacters(false);
-//        maskFormatter.valueToString(phoneNumber) ;
         this.phoneNumber =   phoneNumber;
     }
 

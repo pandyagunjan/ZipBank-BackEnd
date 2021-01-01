@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface AccountRepo extends CrudRepository<Account,Long> {
 
     Account findAccountById(Long Id);
-    Account findAccountByEncryptedUrl(String encryptedUrl); //zekai
-    Account findAccountByAccountNumber(String accountNumber); //zekai
+    Account findAccountByEncryptedUrl(String encryptedUrl);
+    Account findAccountByAccountNumber(String accountNumber);
 }

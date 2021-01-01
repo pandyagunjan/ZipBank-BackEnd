@@ -1,13 +1,11 @@
 package runner.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.springframework.cache.interceptor.CacheAspectSupport;
+
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,7 +14,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String transactionDescription;
-    private Double transactionAmount; //zekai
+    private Double transactionAmount;
     private Double transactionBalance;
     private LocalDate transactionDate;
 

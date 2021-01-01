@@ -3,17 +3,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import runner.entities.Account;
 import runner.entities.Address;
 import runner.entities.Customer;
-import runner.repositories.LoginRepo;
 import runner.services.CustomerServices;
 import java.net.URI;
-import java.util.Set;
 import java.util.logging.Logger;
 
 @RequestMapping("/profile")
@@ -45,6 +40,7 @@ public class CustomerController {
                 .path("/{id}")
                 .buildAndExpand(customer.getId())
                 .toUri();
+
         responseHeaders.setLocation(newPollUri);
 
         return new ResponseEntity<>(customer,responseHeaders, HttpStatus.CREATED);
