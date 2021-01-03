@@ -17,24 +17,24 @@ public class TransactionServices {
     //CRUD methods
     public Optional<Transaction> createTransaction()
     {
-        //Re-direct to POST in TransactionHistory controller
+        //Used in POST for Transaction controller
         return null;
     }
 
     public Optional<Transaction> readTransaction()
     {
-        //Re-direct to GET in TransactionHistory controller
+        //Used in GET in Transaction controller
         return null;
     }
     public Boolean removeTransaction()
     {
-        //Re-direct to DELETE in TransactionHistory controller
+        //Used in DELETE in Transaction controller
         return true;
     }
 
     public Optional<Transaction> updateTransaction()
     {
-        //Re-direct to PUT in TransactionHistory controller
+        //Used in PUT in Transaction controller
         return null;
     }
 

@@ -20,8 +20,8 @@ public class CustomerController {
 
     private final static Logger logger = Logger.getLogger(CustomerController.class.getName());
 
-    @GetMapping(value = "/")
-    public ResponseEntity<Customer> readById(@PathVariable Long id) throws Exception {
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Customer> readById(@PathVariable Long id) {
         Customer customer =customerServices.readCustomer(id);
           if( customer == null)
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -32,8 +32,7 @@ public class CustomerController {
     @PostMapping(value = "/create")
     public ResponseEntity<?> create(@RequestBody Customer customer) {
         customer = customerServices.createCustomer(customer);
-  //Best practice is to convey the URI to the newly created resource using the Location HTTP header via Spring's ServletUriComponentsBuilder utility class.
- //This will ensure that the client has some way of knowing the URI of the newly created Poll.
+  //Best practice is to convey the URI to the newly created resource using the Location HTTP header
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newPollUri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -59,8 +58,8 @@ public class CustomerController {
         else if(response == 1 )
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         else
-           return new ResponseEntity<>("Re-send the phone number", HttpStatus.BAD_REQUEST);
-       // return new ResponseEntity<>(userServices.updateUserPhoneNumber(id,phoneNumber), HttpStatus.OK);
+           return new ResponseEntity<>("Incorrent format of Phone , please re-send", HttpStatus.BAD_REQUEST);
+
     }
 
     @PutMapping(value = "/update/{id}/email") //"/email
@@ -71,8 +70,8 @@ public class CustomerController {
         else if(response == 1 )
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         else
-            return new ResponseEntity<>("Re-send the email-d", HttpStatus.BAD_REQUEST);
-        // return new ResponseEntity<>(userServices.updateUserPhoneNumber(id,phoneNumber), HttpStatus.OK);
+            return new ResponseEntity<>("Incorrect email id format,please re-send", HttpStatus.BAD_REQUEST);
+
     }
 
     @PutMapping(value = "/update/{id}/address") //"/address
@@ -87,11 +86,11 @@ public class CustomerController {
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         int flag=customerServices.deleteCustomer(id);
         if(flag ==0)
-            return new ResponseEntity<>("User has been deleted", HttpStatus.OK);
+            return new ResponseEntity<>("User has been deleted as all accounts has balance as Zero.", HttpStatus.OK);
         else if(flag==2)
-            return new ResponseEntity<>("User has account with balance", HttpStatus.OK);
+            return new ResponseEntity<>("User has account with balance , cannot be deleted", HttpStatus.FORBIDDEN);
         else
-            return new ResponseEntity<>("No accounts/user found", HttpStatus.OK);
+            return new ResponseEntity<>("No accounts/user found", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/accounts/{id}")
