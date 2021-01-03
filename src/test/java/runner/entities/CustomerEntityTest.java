@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -21,12 +22,12 @@ import java.util.Set;
         "DB_PASS=password",
         "DB_URL=jdbc:mysql://localhost:3306/moneymanagement"})
 public class CustomerEntityTest {
-
+    @MockBean
     private Customer customer;
-    private Login login;
-    private Set<Account> expectedAccount;
-    private Account account1;
-    private Address expectedAddress;
+//    private Login login;
+//    private Set<Account> expectedAccount;
+//    private Account account1;
+//    private Address expectedAddress;
 
     @Test
     public void testClassSignatureAnnotations() {
