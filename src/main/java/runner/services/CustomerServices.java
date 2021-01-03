@@ -58,6 +58,20 @@ public class CustomerServices {
         }
     }
 
+
+    public Customer readCustomerByLogin(String name) {
+        loggerService.log(Level.INFO, "The customer information is being read");
+       // Login login =
+        Customer customer = customerRepo.findCustomerByLoginUsername(name);
+        if (customer != null) {
+            loggerService.log(Level.INFO, "The customer is found and being returned");
+            return customer;
+        } else {
+            loggerService.log(Level.WARNING, "The customer could not be found, returned null");
+            return null;
+        }
+    }
+
     public int deleteCustomer(Long id) {
         Customer customer = customerRepo.findCustomerById(id);
         Set<Account> accounts; // To collect all accounts belonging to this customer
@@ -183,6 +197,7 @@ public class CustomerServices {
         }
         return null;
     }
+
     //generate 35-40 random characters
     public String generateRandomUrl() {
         Generex generex = new Generex("[A-Za-z0-9]{35,40}");

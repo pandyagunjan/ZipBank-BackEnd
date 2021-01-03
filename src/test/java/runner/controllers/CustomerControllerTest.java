@@ -43,14 +43,14 @@ public class CustomerControllerTest {
         this.customer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
     }
 
-    @Test
-    public void findUserTest() throws Exception {
-        Mockito.when(userController.readById(1L)).thenReturn(new ResponseEntity<>(customer, HttpStatus.OK));
-        mockMvc.perform(get("/profile/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName", is("Radha")))
-                .andExpect(jsonPath("$.id", is(1)));
-    }
+//    @Test
+//    public void findUserTest() throws Exception {
+//        Mockito.when(userController.readById(1L)).thenReturn(new ResponseEntity<>(customer, HttpStatus.OK));
+//        mockMvc.perform(get("/profile/1"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.firstName", is("Radha")))
+//                .andExpect(jsonPath("$.id", is(1)));
+//    }
 
     @Test
     public void createUserTest() throws Exception {
