@@ -1,4 +1,5 @@
 package runner.controllers;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import runner.entities.Address;
 import runner.entities.Customer;
 import runner.services.CustomerServices;
+import runner.views.Views;
 
 
 import java.net.URI;
@@ -23,9 +25,9 @@ public class CustomerController {
 
     private final static Logger logger = Logger.getLogger(CustomerController.class.getName());
 
-
+    @JsonView(Views.Profile.class)
     @GetMapping
-    public ResponseEntity<?> readById() {
+    public ResponseEntity<?> getCustomer() {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer =customerServices.readCustomerByLogin(currentPrincipalName);
           if( customer == null)
@@ -62,6 +64,7 @@ public class CustomerController {
         return new ResponseEntity<>(customerServices.updateCustomer(id,customer), HttpStatus.OK);
     }
 
+    @JsonView(Views.PhoneNumber.class)
     @PutMapping(value = "/update/phone")
     public ResponseEntity<?> updatePhone(@RequestBody String phoneNumber) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -77,6 +80,7 @@ public class CustomerController {
 
     }
 
+    @JsonView(Views.Email.class)
     @PutMapping(value = "/update/email")
     public ResponseEntity<?> updateEmail(@RequestBody String email) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -92,6 +96,7 @@ public class CustomerController {
 
     }
 
+    @JsonView(Views.Address.class)
     @PutMapping(value = "/update/address")
     public ResponseEntity<?> updateEmail(@RequestBody Address address) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -103,6 +108,7 @@ public class CustomerController {
         else
             return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
     }
+
     @DeleteMapping(value = "/delete")
     public ResponseEntity<?> deleteById() {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -117,14 +123,4 @@ public class CustomerController {
             return new ResponseEntity<>("No accounts/user found", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/accounts")
-    public ResponseEntity<?> getAllAccounts(){
-        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
-        Long id = customerReturned.getId();
-        if(customerServices.getAllAccounts(id) == null)
-            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
-        else
-            return new ResponseEntity<>(customerServices.getAllAccounts(id), HttpStatus.OK);
-    }
 }

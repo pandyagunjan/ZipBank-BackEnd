@@ -1,4 +1,5 @@
 package runner.controllers;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +9,11 @@ import runner.entities.Account;
 import runner.entities.Transaction;
 import runner.services.AccountServices;
 import runner.services.CustomerServices;
+import runner.views.Views;
+
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequestMapping("/myaccount")
 @RestController
@@ -18,8 +22,6 @@ public class AccountController {
     @Autowired
     private AccountServices accountServices;
 
-    @Autowired
-    private CustomerServices customerServices;
     /**
      * This controller is used only for JWT testing purposes
      * */
@@ -29,16 +31,17 @@ public class AccountController {
     }
 
     //get accounts for the authenticated user only, THIS is the homepage once user has logged in
+    @JsonView(Views.AllAccounts.class)
     @GetMapping
     public ResponseEntity<Set<Account>> readAllAccount() {
        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-       return new ResponseEntity<>(customerServices.getAllAccounts(currentPrincipalName), HttpStatus.OK);
+       return new ResponseEntity<>(accountServices.getAllAccounts(currentPrincipalName), HttpStatus.OK);
     }
 
-    //REMOVE if not needed
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Account> readAccount(@PathVariable Long id) throws Exception {
-        return new ResponseEntity<>(accountServices.readAccount(id), HttpStatus.OK);
+    @JsonView(Views.AccountSpecific.class)
+    @GetMapping(value = "/{accountEncryptedUrl}")
+    public ResponseEntity<Account> readAccountById(@PathVariable String accountEncryptedUrl){
+        return new ResponseEntity<>(accountServices.findAccountByEncryptedUrl(accountEncryptedUrl), HttpStatus.OK);
     }
 
     //REMOVE if not needed
@@ -53,10 +56,10 @@ public class AccountController {
         return new ResponseEntity<>(accountServices.updateAccount(id,account), HttpStatus.OK);
     }
 
-    //This needs to be rewritten with "encryptedUrl/delete"
-    @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<Boolean> deleteById(@PathVariable Long id) throws Exception {
-        return new ResponseEntity<>(accountServices.removeAccount(id), HttpStatus.OK);
+    //This needs to be rewritten with "encryptedUrl/delete", need to doublecheck if deleting account deletes User due to cascade.ALL
+    @DeleteMapping(value = "/{encryptedUrl}/delete")
+    public ResponseEntity<Boolean> deleteById(@PathVariable String encryptedUrl){
+        return new ResponseEntity<>(accountServices.removeAccount(encryptedUrl), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{encryptedUrl}/deposit")

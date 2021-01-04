@@ -30,9 +30,6 @@ public class CustomerServices {
     }
 
     @Autowired
-    private LoginRepo loginRepo;
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     //save the customer in the DB
@@ -185,6 +182,7 @@ public class CustomerServices {
         return null;
     }
 
+    //Delete if not needed
     public Set<Account> getAllAccounts(Long id) {
         loggerService.log(Level.INFO, "Finding the customer to get all accounts");
         Customer customer = customerRepo.findCustomerById(id);
@@ -196,7 +194,8 @@ public class CustomerServices {
         return null;
     }
 
-    public Set<Account> getAllAccounts(String username) {
+    //superceded by Set<Account> findAccountsByCustomer_LoginUsername (String login) in AccountRepo
+/*    public Set<Account> getAllAccounts(String username) {
         loggerService.log(Level.INFO, "Finding the customer to get all accounts");
         Login login = loginRepo.findLoginByUsername(username);
         Customer customer = customerRepo.findCustomerById(login.getId());
@@ -206,7 +205,7 @@ public class CustomerServices {
             return customer.getAccounts();
         }
         return null;
-    }
+    }*/
 
     //generate 35-40 random characters
     public String generateRandomUrl() {

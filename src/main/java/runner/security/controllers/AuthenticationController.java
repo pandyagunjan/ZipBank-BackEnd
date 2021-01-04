@@ -14,6 +14,7 @@ import runner.entities.Account;
 import runner.entities.Login;
 import runner.security.models.AuthenticationResponse;
 import runner.security.utilities.JwtUtil;
+import runner.services.AccountServices;
 import runner.services.CustomerServices;
 import runner.services.LoginServices;
 
@@ -29,7 +30,7 @@ public class AuthenticationController {
     @Autowired
     private LoginServices loginServices;
     @Autowired
-    private CustomerServices customerServices;
+    private AccountServices accountServices;
 
     //jwt authentication
     @PostMapping(value = "/authenticate")
@@ -51,7 +52,7 @@ public class AuthenticationController {
 
     //adding the random URL to the accounts
     public void addRandomUrlToAccounts(Login login){
-        Set<Account> accountSet = customerServices.getAllAccounts(login.getUsername());
+        Set<Account> accountSet = accountServices.getAllAccounts(login.getUsername());
         accountSet.stream().forEach(a->a.setEncryptedUrl(generateRandomUrl()));
     }
 
