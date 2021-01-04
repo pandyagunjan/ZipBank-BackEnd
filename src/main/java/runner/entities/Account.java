@@ -1,7 +1,10 @@
 package runner.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import runner.enums.AccountType;
+import runner.views.Views;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -15,15 +18,30 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @JsonView(Views.AccountNumber.class)
     private String accountNumber;
+
+    @JsonView(Views.AccountDetails.class)
     private String routingNumber;
+
+    @JsonView(Views.AccountType.class)
     @Enumerated(EnumType.STRING)
     private AccountType accountType; //enum
+
+    @JsonView(Views.AccountActions.class)
     private Double balance;
+
+    @JsonView(Views.AccountDetails.class)
     private LocalDate dateOfOpening;
+
+    @JsonView(Views.AccountDetails.class)
     private Double interestRate;
+
+    @JsonView(Views.AllAccounts.class) //delete this later in production
     private String encryptedUrl;
 
+    @JsonView(Views.AccountSpecific.class)
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "account_transaction",

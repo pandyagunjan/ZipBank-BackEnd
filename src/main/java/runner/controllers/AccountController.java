@@ -1,4 +1,5 @@
 package runner.controllers;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,8 @@ import runner.entities.Account;
 import runner.entities.Transaction;
 import runner.services.AccountServices;
 import runner.services.CustomerServices;
+import runner.views.Views;
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,12 +31,14 @@ public class AccountController {
     }
 
     //get accounts for the authenticated user only, THIS is the homepage once user has logged in
+    @JsonView(Views.AllAccounts.class)
     @GetMapping
     public ResponseEntity<Set<Account>> readAllAccount() {
        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
        return new ResponseEntity<>(accountServices.getAllAccounts(currentPrincipalName), HttpStatus.OK);
     }
 
+    @JsonView(Views.AccountSpecific.class)
     @GetMapping(value = "/{accountEncryptedUrl}")
     public ResponseEntity<Account> readAccountById(@PathVariable String accountEncryptedUrl){
         return new ResponseEntity<>(accountServices.findAccountByEncryptedUrl(accountEncryptedUrl), HttpStatus.OK);

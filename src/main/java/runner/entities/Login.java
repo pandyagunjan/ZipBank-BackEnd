@@ -2,9 +2,11 @@ package runner.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import runner.views.Views;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -15,8 +17,11 @@ public class Login implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @JsonView(Views.Profile.class)
     @Column(nullable = false)
     private String username;
+
     @Column(nullable = false)
     private String password;
 
