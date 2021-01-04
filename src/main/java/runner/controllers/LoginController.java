@@ -23,7 +23,12 @@ public class LoginController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<Login> create(@RequestBody Login login) {
-        return new ResponseEntity<>(loginServices.createLogin(login), HttpStatus.CREATED);
+        Login loginResult =loginServices.createLogin(login);
+        if( loginResult == null)
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        else
+            return new ResponseEntity<>(loginResult, HttpStatus.OK);
+
     }
 
 }

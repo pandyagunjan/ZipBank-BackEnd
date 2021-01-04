@@ -37,12 +37,22 @@ public class CustomerServices {
 
     //save the customer in the DB
     public Customer createCustomer(Customer customer) {
-        loggerService.log(Level.INFO, "The customer information is being saved");
-        customer.getLogin().setPassword(bCryptPasswordEncoder.encode(customer.getLogin().getPassword())); //encrypts the password before saving
-        customer.setSocialSecurity(bCryptPasswordEncoder.encode(customer.getSocialSecurity()));
-       //get the accounts from the customer and set the customer id in accounts table before saving the Customer.
-        customer.getAccounts().stream().forEach(account -> account.setCustomer(customer));
-        return (Customer) customerRepo.save(customer);
+        loggerService.log(Level.INFO, "The customer information is being checked");
+        if(!checkLogin(customer.getLogin())) {
+            customer.getLogin().setPassword(bCryptPasswordEncoder.encode(customer.getLogin().getPassword())); //encrypts the password before saving
+            customer.setSocialSecurity(bCryptPasswordEncoder.encode(customer.getSocialSecurity()));
+            //get the accounts from the customer and set the customer id in accounts table before saving the Customer.
+            customer.getAccounts().stream().forEach(account -> account.setCustomer(customer));
+            loggerService.log(Level.INFO, "The customer information is being saved" + checkLogin(customer.getLogin()));
+            return (Customer) customerRepo.save(customer);
+        }
+        return null;
+    }
+    public Boolean checkLogin(Login login) {
+
+        List<String> logins= customerRepo.findAllLoginsNative();
+        long count = logins.stream().filter(name -> name.equals(login.getUsername())).count();
+        return count!=0 ? true:false;
     }
 
     public Customer readCustomer(Long id) {
@@ -140,6 +150,7 @@ public class CustomerServices {
     }
 
     public int updateCustomerEmail(Long id, String email) {
+        //return 0 when updated , 1 is customer not found and 2 if value does not match the REGEX
         loggerService.log(Level.INFO, "Finding the user to be updated");
         Customer customer = customerRepo.findCustomerById(id);
 
@@ -163,8 +174,8 @@ public class CustomerServices {
     public Customer updateCustomerAddress(Long id, Address address) {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
         Customer customer = customerRepo.findCustomerById(id);
-        address.setId(customer.getAddress().getId());
         if (customer != null) {
+            address.setId(customer.getAddress().getId());
             loggerService.log(Level.INFO, "customer with id "+id+ " found to be updated");
             customer.setAddress(address);
             customerRepo.save(customer);
