@@ -15,7 +15,7 @@ public class Account {
     @Column(nullable = false)
     private String accountNumber;
     @Column(nullable = false)
-    private String routingNumber;
+    private String routingNumber = "091000022";
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccountType accountType; //enum
