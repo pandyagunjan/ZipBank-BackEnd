@@ -26,11 +26,12 @@ public class AccountServices {
     public Account createAccount(Account account) {
         loggerService.log(Level.INFO, "The customer's new account is being saved and given an account number.");
         Boolean created = false;
-        while(!created) {
-            double temp = Math.floor(Math.random()* 1000000000);
-        if(accountRepo.findAccountByAccountNumber(String.valueOf(temp)) == null) {
-            account.setAccountNumber(String.valueOf(temp));
-            created = true;
+        while (!created) {
+            double temp = Math.floor(Math.random() * 1000000000);
+            if (accountRepo.findAccountByAccountNumber(String.valueOf(temp)) == null) {
+                account.setAccountNumber(String.valueOf(temp));
+                created = true;
+            }
         }
         return accountRepo.save(account);
     }
