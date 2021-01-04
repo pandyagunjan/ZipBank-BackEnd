@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
-import java.util.UUID;
-
 import static javax.persistence.CascadeType.ALL;
+
 
 @Entity
 public class Customer {
@@ -35,22 +34,9 @@ public class Customer {
     private Login login;
 
     @OneToMany(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
-    //@JoinColumn(name = "customer_id")
-    //@OrderBy
+    @OrderBy
     @JsonBackReference
     private Set<Account> accounts;
-
-
-//    String randomUUIDString;
-//
-//    public String getRandomUUIDString() {
-//        return randomUUIDString;
-//    }
-//
-//    public void setRandomUUIDString(String randomUUIDString) {
-//       UUID uuid = UUID.randomUUID();
-//       this.randomUUIDString = uuid.toString();
-//    }
 
     public Customer() {
     }

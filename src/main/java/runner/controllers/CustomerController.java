@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import runner.entities.Address;
 import runner.entities.Customer;
-import runner.entities.Login;
 import runner.services.CustomerServices;
-import runner.services.LoginServices;
+
 
 import java.net.URI;
 import java.util.logging.Logger;
@@ -26,11 +25,11 @@ public class CustomerController {
 
 
     @GetMapping
-    public ResponseEntity<Customer> readById() {
+    public ResponseEntity<?> readById() {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer =customerServices.readCustomerByLogin(currentPrincipalName);
           if( customer == null)
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<>(customer, HttpStatus.OK);
     }
@@ -38,19 +37,23 @@ public class CustomerController {
     @PostMapping(value = "/create")
     public ResponseEntity<?> create(@RequestBody Customer customer) {
         customer = customerServices.createCustomer(customer);
-  //Best practice is to convey the URI to the newly created resource using the Location HTTP header
-        HttpHeaders responseHeaders = new HttpHeaders();
-        URI newPollUri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(customer.getId())
-                .toUri();
 
-        responseHeaders.setLocation(newPollUri);
+        if(customer!=null) {
+            //Best practice is to convey the URI to the newly created resource using the Location HTTP header
+            HttpHeaders responseHeaders = new HttpHeaders();
+            URI newPollUri = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(customer.getId())
+                    .toUri();
 
-        return new ResponseEntity<>(customer,responseHeaders, HttpStatus.CREATED);
+            responseHeaders.setLocation(newPollUri);
+            return new ResponseEntity<>(customer, responseHeaders, HttpStatus.CREATED);
+        }
+        else
+            return new ResponseEntity<>("Login user name already exist", HttpStatus.CONFLICT);
 
-    }
+            }
     @PutMapping(value = "/update")
     public ResponseEntity<Customer> update(@RequestBody Customer customer) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -59,7 +62,7 @@ public class CustomerController {
         return new ResponseEntity<>(customerServices.updateCustomer(id,customer), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/update/phone") //"/phone
+    @PutMapping(value = "/update/phone")
     public ResponseEntity<?> updatePhone(@RequestBody String phoneNumber) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
@@ -68,13 +71,13 @@ public class CustomerController {
         if(response ==0 )
             return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
         else if(response == 1 )
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
         else
            return new ResponseEntity<>("Incorrect format of Phone , please re-send", HttpStatus.BAD_REQUEST);
 
     }
 
-    @PutMapping(value = "/update/email") //"/email
+    @PutMapping(value = "/update/email")
     public ResponseEntity<?> updateEmail(@RequestBody String email) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
@@ -83,20 +86,20 @@ public class CustomerController {
         if(response ==0 )
             return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
         else if(response == 1 )
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<>("Incorrect email id format,please re-send", HttpStatus.BAD_REQUEST);
 
     }
 
-    @PutMapping(value = "/update/address") //"/address
+    @PutMapping(value = "/update/address")
     public ResponseEntity<?> updateEmail(@RequestBody Address address) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
         Long id = customerReturned.getId();
         Customer responseCustomer= customerServices.updateCustomerAddress(id,address);
         if(responseCustomer == null)
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
     }
@@ -120,7 +123,7 @@ public class CustomerController {
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
         Long id = customerReturned.getId();
         if(customerServices.getAllAccounts(id) == null)
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<>(customerServices.getAllAccounts(id), HttpStatus.OK);
     }
