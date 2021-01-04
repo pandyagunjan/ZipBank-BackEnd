@@ -11,8 +11,6 @@ import runner.entities.Address;
 import runner.entities.Customer;
 import runner.services.CustomerServices;
 import runner.views.Views;
-
-
 import java.net.URI;
 import java.util.logging.Logger;
 

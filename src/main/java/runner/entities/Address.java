@@ -1,5 +1,8 @@
 package runner.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import runner.views.Views;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,15 +10,20 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @JsonView(Views.Address.class)
     @Column(nullable = false)
     private String firstLine;
     @Column(nullable = true)
+    @JsonView(Views.Address.class)
     private String secondLIne;
     @Column(nullable = false)
+    @JsonView(Views.Address.class)
     private String city;
     @Column(nullable = false)
+    @JsonView(Views.Address.class)
     private String state;
     @Column(nullable = false)
+    @JsonView(Views.Address.class)
     private String zipcode;
 
     public Long getId() {

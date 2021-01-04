@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import runner.entities.Account;
 import runner.entities.Transaction;
 import runner.services.AccountServices;
-import runner.services.CustomerServices;
 import runner.views.Views;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @RequestMapping("/myaccount")
 @RestController
