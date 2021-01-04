@@ -38,17 +38,17 @@ public class JwtTest {
     @Autowired
     private JwtUtil jwtUtil;
 
-//    @Test
-//    public void notAuthenticatedTest() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.get("/account/test")).andExpect(status().isForbidden());
-//    }
+    @Test
+    public void notAuthenticatedTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/account/test")).andExpect(status().isForbidden());
+    }
 
-//    @Test
-//    public void shouldGenerateToken() throws Exception{
-//        UserDetails user = new User("username","password", new ArrayList<>());
-//        String token = jwtUtil.generateToken(user);
-//        mockMvc.perform(MockMvcRequestBuilders.get("/account/test")
-//                .header("Authorization", token))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    public void shouldGenerateToken() throws Exception{
+        UserDetails user = new User("username","password", new ArrayList<>());
+        String token = jwtUtil.generateToken(user);
+        mockMvc.perform(MockMvcRequestBuilders.get("/account/test")
+                .header("Authorization", token))
+                .andExpect(status().isOk());
+    }
 }

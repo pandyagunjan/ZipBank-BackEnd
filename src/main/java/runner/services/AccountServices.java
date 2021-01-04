@@ -18,6 +18,10 @@ public class AccountServices {
     @Autowired
     private TransactionServices transactionServices;
 
+    public Set<Account> getAllAccounts(String username){
+        return accountRepo.findAccountsByCustomer_LoginUsername(username);
+    }
+
     public Account createAccount(Account account) {
         loggerService.log(Level.INFO, "The customer's new account is being saved");
         return accountRepo.save(account);
@@ -49,6 +53,14 @@ public class AccountServices {
             loggerService.log(Level.WARNING, "The customer had a balance greater than 0 and could not remove the account # " + id);
             throw new Exception("Balance not 0 cannot be closed");
         }
+    }
+
+    public Boolean removeAccount(String encryptedUrl){
+        if(accountRepo.findAccountByEncryptedUrl(encryptedUrl).getBalance()==0) {
+            accountRepo.deleteAccountByEncryptedUrl(encryptedUrl);
+            return true;
+        }
+        return false;
     }
 
     public Optional<Account> updateAccount(Long id, Account account) throws Exception{

@@ -29,8 +29,8 @@ import runner.services.LoginServices;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration //allows Spring to find and automatically apply the class to the global Web Security.
-@EnableWebSecurity
+@Configuration
+@EnableWebSecurity //allows Spring to find and automatically apply the class to the global Web Security.
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
