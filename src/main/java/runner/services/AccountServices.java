@@ -1,4 +1,5 @@
 package runner.services;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import runner.entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,13 @@ public class AccountServices {
 
     public Account createAccount(Account account) {
         loggerService.log(Level.INFO, "The customer's new account is being saved and given an account number.");
-        account.setAccountNumber(String.valueOf(Math.floor(Math.random() * 1000000000)));
+        Boolean created = false;
+        while(!created) {
+            double temp = Math.floor(Math.random()* 1000000000);
+        if(accountRepo.findAccountByAccountNumber(String.valueOf(temp)) == null) {
+            account.setAccountNumber(String.valueOf(temp));
+            created = true;
+        }
         return accountRepo.save(account);
     }
 
