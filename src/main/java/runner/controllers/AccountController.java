@@ -2,21 +2,12 @@ package runner.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import runner.entities.Account;
 import runner.entities.Transaction;
-import runner.security.filters.JwtAuthorizationFilter;
 import runner.services.AccountServices;
 import runner.services.CustomerServices;
-import runner.services.LoginServices;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -40,8 +31,8 @@ public class AccountController {
     //get accounts for the authenticated user only, THIS is the homepage once user has logged in
     @GetMapping
     public ResponseEntity<Set<Account>> readAllAccount() {
-        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return new ResponseEntity<>(customerServices.getAllAccounts(currentPrincipalName), HttpStatus.OK);
+       String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
+       return new ResponseEntity<>(customerServices.getAllAccounts(currentPrincipalName), HttpStatus.OK);
     }
 
     //REMOVE if not needed

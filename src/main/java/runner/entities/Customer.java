@@ -1,12 +1,11 @@
 package runner.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
+
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
@@ -40,6 +39,18 @@ public class Customer {
     //@OrderBy
     @JsonBackReference
     private Set<Account> accounts;
+
+
+//    String randomUUIDString;
+//
+//    public String getRandomUUIDString() {
+//        return randomUUIDString;
+//    }
+//
+//    public void setRandomUUIDString(String randomUUIDString) {
+//       UUID uuid = UUID.randomUUID();
+//       this.randomUUIDString = uuid.toString();
+//    }
 
     public Customer() {
     }
@@ -113,10 +124,7 @@ public class Customer {
     }
 
     public void setPhoneNumber(String phoneNumber)  {
-//        String phoneMask= "###-###-####";
-//        MaskFormatter maskFormatter= new MaskFormatter(phoneMask);
-//        maskFormatter.setValueContainsLiteralCharacters(false);
-//        maskFormatter.valueToString(phoneNumber) ;
+
         this.phoneNumber =   phoneNumber;
     }
 
