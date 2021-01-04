@@ -1,6 +1,8 @@
 package runner.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import runner.views.Views;
 
 
 import javax.persistence.*;
@@ -13,9 +15,17 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @JsonView(Views.AccountSpecific.class)
     private String transactionDescription;
+
+    @JsonView(Views.AccountSpecific.class)
     private Double transactionAmount;
+
+    @JsonView(Views.AccountSpecific.class)
     private Double transactionBalance;
+
+    @JsonView(Views.AccountSpecific.class)
     private LocalDate transactionDate;
 
     @JsonBackReference

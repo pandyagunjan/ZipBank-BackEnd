@@ -15,15 +15,18 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @JsonView(Views.Profile.class)
     @Column(nullable = false)
     private String firstName;
 
     @JsonView(Views.Profile.class)
     private String middleName;
+
     @JsonView(Views.Profile.class)
     @Column(nullable = false)
     private String lastName;
+
     @JsonView(Views.Profile.class)
     @Column(nullable = false)
     private LocalDate dateOfBirth;
@@ -42,6 +45,7 @@ public class Customer {
     @JsonView(Views.Address.class)
     @OneToOne(cascade = ALL, fetch = FetchType.EAGER)
     private Address address;
+
     @JsonBackReference(value = "login")
     @OneToOne(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn //sharing primary key with user login since creating a new user requires a login anyways

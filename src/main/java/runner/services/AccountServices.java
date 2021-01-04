@@ -23,6 +23,11 @@ public class AccountServices {
         return accountRepo.findAccountsByCustomer_LoginUsername(username);
     }
 
+    public void SaveAccountWithUrl(Account account, String randomUrl){
+            account.setEncryptedUrl(randomUrl);
+            accountRepo.save(account);
+    }
+
     public Account createAccount(Account account) {
         loggerService.log(Level.INFO, "The customer's new account is being saved and given an account number.");
         Boolean created = false;
