@@ -15,16 +15,16 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @JsonView(Views.Profile.class)
     @Column(nullable = false)
     private String firstName;
 
     @JsonView(Views.Profile.class)
     private String middleName;
-
+    @JsonView(Views.Profile.class)
     @Column(nullable = false)
     private String lastName;
-
+    @JsonView(Views.Profile.class)
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
