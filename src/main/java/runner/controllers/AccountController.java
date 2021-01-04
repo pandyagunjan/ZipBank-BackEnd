@@ -31,8 +31,8 @@ public class AccountController {
     //get accounts for the authenticated user only, THIS is the homepage once user has logged in
     @GetMapping
     public ResponseEntity<Set<Account>> readAllAccount() {
-        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return new ResponseEntity<>(customerServices.getAllAccounts(currentPrincipalName), HttpStatus.OK);
+       String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
+       return new ResponseEntity<>(customerServices.getAllAccounts(currentPrincipalName), HttpStatus.OK);
     }
 
     //REMOVE if not needed

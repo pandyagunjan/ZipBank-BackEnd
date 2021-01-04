@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import runner.entities.Login;
 import runner.repositories.CustomerRepo;
 import runner.repositories.LoginRepo;
-
 import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
