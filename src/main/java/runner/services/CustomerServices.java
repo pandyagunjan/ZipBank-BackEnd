@@ -48,7 +48,7 @@ public class CustomerServices {
     public Boolean checkLogin(Login login) {
 
         List<String> logins= customerRepo.findAllLoginsNative();
-        long count = logins.stream().filter(name -> name.equals(login.getUsername())).count();
+        long count = logins.stream().filter(name -> name.equalsIgnoreCase(login.getUsername())).count();
         return count!=0 ? true:false;
     }
 
