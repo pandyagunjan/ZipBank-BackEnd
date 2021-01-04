@@ -11,6 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import runner.entities.Login;
 import runner.security.utilities.JwtUtil;
 import runner.services.LoginServices;
+import runner.services.UserDetailServices;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,8 +24,11 @@ import java.util.ArrayList;
 //This class looks for the token in the header and authenticates it
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
+/*    @Autowired
+    private LoginServices loginServices*/;
+
     @Autowired
-    private LoginServices loginServices;
+    private UserDetailServices userDetailServices;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -44,7 +48,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         //checks if the token has username and no security context, create an authentication token
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = loginServices.loadUserByUsername(username);
+            UserDetails userDetails = userDetailServices.loadUserByUsername(username);
             if(jwtUtil.validateToken(jwtToken,userDetails)){
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, new ArrayList<>()); //arraylist is placeholder for authorities which is not used

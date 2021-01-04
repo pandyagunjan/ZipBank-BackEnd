@@ -17,6 +17,7 @@ import runner.security.utilities.JwtUtil;
 import runner.services.AccountServices;
 import runner.services.CustomerServices;
 import runner.services.LoginServices;
+import runner.services.UserDetailServices;
 
 import java.util.Set;
 
@@ -28,15 +29,14 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private LoginServices loginServices;
-    @Autowired
     private AccountServices accountServices;
+    @Autowired
+    private UserDetailServices userDetailServices;
 
     //jwt authentication
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> generateAuthenticationToken(@RequestBody Login login) throws Exception{
         try{
-            Login testLogin = login;
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword())
             );
@@ -45,15 +45,14 @@ public class AuthenticationController {
             throw new Exception("Incorrect username or password", e);
         }
         addRandomUrlToAccounts(login);
-        final UserDetails userDetails = loginServices.loadUserByUsername(login.getUsername());
+        final UserDetails userDetails = userDetailServices.loadUserByUsername(login.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
     //adding the random URL to the accounts
     public void addRandomUrlToAccounts(Login login){
-        Set<Account> accountSet = accountServices.getAllAccounts(login.getUsername());
-        accountSet.stream().forEach(a->a.setEncryptedUrl(generateRandomUrl()));
+        accountServices.getAllAccounts(login.getUsername()).forEach(a->accountServices.SaveAccountWithUrl(a,generateRandomUrl()));
     }
 
     //generate 35-40 random characters
