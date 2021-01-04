@@ -3,6 +3,7 @@ package runner.security.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.BeanIds;
@@ -28,8 +29,8 @@ import runner.services.LoginServices;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration //allows Spring to find and automatically apply the class to the global Web Security.
-@EnableWebSecurity
+@Configuration
+@EnableWebSecurity //allows Spring to find and automatically apply the class to the global Web Security.
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -73,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
         http
                 .csrf().disable()
-                .authorizeRequests().antMatchers("insertUrlHere").permitAll()
+                .authorizeRequests().antMatchers("/authenticate").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

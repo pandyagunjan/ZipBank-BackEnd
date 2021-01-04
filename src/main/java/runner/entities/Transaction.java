@@ -1,24 +1,26 @@
 package runner.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(nullable = false)
-    private String accountNumber;
-    @Column(nullable = false)
     private String transactionDescription;
-    @Column(nullable = false)
+    private Double transactionAmount;
     private Double transactionBalance;
-    @Column(nullable = false)
     private LocalDate transactionDate;
 
-    @ManyToOne
-    @JoinColumn(name = "AccountId", nullable = false)
-    private Account account;
+    @JsonBackReference
+    @ManyToMany(mappedBy = "transactions")
+    private Set<Account> accounts = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -26,14 +28,6 @@ public class Transaction {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
     }
 
     public String getTransactionDescription() {
@@ -59,4 +53,21 @@ public class Transaction {
     public void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
     }
+
+    public Double getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    public void setTransactionAmount(Double transactionAmount) {
+        this.transactionAmount = transactionAmount;
+    }
+
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
+
 }

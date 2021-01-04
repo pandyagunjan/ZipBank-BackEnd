@@ -1,32 +1,45 @@
 package runner.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import runner.views.Views;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
 
+
 @Entity
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @JsonView(Views.Profile.class)
     @Column(nullable = false)
     private String firstName;
+
+    @JsonView(Views.Profile.class)
     private String middleName;
+    @JsonView(Views.Profile.class)
     @Column(nullable = false)
     private String lastName;
+    @JsonView(Views.Profile.class)
     @Column(nullable = false)
     private LocalDate dateOfBirth;
+
     @Column(nullable = false)
     private String socialSecurity;
+
     @Column(nullable = false)
+    @JsonView(Views.Email.class)
     private String email;
+
+    @JsonView(Views.PhoneNumber.class)
     @Column(nullable = false)
     private String phoneNumber;
 
+    @JsonView(Views.Address.class)
     @OneToOne(cascade = ALL, fetch = FetchType.EAGER)
     private Address address;
     @JsonBackReference(value = "login")
@@ -34,8 +47,7 @@ public class Customer {
     @PrimaryKeyJoinColumn //sharing primary key with user login since creating a new user requires a login anyways
     private Login login;
 
-    @OneToMany(cascade= ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
+    @OneToMany(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
     @OrderBy
     @JsonBackReference
     private Set<Account> accounts;
@@ -112,10 +124,7 @@ public class Customer {
     }
 
     public void setPhoneNumber(String phoneNumber)  {
-//        String phoneMask= "###-###-####";
-//        MaskFormatter maskFormatter= new MaskFormatter(phoneMask);
-//        maskFormatter.setValueContainsLiteralCharacters(false);
-//        maskFormatter.valueToString(phoneNumber) ;
+
         this.phoneNumber =   phoneNumber;
     }
 

@@ -12,6 +12,8 @@ import runner.repositories.LoginRepo;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -23,11 +25,16 @@ public class LoginServices implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Login createLogin(Login login) {
+    public Login createLogin(Login login1) {
         Login encryptedLogin = new Login();
-        encryptedLogin.setUser(login.getUser());
-        encryptedLogin.setPassword(bCryptPasswordEncoder.encode(login.getPassword()));
-        return loginRepo.save(encryptedLogin);
+        List<Login> allLogins= loginRepo.findAll();
+        List result = allLogins.stream().filter((login) -> login.getUsername().equals(login1.getUsername())).collect(Collectors.toList());
+        if(result.size()==0) {
+            encryptedLogin.setUser(login1.getUser());
+            encryptedLogin.setPassword(bCryptPasswordEncoder.encode(login1.getPassword()));
+            return loginRepo.save(encryptedLogin);
+        }
+        return null;
     }
 
     //need another password authentication done before allowing user to update their password
@@ -47,8 +54,8 @@ public class LoginServices implements UserDetailsService {
         return loginRepo.findLoginById(id);
     }
 
-    public Login findLoginByUsername(Login login){
-        return loginRepo.findLoginByUsername(login.getUsername());
+    public Login findLoginByUsername(String username){
+        return loginRepo.findLoginByUsername(username);
     }
 
     public Boolean logOut() {

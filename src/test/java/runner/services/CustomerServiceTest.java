@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -18,11 +19,13 @@ import runner.entities.Customer;
         "DB_PASS=password",
         "DB_URL=jdbc:mysql://localhost:3306/moneymanagement"})
 public class CustomerServiceTest {
-    @Autowired
+    @MockBean
     private CustomerServices customerServices; //Calls the mockito
 
     @Test
     public void readUserTest() {
+
+        //test
         Customer customer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
         customer.setId(1L);
         String expectedName= "Radha";
