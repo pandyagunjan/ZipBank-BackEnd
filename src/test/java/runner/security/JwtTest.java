@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,8 +32,10 @@ import runner.AppRunner;
 import runner.entities.Customer;
 import runner.entities.Login;
 import runner.security.controllers.AuthenticationController;
+import runner.security.filters.JwtAuthorizationFilter;
 import runner.security.utilities.JwtUtil;
 import runner.services.LoginServices;
+import runner.services.UserDetailServices;
 
 import java.util.ArrayList;
 
@@ -53,7 +56,8 @@ public class JwtTest {
     @Autowired
     private JwtUtil jwtUtil;
     @MockBean
-            LoginServices loginServices;
+    UserDetailServices userDetailServices;
+
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
@@ -79,9 +83,10 @@ public class JwtTest {
     }
 
     @Test
-    public void shouldGenerateToken() throws Exception{
+    public void AuthenticatedTokenAccess() throws Exception{
         UserDetails user = new User("user2","password", new ArrayList<>());
         String token = jwtUtil.generateToken(user); //bypassing spring security authentication and generate token
+        Mockito.when(userDetailServices.loadUserByUsername("user2")).thenReturn(user);
         mockMvc.perform(MockMvcRequestBuilders.get("/myaccount/test")
                 .header("Authorization", "Bearer "+ token))
                 .andExpect(status().isOk());
