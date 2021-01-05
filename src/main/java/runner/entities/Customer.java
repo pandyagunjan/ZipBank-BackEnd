@@ -67,6 +67,15 @@ public class Customer {
         this.socialSecurity = socialSecurity;
     }
 
+    //for testing
+    public Customer(Long id, String firstName, String lastName, Login login, Set<Account> accounts) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.login = login;
+        this.accounts = accounts;
+    }
+
     public Long getId() {
         return id;
     }
