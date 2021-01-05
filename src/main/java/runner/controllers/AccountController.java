@@ -61,17 +61,20 @@ public class AccountController {
         return new ResponseEntity<>(accountServices.removeAccount(encryptedUrl), HttpStatus.OK);
     }
 
+    @JsonView(Views.AccountSpecific.class)
     @PutMapping(value = "/{encryptedUrl}/deposit")
     public ResponseEntity<Account> updateAccountDeposit(@RequestBody Transaction transaction, @PathVariable String encryptedUrl) throws Exception {
         return new ResponseEntity<>(accountServices.deposit(transaction,encryptedUrl), HttpStatus.OK);
     }
 
+    @JsonView(Views.AccountSpecific.class)
     @PutMapping(value = "/{encryptedUrl}/withdraw")
     public ResponseEntity<Account> updateAccountWithdraw(@RequestBody Transaction transaction, @PathVariable String encryptedUrl) throws Exception {
         return new ResponseEntity<>(accountServices.withdraw(transaction,encryptedUrl), HttpStatus.OK);
     }
 
     //same method as withdraw since JSON payload is same, only front end is different
+    @JsonView(Views.AccountSpecific.class)
     @PutMapping(value = "/<encryptedUrl}/transfer")
     public ResponseEntity<Account> updateAccountTransfer(@RequestBody Transaction transaction, @PathVariable String encryptedUrl) throws Exception {
         return new ResponseEntity<>(accountServices.withdraw(transaction,encryptedUrl), HttpStatus.OK);

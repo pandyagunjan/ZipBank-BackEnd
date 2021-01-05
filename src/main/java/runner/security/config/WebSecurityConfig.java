@@ -25,6 +25,7 @@ import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import runner.security.filters.JwtAuthorizationFilter;
 import runner.services.LoginServices;
+import runner.services.UserDetailServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ import java.util.List;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private LoginServices loginServices;
+    private UserDetailServices userDetailServices;
 
     @Autowired
     private JwtAuthorizationFilter jwtAuthorizationFilter;
@@ -55,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     //dependency injects into AuthenticationController
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(loginServices).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userDetailServices).passwordEncoder(bCryptPasswordEncoder());
     }
 
     //allowing user to post to authenticate since spring security is placed on all request

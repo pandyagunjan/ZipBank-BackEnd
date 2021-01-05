@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class LoginServices implements UserDetailsService {
+public class LoginServices{ //} implements UserDetailsService { <--Moved to UserDetailServices
 
     @Autowired
     private LoginRepo loginRepo;
@@ -44,11 +44,11 @@ public class LoginServices implements UserDetailsService {
         return loginRepo.save(updatedLogin);
     }
 
-    @Override
+/*    @Override <--Moved to UserDetailServices
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Login login = loginRepo.findLoginByUsername(username);
         return new User(login.getUsername(), login.getPassword(),new ArrayList<>()); //ArrayList is typically for the authority but not using this feature
-    }
+    }*/
 
     public Login readLogin(Long id){
         return loginRepo.findLoginById(id);

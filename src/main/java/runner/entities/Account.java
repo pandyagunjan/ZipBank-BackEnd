@@ -23,7 +23,7 @@ public class Account {
     private String accountNumber;
 
     @JsonView(Views.AccountDetails.class)
-    private String routingNumber;
+    private String routingNumber = "091000022";
 
     @JsonView(Views.AccountType.class)
     @Enumerated(EnumType.STRING)
