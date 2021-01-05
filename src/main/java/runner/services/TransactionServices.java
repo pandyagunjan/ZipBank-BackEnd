@@ -51,12 +51,12 @@ public class TransactionServices {
         Transaction newTransaction = new Transaction();
         String AccountNum = account2.getAccountNumber(); //get the account number for formatting description
         if(withdrawType) {
-            newTransaction.setTransactionDescription(String.format("Withdrawal to %s XXXXXXX%s", account2.getAccountType(),
+            newTransaction.setTransactionDescription(String.format("Withdrawal to %s XXXXXXXX%s", account2.getAccountType(),
                     AccountNum.substring(AccountNum.length() - 4))); //format description with last 4 digits of account
             newTransaction.setTransactionAmount(transaction.getTransactionAmount()*(-1)); //making "to" transaction amount negative
         }
         else{
-            newTransaction.setTransactionDescription(String.format("Deposit from %s XXXXXXX%s", account2.getAccountType(),
+            newTransaction.setTransactionDescription(String.format("Deposit from %s XXXXXXXX%s", account2.getAccountType(),
                     AccountNum.substring(AccountNum.length() - 4))); //format description with last 4 digits of account
             newTransaction.setTransactionAmount(transaction.getTransactionAmount()); //making "to" transaction amount negative
         }

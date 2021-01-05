@@ -56,6 +56,15 @@ public class Account {
     public Account() {
     }
 
+    public Account(Long id, String accountNumber, AccountType accountType, Double balance, String encryptedUrl, Set<Transaction> transactions) {
+        this.id = id;
+        this.accountNumber = accountNumber;
+        this.accountType = accountType;
+        this.balance = balance;
+        this.encryptedUrl = encryptedUrl;
+        this.transactions = transactions;
+    }
+
     public Long getId() {
         return id;
     }

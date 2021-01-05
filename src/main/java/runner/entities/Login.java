@@ -33,9 +33,18 @@ public class Login implements UserDetails {
     public Login(){
     }
 
+    //for testing
     public Login(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    //for testing
+    public Login(Long id, String username, String password, Customer customer) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.customer = customer;
     }
 
     public Long getId() {

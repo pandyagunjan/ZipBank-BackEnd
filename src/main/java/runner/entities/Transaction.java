@@ -32,6 +32,23 @@ public class Transaction {
     @ManyToMany(mappedBy = "transactions")
     private Set<Account> accounts = new HashSet<>();
 
+    public Transaction(){
+    }
+
+    //for test only
+    public Transaction(Double transactionAmount, Set<Account> accounts) {
+        this.transactionAmount = transactionAmount;
+        this.accounts = accounts;
+    }
+
+    //for test only
+    public Transaction(String transactionDescription, Double transactionAmount, Double transactionBalance, LocalDate transactionDate) {
+        this.transactionDescription = transactionDescription;
+        this.transactionAmount = transactionAmount;
+        this.transactionBalance = transactionBalance;
+        this.transactionDate = transactionDate;
+    }
+
     public Long getId() {
         return id;
     }
