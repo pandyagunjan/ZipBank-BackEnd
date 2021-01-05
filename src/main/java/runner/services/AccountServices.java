@@ -32,9 +32,10 @@ public class AccountServices {
         loggerService.log(Level.INFO, "The customer's new account is being saved and given an account number.");
         Boolean created = false;
         while (!created) {
-            double temp = Math.floor(Math.random() * 1000000000);
-            if (accountRepo.findAccountByAccountNumber(String.valueOf(temp)) == null) {
-                account.setAccountNumber(String.valueOf(temp));
+            //double temp = Math.floor(Math.random() * 1000000000); <--this only makes a 9 digit number
+            long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
+            if (accountRepo.findAccountByAccountNumber(String.valueOf(number)) == null) {
+                account.setAccountNumber(String.valueOf(number));
                 created = true;
             }
         }
@@ -45,7 +46,8 @@ public class AccountServices {
         return accountRepo.findAccountByEncryptedUrl(encryptedUrl);
     }
 
-    public Account readAccount(Long id) throws Exception{
+    //Remove if not needed
+/*    public Account readAccount(Long id) throws Exception{
         loggerService.log(Level.INFO, "Attempting to read customer's account # " + id);
         if (accountRepo.existsById(id) == true) {
             loggerService.log(Level.INFO, "The customer's account #" + id + "is being read'");
@@ -53,9 +55,10 @@ public class AccountServices {
         }
         loggerService.log(Level.WARNING, "The customer is trying to read account # " + id + "that doe not exist");
         throw new Exception("Account does not exist");
-    }
+    }*/
 
-    public Boolean removeAccount(Long id) throws Exception{
+    //Remove if not needed
+/*    public Boolean removeAccount(Long id) throws Exception{
         loggerService.log(Level.INFO, "Attempting to remove customer's account # " + id);
         if (accountRepo.findAccountById(id).getBalance() == 0) {
             loggerService.log(Level.INFO, "The customer is removing the account # " + id);
@@ -67,7 +70,7 @@ public class AccountServices {
             loggerService.log(Level.WARNING, "The customer had a balance greater than 0 and could not remove the account # " + id);
             throw new Exception("Balance not 0 cannot be closed");
         }
-    }
+    }*/
 
     public Boolean removeAccount(String encryptedUrl){
         if(accountRepo.findAccountByEncryptedUrl(encryptedUrl).getBalance()==0) {
