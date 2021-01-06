@@ -1,0 +1,9 @@
+runner/configuration/CustomerServiceTestConfiguration.class
+runner/security/JwtTest.class
+runner/controllers/CustomerControllerTest.class
+runner/controllers/AccountControllerTest.class
+runner/services/CustomerServiceTest.class
+runner/entities/AccountEntityTest.class
+runner/configuration/AccountServiceTestConfiguration.class
+runner/services/AccountServiceTest.class
+runner/entities/CustomerEntityTest.class
