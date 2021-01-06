@@ -40,7 +40,6 @@ public class TransactionServicesTest {
             TransactionServices transactionServices;
     Account account1;
     Account account2;
-    Set<Account> testAccounts;
     Transaction transaction;
     Set<Account> transactionAccount;
 
@@ -51,16 +50,12 @@ public class TransactionServicesTest {
         transaction = new Transaction(1.00,transactionAccount);
         account1 = new Account(1L,"12345", AccountType.CHECKING,100.00,"abcdefg", new HashSet<Transaction>());
         account2 = new Account(2L,"54321", AccountType.SAVINGS,0.00,"gfedcba", new HashSet<Transaction>());
-        testAccounts = new HashSet<Account>();
-        testAccounts.add(account1);
-        testAccounts.add(account2);
     }
 
     @Test
     public void setAllTransactionTest(){
-
-
         ArrayList<Transaction> actualTransactionList = transactionServices.setAllTransactions(transaction,account1,account2);
+        Assert.assertTrue(actualTransactionList.size() == 2);
     }
 
     @Test
@@ -70,6 +65,20 @@ public class TransactionServicesTest {
                 transaction.getTransactionAmount()*(-1), account1.getBalance(), LocalDate.now());
 
         Transaction actual = transactionServices.setOneTransaction(transaction,account1,account2,true);
+
+        Assert.assertEquals(expected.getTransactionAmount(),actual.getTransactionAmount());
+        Assert.assertEquals(expected.getTransactionBalance(),actual.getTransactionBalance());
+        Assert.assertEquals(expected.getTransactionDate(),actual.getTransactionDate());
+        Assert.assertEquals(expected.getTransactionDescription(),actual.getTransactionDescription());
+    }
+
+    @Test
+    public void setOneTransactionTestDeposit(){
+        Transaction expected = new Transaction(String.format("Deposit from %s XXXXXXXX%s",account1.getAccountType(),
+                account1.getAccountNumber().substring(account1.getAccountNumber().length()-4)),
+                transaction.getTransactionAmount(), account2.getBalance(), LocalDate.now());
+
+        Transaction actual = transactionServices.setOneTransaction(transaction,account2,account1,false);
 
         Assert.assertEquals(expected.getTransactionAmount(),actual.getTransactionAmount());
         Assert.assertEquals(expected.getTransactionBalance(),actual.getTransactionBalance());
