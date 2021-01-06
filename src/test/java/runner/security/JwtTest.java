@@ -39,6 +39,7 @@ import runner.services.UserDetailServices;
 
 import java.util.ArrayList;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -86,7 +87,7 @@ public class JwtTest {
     public void AuthenticatedTokenAccess() throws Exception{
         UserDetails user = new User("user2","password", new ArrayList<>());
         String token = jwtUtil.generateToken(user); //bypassing spring security authentication and generate token
-        Mockito.when(userDetailServices.loadUserByUsername("user2")).thenReturn(user);
+        Mockito.when(userDetailServices.loadUserByUsername(any())).thenReturn(user);
         mockMvc.perform(MockMvcRequestBuilders.get("/myaccount/test")
                 .header("Authorization", "Bearer "+ token))
                 .andExpect(status().isOk());
