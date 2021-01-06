@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import runner.entities.Login;
 import runner.repositories.CustomerRepo;
-import runner.repositories.LoginRepo;
 import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
@@ -19,10 +18,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class CustomerServices {
-   //object for logging information,warning,error
+    //object for logging information,warning,error
     private final static Logger loggerService = Logger.getLogger(CustomerServices.class.getName());
     private CustomerRepo customerRepo;
-   //Autowired the customerService
+    //Autowired the customerService
     @Autowired
     public CustomerServices(CustomerRepo customerRepo) {
         loggerService.log(Level.INFO, "The repository for customer has been autowired to services");
@@ -32,7 +31,7 @@ public class CustomerServices {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    //save the customer in the DB
+    //Save the customer in the DB
     public Customer createCustomer(Customer customer) {
         loggerService.log(Level.INFO, "The customer information is being checked");
         if(!checkLogin(customer.getLogin())) {
@@ -45,6 +44,8 @@ public class CustomerServices {
         }
         return null;
     }
+
+    //Check if the username already exist
     public Boolean checkLogin(Login login) {
 
         List<String> logins= customerRepo.findAllLoginsNative();
@@ -52,6 +53,7 @@ public class CustomerServices {
         return count!=0 ? true:false;
     }
 
+    //Find the customer from DB using id
     public Customer readCustomer(Long id) {
         loggerService.log(Level.INFO, "The customer information is being read");
         Customer customer = customerRepo.findCustomerById(id);
@@ -64,10 +66,9 @@ public class CustomerServices {
         }
     }
 
-
+    //Find Customer from DB using the logged in user name
     public Customer readCustomerByLogin(String name) {
         loggerService.log(Level.INFO, "The customer information is being read");
-       // Login login =
         Customer customer = customerRepo.findCustomerByLoginUsername(name);
         if (customer != null) {
             loggerService.log(Level.INFO, "The customer is found and being returned");
@@ -77,7 +78,7 @@ public class CustomerServices {
             return null;
         }
     }
-
+   //Delete the customer from DB after checking that all account balance are < 0
     public int deleteCustomer(Long id) {
         Customer customer = customerRepo.findCustomerById(id);
         Set<Account> accounts; // To collect all accounts belonging to this customer
@@ -99,6 +100,7 @@ public class CustomerServices {
        return 1;
     }
 
+    //Update the Customer (all fields) in the DB ,based on body of request
     public Customer updateCustomer(Long id, Customer customer) throws Exception {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
         Customer customerFromDB = customerRepo.findCustomerById(id);
@@ -108,14 +110,13 @@ public class CustomerServices {
             customer.getAddress().setId(customerFromDB.getAddress().getId());
             customer.setId(customerFromDB.getId());
             accountSetFromDB = customerFromDB.getAccounts();
-            //Once the existing accounts are added , we will add more accounts
+            //Once the existing accounts are added , we will add more accounts from the request body
             for (Account account : customer.getAccounts()) {
                 account.setCustomer(customerFromDB);
                 account.setEncryptedUrl(generateRandomUrl());
                 accountSetFromDB.add(account);
             }
             customer.setAccounts(accountSetFromDB);
-
             customerRepo.save(customer);
             loggerService.log(Level.INFO, "Customer with Id " + customerFromDB.getId() + "has been updated");
             return customerFromDB;
@@ -125,7 +126,8 @@ public class CustomerServices {
         }
     }
 
-
+    //Update phone number ,check syntax based on the REGEX
+    //Returns 0 = Updated , 1 : Customer not found , 2 : Phone number format not correct
     public int updateCustomerPhoneNumber(Long id, String phone) throws ParseException {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
         Customer customer = customerRepo.findCustomerById(id);
@@ -146,6 +148,8 @@ public class CustomerServices {
         return 2;
     }
 
+    //Update Email number ,check syntax based on the REGEX
+    //Returns 0 = Updated , 1 : Customer not found , 2 : Email format not correct
     public int updateCustomerEmail(Long id, String email) {
         //return 0 when updated , 1 is customer not found and 2 if value does not match the REGEX
         loggerService.log(Level.INFO, "Finding the user to be updated");
@@ -167,7 +171,7 @@ public class CustomerServices {
         }
         return 2;
     }
-
+    //Update Customer address
     public Customer updateCustomerAddress(Long id, Address address) {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
         Customer customer = customerRepo.findCustomerById(id);
@@ -193,19 +197,6 @@ public class CustomerServices {
         }
         return null;
     }
-
-    //superceded by Set<Account> findAccountsByCustomer_LoginUsername (String login) in AccountRepo
-/*    public Set<Account> getAllAccounts(String username) {
-        loggerService.log(Level.INFO, "Finding the customer to get all accounts");
-        Login login = loginRepo.findLoginByUsername(username);
-        Customer customer = customerRepo.findCustomerById(login.getId());
-
-        if (customer != null) {
-            loggerService.log(Level.INFO, "Accounts belonging to "+login.getId()+ " use has been found ,accounts are being returned");
-            return customer.getAccounts();
-        }
-        return null;
-    }*/
 
     //generate 35-40 random characters
     public String generateRandomUrl() {
