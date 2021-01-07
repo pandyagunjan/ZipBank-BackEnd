@@ -47,7 +47,6 @@ public class CustomerServices {
 
     //Check if the username already exist
     public Boolean checkLogin(Login login) {
-
         List<String> logins= customerRepo.findAllLoginsNative();
         long count = logins.stream().filter(name -> name.equalsIgnoreCase(login.getUsername())).count();
         return count!=0 ? true:false;
@@ -79,25 +78,40 @@ public class CustomerServices {
         }
     }
    //Delete the customer from DB after checking that all account balance are < 0
+   //Returns 0 = Deleted , 1 : Customer not found , 2 : Accounts with > 0 balance exist
     public int deleteCustomer(Long id) {
         Customer customer = customerRepo.findCustomerById(id);
-        Set<Account> accounts; // To collect all accounts belonging to this customer
-        List<Account> result ; //To collect accounts with balance greater than 0
         if (customer != null) {
-            accounts=getAllAccounts(id);
-            result = accounts.stream().filter((account) -> account.getBalance() > 0).collect(Collectors.toList());
-            loggerService.log(Level.INFO, "Account list size " + result.size());
-            if(result.size()==0 && accounts.size()!=0) {
+            if (customer.getAccounts() != null) {
+                return checkAccountBalanceAndDelete(id, customer);
+            }
+            else
+            {
                 customerRepo.delete(customer);
-                loggerService.log(Level.INFO, "User has been deleted as account balance for all accounts =0");
+                loggerService.log(Level.INFO, "User has been deleted as no accounts found for this customer");
                 return 0;
             }
-            else if(result.size()>0) {
-                loggerService.log(Level.WARNING, "The customer had a balance greater than 0 and could not remove the account # " + id);
-                return 2;
-            }
         }
+        loggerService.log(Level.WARNING, "The customer not found" + id);
        return 1;
+    }
+
+  // Used in above method to decide if the customer can be deleted
+  int checkAccountBalanceAndDelete(Long id, Customer customer) {
+        Set<Account> accounts; // To collect all accounts belonging to this customer
+        List<Account> result ; //To collect accounts with balance greater than 0
+        accounts = getAllAccounts(id);
+        result = accounts.stream().filter((account) -> account.getBalance() > 0).collect(Collectors.toList());
+        loggerService.log(Level.INFO, "Account list size " + result.size());
+        if (result.size() == 0 && accounts.size() != 0) {
+            customerRepo.delete(customer);
+            loggerService.log(Level.INFO, "User has been deleted as account balance for all accounts 0 , All accounts are deleted as well.");
+            return 0;
+        } else if (result.size() > 0) {
+            loggerService.log(Level.WARNING, "The customer had a balance greater than 0 and could not remove the account # " + id);
+            return 2;
+        }
+        return 4;
     }
 
     //Update the Customer (all fields) in the DB ,based on body of request
@@ -140,12 +154,12 @@ public class CustomerServices {
                 customer.setPhoneNumber(phone);
                 customerRepo.save(customer);
                 loggerService.log(Level.INFO, "User with Id " + customer.getId() + " phone number has been updated");
-                return 0;
+                return 0; // Phone number has been updated
             } else {
-                return 1;
+                return 1; // Customer not found
             }
         }
-        return 2;
+        return 2; // Phone number format is incorrect
     }
 
     //Update Email number ,check syntax based on the REGEX
@@ -164,12 +178,12 @@ public class CustomerServices {
                 customer.setEmail(email);
                 customerRepo.save(customer);
                 loggerService.log(Level.INFO, "customer with Id " + customer.getId() + " email id has been updated");
-                return 0;
+                return 0; // Updated
             } else {
-                return 1;
+                return 1; // Customer not found
             }
         }
-        return 2;
+        return 2; // Email format incorrect
     }
     //Update Customer address
     public Customer updateCustomerAddress(Long id, Address address) {

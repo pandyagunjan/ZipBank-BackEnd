@@ -16,7 +16,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import runner.entities.Customer;
+import runner.entities.*;
+import runner.enums.AccountType;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,16 +38,42 @@ public class CustomerControllerTest {
     @MockBean
     private CustomerController userController;
 
-    private Customer customer;
+   // private Customer customer;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
+//    @Before
+//    public void setUp() {
+//        userController = Mockito.mock(CustomerController.class);
+//        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+//        this.customer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
+//    }
+
+    Account account1;
+    Account account2;
+    Account account3;
+    Set<Account> testAccounts;
+    Login login;
+    Customer customer;
+    Transaction transaction;
+    Set<Account> transactionAccount;
+    Transaction withdrawalTransaction;
+    Transaction depositTransaction;
+    ArrayList<Transaction> myTransactionList;
+    Address address;
     @Before
-    public void setUp() {
-        userController = Mockito.mock(CustomerController.class);
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        this.customer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
+    public void setup(){
+        account1 = new Account(1L,"12345", AccountType.CHECKING,100.00,"abcdefg", new HashSet<Transaction>());
+        account2 = new Account(2L,"54321", AccountType.SAVINGS,0.00,"gfedcba", new HashSet<Transaction>());
+        account3 =  new Account(2L,"56789", AccountType.SAVINGS,100.00,"qwerty", new HashSet<Transaction>());
+        testAccounts = new HashSet<Account>();
+        testAccounts.add(account1);
+        testAccounts.add(account2);
+        login = new Login(1L,"user","password",customer); //customer would be null here due to order of code;
+        customer = new Customer(1L,"John","Doe",login,testAccounts);
+        address = new Address(1L,"Address Line 1", "Address Line 2", "Bear","DE","19701");
     }
+
 
 //    @Test
 //    public void findUserTest() throws Exception {
@@ -54,12 +86,12 @@ public class CustomerControllerTest {
 
     @Test
     public void createUserTest() throws Exception {
-        Customer customer1 = new Customer( 2L, "Rekha" , "Jagdish","Patel","234234324");
+     //   Customer customer1 = new Customer( 2L, "Rekha" , "Jagdish","Patel","234234324");
 //        BDDMockito
 //                .given(userController.create(user1))
 //                .willReturn(user1);
 
-        String jsonRequest = objectMapper.writeValueAsString(customer1);
+        String jsonRequest = objectMapper.writeValueAsString(customer);
        // Mockito.when(userController.create(customer1)).thenReturn(new ResponseEntity<>(customer1, HttpStatus.CREATED));
 
               MvcResult result=   mockMvc.perform(post("/profile/create")

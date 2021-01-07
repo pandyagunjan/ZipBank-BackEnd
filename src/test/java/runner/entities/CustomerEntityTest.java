@@ -3,6 +3,7 @@ package runner.entities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,8 +12,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import runner.AppRunner;
+import runner.enums.AccountType;
 
 import javax.persistence.Entity;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 @ActiveProfiles("test")
@@ -22,12 +26,31 @@ import java.util.Set;
         "DB_PASS=password",
         "DB_URL=jdbc:mysql://localhost:3306/moneymanagement"})
 public class CustomerEntityTest {
-    @MockBean
-    private Customer customer;
-//    private Login login;
-//    private Set<Account> expectedAccount;
-//    private Account account1;
-//    private Address expectedAddress;
+
+    Account account1;
+    Account account2;
+    Account account3;
+    Set<Account> testAccounts;
+    Login login;
+    Customer customer;
+    Transaction transaction;
+    Set<Account> transactionAccount;
+    Transaction withdrawalTransaction;
+    Transaction depositTransaction;
+    ArrayList<Transaction> myTransactionList;
+    Address address;
+    @Before
+    public void setup(){
+        account1 = new Account(1L,"12345", AccountType.CHECKING,100.00,"abcdefg", new HashSet<Transaction>());
+        account2 = new Account(2L,"54321", AccountType.SAVINGS,0.00,"gfedcba", new HashSet<Transaction>());
+        account3 =  new Account(2L,"56789", AccountType.SAVINGS,100.00,"qwerty", new HashSet<Transaction>());
+        testAccounts = new HashSet<Account>();
+        testAccounts.add(account1);
+        testAccounts.add(account2);
+        login = new Login(1L,"user","password",customer); //customer would be null here due to order of code;
+        address = new Address(1L,"Address Line 1", "Address Line 2", "Bear","DE","19701");
+        customer = new Customer(1L,"John","Doe",address,login,testAccounts);
+    }
 
     @Test
     public void testClassSignatureAnnotations() {
@@ -36,10 +59,10 @@ public class CustomerEntityTest {
     @Test
     public void testCreateJson() throws JsonProcessingException {
         ObjectMapper objectMapper= new ObjectMapper();
-        Customer expectedCustomer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
-        String json = objectMapper.writeValueAsString(expectedCustomer);
+     //   Customer expectedCustomer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
+        String json = objectMapper.writeValueAsString(customer);
         Customer actualCustomer =objectMapper.readValue(json, Customer.class);
-        Assert.assertEquals(expectedCustomer.getId(), actualCustomer.getId());
+        Assert.assertEquals(customer.getId(), actualCustomer.getId());
 
     }
 
@@ -174,18 +197,18 @@ public class CustomerEntityTest {
 //       Assert.assertEquals(expectedAccount.size(),actualAccount.size());
 //    }
 //
-//    @Test
-//    public void setAndGetAddressTest()
-//    {
-//        //Given
-//         expectedAddress = new Address();
-//         expectedAddress.setFirstLine("First Line of Address");
-//         expectedAddress.setSecondLIne("Second Line of Address");
+//@Test
+// public void setAndGetAddressTest()
+//  {
+//      //Given
+//       expectedAddress = new Address();
+//       expectedAddress.setFirstLine("First Line of Address");
+//       expectedAddress.setSecondLIne("Second Line of Address");
 //
-//        //When
-//        user.setAddress(expectedAddress);
-//        //Then
-//        Address actualAddress = user.getAddress();
-//        Assert.assertEquals(expectedAddress,actualAddress);
-//    }
+//      //When
+//      customer.setAddress(expectedAddress);
+//     //Then
+//     Address actualAddress = customer.getAddress();
+//     Assert.assertEquals(expectedAddress,actualAddress);
+//  }
 }

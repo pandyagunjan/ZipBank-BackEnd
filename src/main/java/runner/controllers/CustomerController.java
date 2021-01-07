@@ -80,7 +80,7 @@ public class CustomerController {
 
     @JsonView(Views.Email.class)
     @PutMapping(value = "/update/email")
-    public ResponseEntity<?> updateEmail(@RequestBody String email) throws Exception {
+    public ResponseEntity<?> updateEmail(@RequestBody String email) {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
         Long id = customerReturned.getId();
@@ -96,7 +96,7 @@ public class CustomerController {
 
     @JsonView(Views.Address.class)
     @PutMapping(value = "/update/address")
-    public ResponseEntity<?> updateEmail(@RequestBody Address address) throws Exception {
+    public ResponseEntity<?> updateEmail(@RequestBody Address address) {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
         Long id = customerReturned.getId();
