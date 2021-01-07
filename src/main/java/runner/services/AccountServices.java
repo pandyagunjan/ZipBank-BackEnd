@@ -131,7 +131,7 @@ public class AccountServices {
     }
 
     //need to add method inside here to check if the routing and account numbers are valid
-    public Account deposit(Transaction transaction, String encryptedUrl) throws Exception{ //zekai
+    public Account deposit(Transaction transaction, String encryptedUrl) throws Exception{
         loggerService.log(Level.INFO, "The customer is making a deposit");
         Account toAccount = accountRepo.findAccountByEncryptedUrl(encryptedUrl);
 
