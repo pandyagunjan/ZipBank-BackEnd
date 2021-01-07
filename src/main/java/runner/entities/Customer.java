@@ -59,19 +59,20 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Long id, String firstName, String middleName, String lastName, String socialSecurity) {
-        this.id = id;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.socialSecurity = socialSecurity;
-    }
-
-    //for testing
+      //for testing
     public Customer(Long id, String firstName, String lastName, Login login, Set<Account> accounts) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.login = login;
+        this.accounts = accounts;
+    }
+
+    public Customer(Long id, String firstName, String lastName, Address address, Login login, Set<Account> accounts) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
         this.login = login;
         this.accounts = accounts;
     }

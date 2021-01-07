@@ -26,6 +26,19 @@ public class Address {
     @JsonView(Views.Address.class)
     private String zipcode;
 
+    public Address() {
+    }
+
+    //for testing
+    public Address(Long id, String firstLine, String secondLIne, String city, String state, String zipcode) {
+        this.id = id;
+        this.firstLine = firstLine;
+        this.secondLIne = secondLIne;
+        this.city = city;
+        this.state = state;
+        this.zipcode = zipcode;
+    }
+
     public Long getId() {
         return id;
     }
