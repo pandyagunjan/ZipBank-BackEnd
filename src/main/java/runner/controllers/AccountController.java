@@ -40,13 +40,14 @@ public class AccountController {
     @JsonView(Views.AccountSpecific.class)
     @GetMapping(value = "/{encryptedUrl}")
     public ResponseEntity<Account> readAccountByUrl(@PathVariable String encryptedUrl){
-        return new ResponseEntity<>(accountServices.findAccountByEncryptedUrl(encryptedUrl), HttpStatus.OK);
+        return new ResponseEntity<>(accountServices.getAccountByEncryptedUrl(encryptedUrl), HttpStatus.OK);
     }
 
-    //REMOVE if not needed
+
     @PostMapping(value = "/create")
-    public ResponseEntity<Account> create(@RequestBody Account account) {
-        return new ResponseEntity<>(accountServices.createAccount(account), HttpStatus.CREATED);
+    public ResponseEntity<Account> create(@RequestBody Account account) throws Exception {
+        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return new ResponseEntity<>(accountServices.createAccount(account, currentPrincipalName), HttpStatus.CREATED);
     }
 
     //REMOVE if not needed
@@ -78,5 +79,11 @@ public class AccountController {
     @PutMapping(value = "/{encryptedUrl}/transfer")
     public ResponseEntity<Account> updateAccountTransfer(@RequestBody Transaction transaction, @PathVariable String encryptedUrl) throws Exception {
         return new ResponseEntity<>(accountServices.withdraw(transaction,encryptedUrl), HttpStatus.OK);
+    }
+
+    @GetMapping("/loggedout")
+    public ResponseEntity<?> updateAccountTransfer(){
+        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return new ResponseEntity<>(accountServices.logout(currentPrincipalName), HttpStatus.OK);
     }
 }

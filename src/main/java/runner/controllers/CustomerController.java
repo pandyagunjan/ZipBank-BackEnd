@@ -14,7 +14,7 @@ import runner.views.Views;
 import java.net.URI;
 import java.util.logging.Logger;
 
-@RequestMapping("/profile")
+//@RequestMapping("/profile") not needed due to drastically different URI in the controller
 @RestController
 public class CustomerController {
 
@@ -34,27 +34,20 @@ public class CustomerController {
             return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<?> create(@RequestBody Customer customer) {
+    @PostMapping(value = "/openaccount")
+    public ResponseEntity<?> create(@RequestBody Customer customer) throws Exception {
         customer = customerServices.createCustomer(customer);
 
         if(customer!=null) {
             //Best practice is to convey the URI to the newly created resource using the Location HTTP header
             HttpHeaders responseHeaders = new HttpHeaders();
-            URI newPollUri = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(customer.getId())
-                    .toUri();
-
-            responseHeaders.setLocation(newPollUri);
             return new ResponseEntity<>(customer, responseHeaders, HttpStatus.CREATED);
         }
         else
             return new ResponseEntity<>("Login user name already exist", HttpStatus.CONFLICT);
+    }
 
-            }
-    @PutMapping(value = "/update")
+    @PutMapping(value = "myaccount/profile/update")
     public ResponseEntity<Customer> update(@RequestBody Customer customer) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
@@ -63,7 +56,7 @@ public class CustomerController {
     }
 
     @JsonView(Views.PhoneNumber.class)
-    @PutMapping(value = "/update/phone")
+    @PutMapping(value = "myaccount/profile/phone")
     public ResponseEntity<?> updatePhone(@RequestBody String phoneNumber) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
@@ -79,7 +72,7 @@ public class CustomerController {
     }
 
     @JsonView(Views.Email.class)
-    @PutMapping(value = "/update/email")
+    @PutMapping(value = "myaccount/profile/email")
     public ResponseEntity<?> updateEmail(@RequestBody String email) {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
@@ -95,7 +88,7 @@ public class CustomerController {
     }
 
     @JsonView(Views.Address.class)
-    @PutMapping(value = "/update/address")
+    @PutMapping(value = "myaccount/profile/address")
     public ResponseEntity<?> updateEmail(@RequestBody Address address) {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
@@ -107,7 +100,7 @@ public class CustomerController {
             return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/delete")
+    @DeleteMapping(value = "myaccount/profile/delete")
     public ResponseEntity<?> deleteById() {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);

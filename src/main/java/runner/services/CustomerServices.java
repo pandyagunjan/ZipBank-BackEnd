@@ -1,12 +1,9 @@
 package runner.services;
 import com.mifmif.common.regex.Generex;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import runner.entities.Account;
-import runner.entities.Address;
-import runner.entities.Customer;
+import runner.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import runner.entities.Login;
 import runner.repositories.CustomerRepo;
 import java.text.ParseException;
 import java.util.*;
@@ -29,18 +26,27 @@ public class CustomerServices {
     }
 
     @Autowired
+    private AccountServices accountServices;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     //Save the customer in the DB
-    public Customer createCustomer(Customer customer) {
+    public Customer createCustomer(Customer customer) throws Exception {
         loggerService.log(Level.INFO, "The customer information is being checked");
         if(!checkLogin(customer.getLogin())) {
             customer.getLogin().setPassword(bCryptPasswordEncoder.encode(customer.getLogin().getPassword())); //encrypts the password before saving
-            customer.setSocialSecurity(bCryptPasswordEncoder.encode(customer.getSocialSecurity()));
+            customer.setSocialSecurity(bCryptPasswordEncoder.encode(customer.getSocialSecurity())); //encrypts the SSN before saving
             //get the accounts from the customer and set the customer id in accounts table before saving the Customer.
-            customer.getAccounts().stream().forEach(account -> account.setCustomer(customer));
+            Account newAccount = customer.getAccounts().stream().findFirst().orElse(null);
+            //customer.getAccounts().stream().forEach(account -> account.setCustomer(customer)); -Gunjan's method
+            newAccount.setCustomer(customer);
+            //passing the account to "createAccount" in accountServices to generate the account number
+            accountServices.setUpAccount(newAccount);
+            //doing the deposit from the source account;
+            accountServices.transferMoneyToNewAccount(newAccount);
             loggerService.log(Level.INFO, "The customer information is being saved" + checkLogin(customer.getLogin()));
-            return (Customer) customerRepo.save(customer);
+            return customerRepo.save(customer);
         }
         return null;
     }
@@ -127,7 +133,7 @@ public class CustomerServices {
             //Once the existing accounts are added , we will add more accounts from the request body
             for (Account account : customer.getAccounts()) {
                 account.setCustomer(customerFromDB);
-                account.setEncryptedUrl(generateRandomUrl());
+                account.setEncryptedUrl(accountServices.generateRandomUrl());
                 accountSetFromDB.add(account);
             }
             customer.setAccounts(accountSetFromDB);
@@ -212,10 +218,4 @@ public class CustomerServices {
         return null;
     }
 
-    //generate 35-40 random characters
-    public String generateRandomUrl() {
-        Generex generex = new Generex("[A-Za-z0-9]{35,40}");
-        String randomString = generex.random();
-        return randomString;
-    }
 }

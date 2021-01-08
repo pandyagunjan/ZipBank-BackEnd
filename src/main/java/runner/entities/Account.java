@@ -122,7 +122,7 @@ public class Account {
     }
 
     public void setInterestRate(Double interestRate) {
-        this.interestRate = interestRate;
+        this.interestRate = this.accountType.getInterestRate();
     }
 
     public Set<Transaction> getTransactions() {

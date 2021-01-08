@@ -1,7 +1,6 @@
 package runner.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matcher;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -20,19 +18,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import runner.AppRunner;
 import runner.entities.Account;
-import runner.entities.Customer;
 import runner.entities.Transaction;
 import runner.enums.AccountType;
 import runner.services.AccountServices;
@@ -99,7 +93,7 @@ public class AccountControllerTest {
     @WithMockUser
     @Test
     public void readAccountByUrlTest() throws Exception {
-        Mockito.when(accountServices.findAccountByEncryptedUrl(any())).thenReturn(account1);
+        Mockito.when(accountServices.getAccountByEncryptedUrl(any())).thenReturn(account1);
 
         mockMvc.perform(get("/myaccount/{encryptedUrl}","12345"))
                 .andExpect(status().isOk())

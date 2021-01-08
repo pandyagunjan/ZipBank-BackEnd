@@ -52,14 +52,7 @@ public class AuthenticationController {
 
     //adding the random URL to the accounts
     public void addRandomUrlToAccounts(Login login){
-        accountServices.getAllAccounts(login.getUsername()).forEach(a->accountServices.SaveAccountWithUrl(a,generateRandomUrl()));
-    }
-
-    //generate 35-40 random characters
-    public String generateRandomUrl() {
-        Generex generex = new Generex("[A-Za-z0-9]{35,40}");
-        String randomString = generex.random();
-        return randomString;
+        accountServices.getAllAccounts(login.getUsername()).forEach(a->accountServices.SaveAccountWithUrl(a, accountServices.generateRandomUrl()));
     }
 
 }

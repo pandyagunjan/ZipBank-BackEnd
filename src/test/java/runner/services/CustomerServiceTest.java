@@ -73,7 +73,7 @@ public class CustomerServiceTest {
         Assert.assertEquals(expectedName, testName);
     }
     @Test
-    public void createUserTest() {
+    public void createUserTest() throws Exception {
 
 //        String expectedName= "John";
 //        Mockito.when(customerRepo.save(customer)).thenReturn(customer);
@@ -164,9 +164,5 @@ public class CustomerServiceTest {
         Assert.assertEquals(testAccounts.size(), actualAccounts.size());
     }
 
-    @Test
-    public void generateRandomURLTest() throws Exception {
-        String actual = customerServices.generateRandomUrl();
-        Assert.assertTrue(actual.length()!=0);
-    }
+
 }

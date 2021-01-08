@@ -7,11 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.omg.IOP.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -105,18 +101,18 @@ public class AccountServiceTest {
         Account expectedAccount = account1;
         Mockito.when(accountRepo.findAccountByEncryptedUrl(any())).thenReturn(account1);
 
-        Account actualAccount = accountServices.findAccountByEncryptedUrl(account1.getEncryptedUrl());
+        Account actualAccount = accountServices.getAccountByEncryptedUrl(account1.getEncryptedUrl());
 
         Assert.assertTrue(expectedAccount.equals(actualAccount));
     }
 
     @Test
-    public void createAccountTest() {
+    public void createAccountTest() throws Exception {
         Account expectedAccount = account1;
         Mockito.when(accountRepo.findAccountByAccountNumber(any())).thenReturn(null);
         Mockito.when(accountRepo.save(any())).thenReturn(expectedAccount);
 
-        Account actualAccount = accountServices.createAccount(expectedAccount);
+        Account actualAccount = accountServices.createAccount(expectedAccount, login.getUsername());
 
         Assert.assertTrue(expectedAccount.getAccountNumber().length()==10);
     }
@@ -195,6 +191,13 @@ public class AccountServiceTest {
         Account actualAccount = accountServices.deposit(transaction,encryptedUrl);
 
         Assert.assertEquals(expectedAccount.getBalance(),actualAccount.getBalance());
+    }
+
+
+    @Test
+    public void generateRandomURLTest() throws Exception {
+        String actual = accountServices.generateRandomUrl();
+        Assert.assertTrue(actual.length()!=0);
     }
 
 }

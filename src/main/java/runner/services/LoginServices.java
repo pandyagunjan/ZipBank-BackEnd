@@ -25,6 +25,8 @@ public class LoginServices{ //} implements UserDetailsService { <--Moved to User
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
+    //REMOVE if not needed
     public Login createLogin(Login login1) {
         Login encryptedLogin = new Login();
         List<Login> allLogins= loginRepo.findAll();

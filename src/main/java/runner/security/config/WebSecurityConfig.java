@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate","/").permitAll() //permit everybody for this endpoint
+                .authorizeRequests().antMatchers("/authenticate","/","/openaccount").permitAll() //permit everybody for this endpoint
                 .anyRequest().authenticated() //all other request requires authentication
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS); //jwt is stateless, asking Spring to not create sessions for each request
