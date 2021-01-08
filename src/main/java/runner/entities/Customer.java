@@ -46,11 +46,13 @@ public class Customer {
     @OneToOne(cascade = ALL, fetch = FetchType.EAGER)
     private Address address;
 
+    @JsonView(Views.Profile.class) //delete in production
     @JsonBackReference(value = "login")
     @OneToOne(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn //sharing primary key with user login since creating a new user requires a login anyways
     private Login login;
 
+    @JsonView(Views.Profile.class) //delete in production
     @OneToMany(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
     @OrderBy
     @JsonBackReference

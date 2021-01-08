@@ -1,10 +1,12 @@
 package runner.services;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.mifmif.common.regex.Generex;
 import runner.entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import runner.entities.Transaction;
 import runner.repositories.AccountRepo;
+
+import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,27 +25,56 @@ public class AccountServices {
         return accountRepo.findAccountsByCustomer_LoginUsername(username);
     }
 
+    public void saveAccount(Account account){
+        accountRepo.save(account);
+    }
+
     public void SaveAccountWithUrl(Account account, String randomUrl){
             account.setEncryptedUrl(randomUrl);
             accountRepo.save(account);
     }
 
-    public Account createAccount(Account account) {
+    public Account createAccount(Account account, String username) throws Exception {
         loggerService.log(Level.INFO, "The customer's new account is being saved and given an account number.");
+        account.setCustomer(accountRepo.findAccountsByCustomer_LoginUsername(username).stream().findAny().orElse(null).getCustomer());
+        setUpAccount(account);
+        transferMoneyToNewAccount(account);
+        account.setEncryptedUrl(generateRandomUrl());
+        return accountRepo.save(account);
+    }
+
+    public void transferMoneyToNewAccount(Account newAccount) throws Exception {
+        Transaction customerTransaction = newAccount.getTransactions().stream().findFirst().orElse(null);
+        Account sourceAccount = getAccountByAccountNumber(
+                customerTransaction.getAccounts().stream().findFirst().orElse(null).getAccountNumber());
+        transferMoney(customerTransaction,sourceAccount,newAccount);
+        //removes the empty transaction owned by the new account due to structure of the JSON, newaccount->transactions->account
+        newAccount.getTransactions().remove(newAccount.getTransactions().stream()
+                .filter(transaction -> transaction.getTransactionBalance()==null).findFirst().orElse(null));
+    }
+
+    public Account setUpAccount(Account account) {
         Boolean created = false;
         while (!created) {
             //double temp = Math.floor(Math.random() * 1000000000); <--this only makes a 9 digit number
             long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
             if (accountRepo.findAccountByAccountNumber(String.valueOf(number)) == null) {
                 account.setAccountNumber(String.valueOf(number));
+                account.setDateOfOpening(LocalDate.now());
+                account.setBalance(0.00);
+                account.setInterestRate(account.getInterestRate());
                 created = true;
             }
         }
-        return accountRepo.save(account);
+        return account;
     }
 
-    public Account findAccountByEncryptedUrl(String encryptedUrl){
+    public Account getAccountByEncryptedUrl(String encryptedUrl){
         return accountRepo.findAccountByEncryptedUrl(encryptedUrl);
+    }
+
+    public Account getAccountByAccountNumber(String accountNumber){
+        return accountRepo.findAccountByAccountNumber(accountNumber);
     }
 
     //Remove if not needed
@@ -80,6 +111,7 @@ public class AccountServices {
         return false;
     }
 
+    //REMOVE if not used
     public Optional<Account> updateAccount(Long id, Account account) throws Exception{
         loggerService.log(Level.INFO, "Attempting to update customer's account # " + id);
         if (accountRepo.existsById(id) == true) {
@@ -158,6 +190,19 @@ public class AccountServices {
 
         accountRepo.save(myAccountArray[1]); //1st element in list/array always account money is moving out of
         return accountRepo.save(myAccountArray[0]); //2nd element in list/array always account money is moving into
+    }
+
+    public String logout(String username){
+        this.getAllAccounts(username).stream().forEach(a->a.setEncryptedUrl(null));
+        this.getAllAccounts(username).stream().forEach(a->this.saveAccount(a));
+        return "You have been logged out";
+    }
+
+    //generate 35-40 random characters
+    public String generateRandomUrl() {
+        Generex generex = new Generex("[A-Za-z0-9]{35,40}");
+        String randomString = generex.random();
+        return randomString;
     }
 
     // Not needed, transfer and withdraw have same JSON payload; so use withdraw method

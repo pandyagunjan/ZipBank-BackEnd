@@ -44,6 +44,7 @@ public class Views {
     }
 
     public static class Profile implements Email, PhoneNumber, Address {
+        //everything in Customer except for SSN, password
     }
 
 }
