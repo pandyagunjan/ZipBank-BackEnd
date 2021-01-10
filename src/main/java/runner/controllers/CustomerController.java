@@ -6,22 +6,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import runner.entities.Address;
 import runner.entities.Customer;
 import runner.services.CustomerServices;
 import runner.views.Views;
-import java.net.URI;
 import java.util.logging.Logger;
 
-//@RequestMapping("/profile") not needed due to drastically different URI in the controller
 @RestController
 public class CustomerController {
 
     @Autowired
     private CustomerServices customerServices;
-
-    private final static Logger logger = Logger.getLogger(CustomerController.class.getName());
 
     @JsonView(Views.Profile.class)
     @GetMapping
@@ -39,9 +34,7 @@ public class CustomerController {
         customer = customerServices.createCustomer(customer);
 
         if(customer!=null) {
-            //Best practice is to convey the URI to the newly created resource using the Location HTTP header
-            HttpHeaders responseHeaders = new HttpHeaders();
-            return new ResponseEntity<>(customer, responseHeaders, HttpStatus.CREATED);
+            return new ResponseEntity<>(customer,  HttpStatus.CREATED);
         }
         else
             return new ResponseEntity<>("Login user name already exist", HttpStatus.CONFLICT);
