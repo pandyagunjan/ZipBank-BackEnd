@@ -1,7 +1,6 @@
 package runner.controllers;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,7 +9,7 @@ import runner.entities.Address;
 import runner.entities.Customer;
 import runner.services.CustomerServices;
 import runner.views.Views;
-import java.util.logging.Logger;
+
 
 @RestController
 public class CustomerController {
@@ -19,7 +18,7 @@ public class CustomerController {
     private CustomerServices customerServices;
 
     @JsonView(Views.Profile.class)
-    @GetMapping
+    @GetMapping(value = "/myaccount/profile")
     public ResponseEntity<?> getCustomer() {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer =customerServices.readCustomerByLogin(currentPrincipalName);
@@ -53,14 +52,19 @@ public class CustomerController {
     public ResponseEntity<?> updatePhone(@RequestBody String phoneNumber) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
-        Long id = customerReturned.getId();
-        int response = customerServices.updateCustomerPhoneNumber(id,phoneNumber);
-        if(response ==0 )
-            return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
-        else if(response == 1 )
-            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
-        else
-           return new ResponseEntity<>("Incorrect format of Phone , please re-send", HttpStatus.BAD_REQUEST);
+
+        if(customerReturned!=null) {
+            Long id = customerReturned.getId();
+            int response = customerServices.updateCustomerPhoneNumber(id, phoneNumber);
+            if (response == 0)
+                return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
+           else if (response == 1)
+               return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
+            else if (response == 2)
+                return new ResponseEntity<>("Incorrect format of Phone , please re-send", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
 
     }
 
@@ -69,15 +73,18 @@ public class CustomerController {
     public ResponseEntity<?> updateEmail(@RequestBody String email) {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
-        Long id = customerReturned.getId();
-        int response = customerServices.updateCustomerEmail(id,email);
-        if(response ==0 )
-            return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
-        else if(response == 1 )
-            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
-        else
-            return new ResponseEntity<>("Incorrect email id format,please re-send", HttpStatus.BAD_REQUEST);
+        if(customerReturned!=null) {
+            Long id = customerReturned.getId();
 
+            int response = customerServices.updateCustomerEmail(id, email);
+            if (response == 0)
+                return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
+            else if (response == 1)
+                return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
+            else
+                return new ResponseEntity<>("Incorrect email id format,please re-send", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
     }
 
     @JsonView(Views.Address.class)
@@ -85,12 +92,15 @@ public class CustomerController {
     public ResponseEntity<?> updateEmail(@RequestBody Address address) {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
-        Long id = customerReturned.getId();
-        Customer responseCustomer= customerServices.updateCustomerAddress(id,address);
-        if(responseCustomer == null)
-            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
-        else
-            return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
+        if(customerReturned!=null) {
+            Long id = customerReturned.getId();
+            Customer responseCustomer = customerServices.updateCustomerAddress(id, address);
+            if (responseCustomer == null)
+                return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
+            else
+                return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "myaccount/profile/delete")

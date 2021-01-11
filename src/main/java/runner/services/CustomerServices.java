@@ -24,7 +24,7 @@ public class CustomerServices {
         loggerService.log(Level.INFO, "The repository for customer has been autowired to services");
         this.customerRepo = customerRepo;
     }
-
+//Can we try removing this below Autowired ??
     @Autowired
     private AccountServices accountServices;
 
@@ -133,7 +133,7 @@ public class CustomerServices {
             //Once the existing accounts are added , we will add more accounts from the request body
             for (Account account : customer.getAccounts()) {
                 account.setCustomer(customerFromDB);
-                account.setEncryptedUrl(accountServices.generateRandomUrl());
+                account.setEncryptedUrl(accountServices.generateRandomUrl()); // test-case fails as need to autowire this too.
                 accountSetFromDB.add(account);
             }
             customer.setAccounts(accountSetFromDB);
