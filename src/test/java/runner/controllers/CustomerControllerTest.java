@@ -1,66 +1,54 @@
 package runner.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import runner.AppRunner;
 import runner.entities.*;
 import runner.enums.AccountType;
-
-import java.util.ArrayList;
+import runner.services.CustomerServices;
 import java.util.HashSet;
 import java.util.Set;
-
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = CustomerController.class)
 @ActiveProfiles("test")
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = AppRunner.class)
+@AutoConfigureMockMvc
+@TestPropertySource(properties = {"DB_USER=newuser",
+        "DB_PASS=password",
+        "DB_URL=jdbc:mysql://localhost:3306/moneymanagement"})
+
 public class CustomerControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private CustomerController userController;
-
-   // private Customer customer;
-
+    private CustomerServices customerServices;
     ObjectMapper objectMapper = new ObjectMapper();
-
-//    @Before
-//    public void setUp() {
-//        userController = Mockito.mock(CustomerController.class);
-//        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-//        this.customer = new Customer( 1L, "Radha" , "Ramnik","Patel","234324");
-//    }
-
     Account account1;
     Account account2;
     Account account3;
     Set<Account> testAccounts;
     Login login;
     Customer customer;
-    Transaction transaction;
-    Set<Account> transactionAccount;
-    Transaction withdrawalTransaction;
-    Transaction depositTransaction;
-    ArrayList<Transaction> myTransactionList;
-    Address address;
+    Address address,addressUpdate;
     @Before
     public void setup(){
         account1 = new Account(1L,"12345", AccountType.CHECKING,100.00,"abcdefg", new HashSet<Transaction>());
@@ -72,62 +60,188 @@ public class CustomerControllerTest {
         login = new Login(1L,"user","password",customer); //customer would be null here due to order of code;
         customer = new Customer(1L,"John","Doe",login,testAccounts);
         address = new Address(1L,"Address Line 1", "Address Line 2", "Bear","DE","19701");
+        addressUpdate = new Address(1L,"Address Line Updated", "Address Line Updated", "Bear","DE","19701");
     }
 
-
-//    @Test
-//    public void findUserTest() throws Exception {
-//        Mockito.when(userController.readById(1L)).thenReturn(new ResponseEntity<>(customer, HttpStatus.OK));
-//        mockMvc.perform(get("/profile/1"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.firstName", is("Radha")))
-//                .andExpect(jsonPath("$.id", is(1)));
-//    }
-
+    @WithMockUser
     @Test
-    public void createUserTest() throws Exception {
-     //   Customer customer1 = new Customer( 2L, "Rekha" , "Jagdish","Patel","234234324");
-//        BDDMockito
-//                .given(userController.create(user1))
-//                .willReturn(user1);
+    public void createCustomerTest()  {
 
-        String jsonRequest = objectMapper.writeValueAsString(customer);
-       // Mockito.when(userController.create(customer1)).thenReturn(new ResponseEntity<>(customer1, HttpStatus.CREATED));
+        try {
+            String jsonRequest = objectMapper.writeValueAsString(customer);
 
-              MvcResult result=   mockMvc.perform(post("/profile/create")
+            Mockito.when(customerServices.createCustomer(any())).thenReturn(customer);
+
+           mockMvc.perform(post("/openaccount")
+                    .content(jsonRequest)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.id", is(1)))
+                    .andReturn();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @WithMockUser
+    @Test
+    public void readCustomer() {
+              Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+        try {
+            mockMvc.perform(get("/myaccount/profile"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.firstName",is("John")))
+                    .andReturn();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @WithMockUser
+    @Test
+    public void readCustomerNullTest() {
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(null);
+        try {
+            mockMvc.perform(get("/myaccount/profile"))
+                    .andExpect(status().isNotFound())
+                    .andReturn();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @WithMockUser
+    @Test
+    public void updateCustomerPhone() throws Exception {
+        String jsonRequest = objectMapper.writeValueAsString("548-458-4584");
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+        Mockito.when(customerServices.updateCustomerPhoneNumber(any(),any())).thenReturn(0);
+        mockMvc.perform(put("/myaccount/profile/phone")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-               // .andExpect(MockMvcResultMatchers.status().isOk())
-               // .andExpect(jsonPath("$.id",is(2)))
-                      .andReturn();
-                //.andExpect(MockMvcResultMatchers.content().string(jsonRequest));
-
-        MockHttpServletResponse response=result.getResponse();
-        assertEquals(HttpStatus.CREATED.value(),response.getStatus());
-      //  assertEquals("http://localhost:8080/profile/create/1", response.getHeader(HttpHeaders.LOCATION));
-
-
-
-//        Mockito.when(
-//                studentService.addCourse(Mockito.anyString(),
-//                        Mockito.any(Course.class))).thenReturn(mockCourse);
-//
-//        // Send course as body to /students/Student1/courses
-//        RequestBuilder requestBuilder = MockMvcRequestBuilders
-//                .post("/students/Student1/courses")
-//                .accept(MediaType.APPLICATION_JSON).content(exampleCourseJson)
-//                .contentType(MediaType.APPLICATION_JSON);
-//
-//        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-//
-//        MockHttpServletResponse response = result.getResponse();
-//
-//        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-//
-//        assertEquals("http://localhost/students/Student1/courses/1",
-//                response.getHeader(HttpHeaders.LOCATION));
-
+                .andExpect(status().isOk());
     }
 
+    @WithMockUser
+    @Test
+    public void updateCustomerPhoneCustomerNotfound() throws Exception {
+        String jsonRequest = objectMapper.writeValueAsString("548-584-8999");
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(null);
+        Mockito.when(customerServices.updateCustomerPhoneNumber(any(),any())).thenReturn(1);
+
+        mockMvc.perform(put("/myaccount/profile/phone")
+                .content(jsonRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @WithMockUser
+    @Test
+    public void updateCustomerPhoneFormat() throws Exception {
+        String jsonRequest = objectMapper.writeValueAsString("54845");
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+        Mockito.when(customerServices.updateCustomerPhoneNumber(any(),any())).thenReturn(2);
+        mockMvc.perform(put("/myaccount/profile/phone")
+                .content(jsonRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+
+
+    @WithMockUser
+    @Test
+    public void updateCustomerEmail() throws Exception {
+        String jsonRequest = objectMapper.writeValueAsString("test@gmail.com");
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+        Mockito.when(customerServices.updateCustomerEmail(any(),any())).thenReturn(0);
+        mockMvc.perform(put("/myaccount/profile/email")
+                .content(jsonRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+    @WithMockUser
+    @Test
+    public void updateCustomerEmailCustomerNotFound() throws Exception {
+        String jsonRequest = objectMapper.writeValueAsString("test@gmail.com");
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(null);
+        Mockito.when(customerServices.updateCustomerEmail(any(),any())).thenReturn(1);
+
+        mockMvc.perform(put("/myaccount/profile/email")
+                .content(jsonRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+
+    @WithMockUser
+    @Test
+    public void updateCustomerEmailFormat() throws Exception {
+        String jsonRequest = objectMapper.writeValueAsString("test");
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+        Mockito.when(customerServices.updateCustomerEmail(any(),any())).thenReturn(2);
+        mockMvc.perform(put("/myaccount/profile/email")
+                .content(jsonRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @WithMockUser
+    @Test
+    public void updateCustomerAddress() throws Exception {
+        String jsonRequest = objectMapper.writeValueAsString(addressUpdate);
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+        Mockito.when(customerServices.updateCustomerAddress(any(),any())).thenReturn(customer);
+        mockMvc.perform(put("/myaccount/profile/address")
+                .content(jsonRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+    @WithMockUser
+    @Test
+    public void updateCustomerAddressCustomerNotFound() throws Exception {
+        String jsonRequest = objectMapper.writeValueAsString(addressUpdate);
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(null);
+        Mockito.when(customerServices.updateCustomerAddress(any(),any())).thenReturn(null);
+        mockMvc.perform(put("/myaccount/profile/address")
+                .content(jsonRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @WithMockUser
+    @Test
+    public void updateCustomerDeleteTest() throws Exception {
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+        Mockito.when(customerServices.deleteCustomer(any())).thenReturn(0);
+                mockMvc.perform(delete("/myaccount/profile/delete"))
+                .andExpect(status().isOk());
+    }
+
+    @WithMockUser
+    @Test
+    public void updateCustomerDeleteTestAccountWithBalanceFound() throws Exception {
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+        Mockito.when(customerServices.deleteCustomer(any())).thenReturn(2);
+        mockMvc.perform(delete("/myaccount/profile/delete"))
+                .andExpect(status().isForbidden());
+    }
+
+    @WithMockUser
+    @Test
+    public void updateCustomerDeleteCustomerNotfound() throws Exception {
+        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+        Mockito.when(customerServices.deleteCustomer(any())).thenReturn(1);
+        mockMvc.perform(delete("/myaccount/profile/delete"))
+                .andExpect(status().isNotFound());
+    }
 }
