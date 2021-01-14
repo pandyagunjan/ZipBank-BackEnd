@@ -109,12 +109,14 @@ public class CustomerServiceTest {
     }
     @Test
     public void updateUserTest() throws Exception {
-        Customer customer1 = new Customer( 2L, "Radha" , "Ramnik",address,login,testAccounts);
+      //  Customer customer1 = new Customer( 2L, "Radha" , "Ramnik",address,login,testAccounts);
         String expectedUpdateName= "Update the First Name";
-        Mockito.when(customerRepo.save(customer1)).thenReturn(customer1);
-        Mockito.when(customerRepo.findCustomerById(customer1.getId())).thenReturn(customer1);
-        customer1.setFirstName(expectedUpdateName);
-        String actualUpdatedName= customerServices.updateCustomer(customer1.getId(), customer1).getFirstName();
+        Mockito.when(customerRepo.findCustomerById(customer.getId())).thenReturn(customer);
+        customer.setFirstName(expectedUpdateName);
+        Mockito.when(customerRepo.save(customer)).thenReturn(customer);
+
+        //Fails as customerService has been autowried to accountServices too... Need to look into this.
+        String actualUpdatedName= customerServices.updateCustomer(customer.getId(), customer).getFirstName();
         Assert.assertEquals(expectedUpdateName, actualUpdatedName);
     }
     @Test
