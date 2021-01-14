@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -24,17 +25,17 @@ public class CustomerController {
     private final static Logger logger = Logger.getLogger(CustomerController.class.getName());
 
     @JsonView(Views.Profile.class)
-    @GetMapping
+    @GetMapping(value = "/myaccount/profile")
     public ResponseEntity<?> getCustomer() {
-        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Customer customer =customerServices.readCustomerByLogin(currentPrincipalName);
+        //String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName(); //needs JWT token in header
+        Customer customer =customerServices.readCustomerByLogin("user1"); //<< for testing on angular, need to change back to currentPrincipalName
           if( customer == null)
             return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/openaccount")
+    @PostMapping(value = "/openaccount",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> create(@RequestBody Customer customer) throws Exception {
         customer = customerServices.createCustomer(customer);
 
@@ -47,13 +48,13 @@ public class CustomerController {
             return new ResponseEntity<>("Login user name already exist", HttpStatus.CONFLICT);
     }
 
-    @PutMapping(value = "myaccount/profile/update")
+/*    @PutMapping(value = "myaccount/profile")
     public ResponseEntity<Customer> update(@RequestBody Customer customer) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
+        Customer customerReturned =customerServices.readCustomerByLogin(*//*currentPrincipalName*//* "user1");
         Long id = customerReturned.getId();
         return new ResponseEntity<>(customerServices.updateCustomer(id,customer), HttpStatus.OK);
-    }
+    }*/
 
     @JsonView(Views.PhoneNumber.class)
     @PutMapping(value = "myaccount/profile/phone")
