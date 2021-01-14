@@ -30,7 +30,7 @@ public class AccountController {
     }
 
     //get accounts for the authenticated user only, THIS is the homepage once user has logged in
-    @JsonView(Views.AllAccounts.class)
+    //@JsonView(Views.AllAccounts.class)
     @GetMapping
     public ResponseEntity<Set<Account>> readAllAccount() {
        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
