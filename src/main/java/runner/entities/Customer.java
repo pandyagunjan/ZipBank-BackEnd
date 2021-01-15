@@ -17,29 +17,29 @@ public class Customer {
     private Long id;
 
     //@JsonView(Views.Profile.class)
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String firstName;
 
     //@JsonView(Views.Profile.class)
     private String middleName;
 
     //@JsonView(Views.Profile.class)
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String lastName;
 
     //@JsonView(Views.Profile.class)
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String socialSecurity;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     @JsonView(Views.Email.class)
     private String email;
 
     @JsonView(Views.PhoneNumber.class)
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String phoneNumber;
 
     @JsonView(Views.Address.class)
