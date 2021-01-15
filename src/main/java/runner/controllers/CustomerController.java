@@ -21,8 +21,8 @@ public class CustomerController {
     @JsonView(Views.Profile.class)
     @GetMapping(value = "/myaccount/profile")
     public ResponseEntity<?> getCustomer() {
-        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName(); //needs JWT token in header
-        Customer customer =customerServices.readCustomerByLogin(currentPrincipalName); //<< for testing on angular, need to change back to currentPrincipalName
+        //String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName(); //needs JWT token in header
+        Customer customer =customerServices.readCustomerByLogin("user1"); //<< for testing on angular, need to change back to currentPrincipalName
           if( customer == null)
             return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
         else

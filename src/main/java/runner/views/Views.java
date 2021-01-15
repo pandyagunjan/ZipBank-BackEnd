@@ -10,9 +10,17 @@ public class Views {
 
     }
 
-    public static class AllAccounts implements AccountNumber, AccountType{
+    public static interface RoutingNumber{
+
+    }
+
+    public static interface AccountOpening{
+
+    }
+
+    public static class AllAccounts implements AccountNumber, AccountType, RoutingNumber, AccountActions, AccountOpening{
         /*
-        payload: multiple accounts: account number, account balance, account type
+        payload: multiple accounts: account number, account balance, account type, routingNumber, AccountOpening,
          */
     }
 
@@ -22,15 +30,15 @@ public class Views {
          */
     }
 
-    public static class AccountDetails implements AccountNumber, AccountType, AccountActions{
+    public static class AccountDetails implements AccountNumber, AccountType, AccountActions, AccountOpening, RoutingNumber{
         /*
-        payload: account balance, interest rate, date of creation, account number, routing number, account type
+        payload: account balance, interest rate, date of creation, account number, routing number, account type, transactions
          */
     }
 
-    public static class AccountSpecific implements AccountActions{
+    public static class AccountSpecific implements AccountActions, AccountNumber{
         /*
-        payload: account balance, transactions
+        payload: account balance, transactions, account number
          */
     }
 
