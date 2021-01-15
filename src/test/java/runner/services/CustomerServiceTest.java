@@ -119,37 +119,49 @@ public class CustomerServiceTest {
         String actualUpdatedName= customerServices.updateCustomer(customer.getId(), customer).getFirstName();
         Assert.assertEquals(expectedUpdateName, actualUpdatedName);
     }
-    @Test
-    public void updateUserPhoneNumberTest() throws Exception {
-        Customer customer1 = new Customer( 2L, "Radha" , "Ramnik",address,login,testAccounts);
-        int expected = 0;
-        Mockito.when(customerRepo.save(customer1)).thenReturn(customer1);
-        Mockito.when(customerRepo.findCustomerById(customer1.getId())).thenReturn(customer1);
-        String phoneNumber = "514-454-8974";
-        int actual= customerServices.updateCustomerPhoneNumber(customer1.getId(), phoneNumber);
-        Assert.assertEquals(expected, actual);
-    }
-    @Test
-    public void updateUserEmailTest() throws Exception {
-        Customer customer1 = new Customer( 2L, "Radha" , "Ramnik",address,login,testAccounts);
-        int expected = 0;
-        Mockito.when(customerRepo.save(customer1)).thenReturn(customer1);
-        Mockito.when(customerRepo.findCustomerById(customer1.getId())).thenReturn(customer1);
-        String email = "gtest@gmail.com";
-        int actual= customerServices.updateCustomerEmail(customer1.getId(), email);
-        Assert.assertEquals(expected, actual);
-    }
 
-    @Test
-    public void updateUserAddressTest() throws Exception {
-        Customer customer1 = new Customer( 2L, "Radha" , "Ramnik",address,login,testAccounts);
-        int expected = 0;
-        Mockito.when(customerRepo.save(customer1)).thenReturn(customer1);
-        Mockito.when(customerRepo.findCustomerById(customer1.getId())).thenReturn(customer1);
-        address.setFirstLine("First Line has been changed");
-        Customer actualCustomer= customerServices.updateCustomerAddress(customer1.getId(), address);
-        Assert.assertEquals(address.getFirstLine(), actualCustomer.getAddress().getFirstLine());
-    }
+//    @Test
+//    public void updateUserPhoneNumberTest() throws Exception {
+//        Customer customer1 = new Customer( 2L, "Radha" , "Ramnik",address,login,testAccounts);
+//        int expected = 0;
+//        Mockito.when(customerRepo.save(customer1)).thenReturn(customer1);
+//        Mockito.when(customerRepo.findCustomerById(customer1.getId())).thenReturn(customer1);
+//        String phoneNumber = "514-454-8974";
+//        int actual= customerServices.updateCustomerPhoneNumber(customer1.getId(), phoneNumber);
+//        Assert.assertEquals(expected, actual);
+//    }
+
+//    @Test
+//    public void updateUserEmailTest() throws Exception {
+//        Customer customer1 = new Customer( 2L, "Radha" , "Ramnik",address,login,testAccounts);    @Test
+////    public void updateUserEmailTest() throws Exception {
+////        Customer customer1 = new Customer( 2L, "Radha" , "Ramnik",address,login,testAccounts);
+////        int expected = 0;
+////        Mockito.when(customerRepo.save(customer1)).thenReturn(customer1);
+////        Mockito.when(customerRepo.findCustomerById(customer1.getId())).thenReturn(customer1);
+////        String email = "gtest@gmail.com";
+////        int actual= customerServices.updateCustomerEmail(customer1.getId(), email);
+////        Assert.assertEquals(expected, actual);
+////    }
+//        int expected = 0;
+//        Mockito.when(customerRepo.save(customer1)).thenReturn(customer1);
+//        Mockito.when(customerRepo.findCustomerById(customer1.getId())).thenReturn(customer1);
+//        String email = "gtest@gmail.com";
+//        int actual= customerServices.updateCustomerEmail(customer1.getId(), email);
+//        Assert.assertEquals(expected, actual);
+//    }
+
+//    @Test
+//    public void updateUserAddressTest() throws Exception {
+//        Customer customer1 = new Customer( 2L, "Radha" , "Ramnik",address,login,testAccounts);
+//        int expected = 0;
+//        Mockito.when(customerRepo.save(customer1)).thenReturn(customer1);
+//        Mockito.when(customerRepo.findCustomerById(customer1.getId())).thenReturn(customer1);
+//        address.setFirstLine("First Line has been changed");
+//        Customer actualCustomer= customerServices.updateCustomerAddress(customer1.getId(), address);
+//        Assert.assertEquals(address.getFirstLine(), actualCustomer.getAddress().getFirstLine());
+//    }
+
     @Test
     public void checkLoginTest() throws Exception {
         Boolean expected =true;

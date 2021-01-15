@@ -50,58 +50,23 @@ public class CustomerController {
 
     @JsonView(Views.PhoneNumber.class)
     @PutMapping(value = "myaccount/profile/phone")
-    public ResponseEntity<?> updatePhone(@RequestBody String phoneNumber) throws Exception {
+    public ResponseEntity<Customer> updatePhone(@RequestBody Customer customer) throws Exception {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
-
-        if(customerReturned!=null) {
-            Long id = customerReturned.getId();
-            int response = customerServices.updateCustomerPhoneNumber(id, phoneNumber);
-            if (response == 0)
-                return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
-           else if (response == 1)
-               return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
-            else if (response == 2)
-                return new ResponseEntity<>("Incorrect format of Phone , please re-send", HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
-
+        return new ResponseEntity<>(customerServices.updateCustomerPhoneNumber(currentPrincipalName,customer), HttpStatus.OK);
     }
 
     @JsonView(Views.Email.class)
     @PutMapping(value = "myaccount/profile/email")
-    public ResponseEntity<?> updateEmail(@RequestBody String email) {
+    public ResponseEntity<Customer> updateEmail(@RequestBody Customer customer) {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
-        if(customerReturned!=null) {
-            Long id = customerReturned.getId();
-
-            int response = customerServices.updateCustomerEmail(id, email);
-            if (response == 0)
-                return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
-            else if (response == 1)
-                return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
-            else
-                return new ResponseEntity<>("Incorrect email id format,please re-send", HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
+       return new ResponseEntity<>(customerServices.updateCustomerEmail(currentPrincipalName, customer), HttpStatus.OK);
     }
 
     @JsonView(Views.Address.class)
     @PutMapping(value = "myaccount/profile/address")
-    public ResponseEntity<?> updateEmail(@RequestBody Address address) {
+    public ResponseEntity<Customer> updateEmail(@RequestBody Address address) {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Customer customerReturned =customerServices.readCustomerByLogin(currentPrincipalName);
-        if(customerReturned!=null) {
-            Long id = customerReturned.getId();
-            Customer responseCustomer = customerServices.updateCustomerAddress(id, address);
-            if (responseCustomer == null)
-                return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
-            else
-                return new ResponseEntity<>(customerServices.readCustomer(id), HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(customerServices.updateCustomerAddress(currentPrincipalName, address), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "myaccount/profile/delete")
