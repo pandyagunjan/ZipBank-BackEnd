@@ -1,4 +1,5 @@
 package runner.services;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.mifmif.common.regex.Generex;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import runner.entities.*;
@@ -148,62 +149,35 @@ public class CustomerServices {
 
     //Update phone number ,check syntax based on the REGEX
     //Returns 0 = Updated , 1 : Customer not found , 2 : Phone number format not correct
-    public int updateCustomerPhoneNumber(Long id, String phone) throws ParseException {
+    public Customer updateCustomerPhoneNumber(String username, Customer tempCustomer) throws ParseException {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
-        Customer customer = customerRepo.findCustomerById(id);
-        Pattern pattern = Pattern.compile("([0-9]{10}|\\(?[0-9]{3}\\)?[- ]{0,1}[0-9]{3}[- ]{0,1}[0-9]{4})");
-        Matcher matcher = pattern.matcher(phone);
-
-        if (matcher.matches()) {
-            if (customer != null) {
-                loggerService.log(Level.INFO, "Customer with id " + customer.getId() + " found to be updated");
-                customer.setPhoneNumber(phone);
-                customerRepo.save(customer);
-                loggerService.log(Level.INFO, "User with Id " + customer.getId() + " phone number has been updated");
-                return 0; // Phone number has been updated
-            } else {
-                return 1; // Customer not found
-            }
-        }
-        return 2; // Phone number format is incorrect
+        Customer customer = customerRepo.findCustomerByLoginUsername(username);
+        loggerService.log(Level.INFO, "Customer with id " + customer.getId() + " found to be updated");
+        customer.setPhoneNumber(tempCustomer.getPhoneNumber());
+        loggerService.log(Level.INFO, "User with Id " + customer.getId() + " phone number has been updated");
+        return customerRepo.save(customer);
     }
 
     //Update Email number ,check syntax based on the REGEX
     //Returns 0 = Updated , 1 : Customer not found , 2 : Email format not correct
-    public int updateCustomerEmail(Long id, String email) {
-        //return 0 when updated , 1 is customer not found and 2 if value does not match the REGEX
+    public Customer updateCustomerEmail(String username, Customer tempCustomer) {
         loggerService.log(Level.INFO, "Finding the user to be updated");
-        Customer customer = customerRepo.findCustomerById(id);
-
-        Pattern patternEmail = Pattern.compile("^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = patternEmail.matcher(email);
-
-        if (matcher.matches()) {
-            if (customer != null) {
-                loggerService.log(Level.INFO, "customer with id " + customer.getId() + " found to be updated");
-                customer.setEmail(email);
-                customerRepo.save(customer);
-                loggerService.log(Level.INFO, "customer with Id " + customer.getId() + " email id has been updated");
-                return 0; // Updated
-            } else {
-                return 1; // Customer not found
-            }
-        }
-        return 2; // Email format incorrect
+        Customer customer = customerRepo.findCustomerByLoginUsername(username);
+        loggerService.log(Level.INFO, "customer with username "+username+ " found to be updated");
+        customer.setEmail(tempCustomer.getEmail());
+        loggerService.log(Level.INFO, "customer with username " + username + " email id has been updated");
+        return customerRepo.save(customer);
     }
+
     //Update Customer address
-    public Customer updateCustomerAddress(Long id, Address address) {
+    public Customer updateCustomerAddress(String username, Address address) {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
-        Customer customer = customerRepo.findCustomerById(id);
-        if (customer != null) {
-            address.setId(customer.getAddress().getId());
-            loggerService.log(Level.INFO, "customer with id "+id+ " found to be updated");
-            customer.setAddress(address);
-            customerRepo.save(customer);
-            loggerService.log(Level.INFO, "customer with Id " + customer.getId() + " address has been updated");
-            return customer;
-        }
-        return null;
+        Customer customer = customerRepo.findCustomerByLoginUsername(username);
+        address.setId(customer.getAddress().getId());
+        loggerService.log(Level.INFO, "customer with username "+username+ " found to be updated");
+        customer.setAddress(address);
+        loggerService.log(Level.INFO, "customer with username " + username + " address has been updated");
+        return customerRepo.save(customer);
     }
 
     //Delete if not needed

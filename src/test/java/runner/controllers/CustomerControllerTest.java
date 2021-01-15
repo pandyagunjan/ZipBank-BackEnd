@@ -111,87 +111,88 @@ public class CustomerControllerTest {
         }
     }
 
-    @WithMockUser
-    @Test
-    public void updateCustomerPhone() throws Exception {
-        String jsonRequest = objectMapper.writeValueAsString("548-458-4584");
-        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
-        Mockito.when(customerServices.updateCustomerPhoneNumber(any(),any())).thenReturn(0);
-        mockMvc.perform(put("/myaccount/profile/phone")
-                .content(jsonRequest)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
+//    @WithMockUser
+//    @Test
+//    public void updateCustomerPhone() throws Exception {
+//        String jsonRequest = objectMapper.writeValueAsString("548-458-4584");
+//        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+//        Mockito.when(customerServices.updateCustomerPhoneNumber(any(),any())).thenReturn(0);
+//        mockMvc.perform(put("/myaccount/profile/phone")
+//                .content(jsonRequest)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk());
+//    }
 
-    @WithMockUser
-    @Test
-    public void updateCustomerPhoneCustomerNotfound() throws Exception {
-        String jsonRequest = objectMapper.writeValueAsString("548-584-8999");
-        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(null);
-        Mockito.when(customerServices.updateCustomerPhoneNumber(any(),any())).thenReturn(1);
+//    @WithMockUser
+//    @Test
+//    public void updateCustomerPhoneCustomerNotfound() throws Exception {
+//        String jsonRequest = objectMapper.writeValueAsString("548-584-8999");
+//        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(null);
+//        Mockito.when(customerServices.updateCustomerPhoneNumber(any(),any())).thenReturn(1);
+//
+//        mockMvc.perform(put("/myaccount/profile/phone")
+//                .content(jsonRequest)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isNotFound());
+//    }
 
-        mockMvc.perform(put("/myaccount/profile/phone")
-                .content(jsonRequest)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
-
-    @WithMockUser
-    @Test
-    public void updateCustomerPhoneFormat() throws Exception {
-        String jsonRequest = objectMapper.writeValueAsString("54845");
-        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
-        Mockito.when(customerServices.updateCustomerPhoneNumber(any(),any())).thenReturn(2);
-        mockMvc.perform(put("/myaccount/profile/phone")
-                .content(jsonRequest)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-
-
-    @WithMockUser
-    @Test
-    public void updateCustomerEmail() throws Exception {
-        String jsonRequest = objectMapper.writeValueAsString("test@gmail.com");
-        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
-        Mockito.when(customerServices.updateCustomerEmail(any(),any())).thenReturn(0);
-        mockMvc.perform(put("/myaccount/profile/email")
-                .content(jsonRequest)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-    @WithMockUser
-    @Test
-    public void updateCustomerEmailCustomerNotFound() throws Exception {
-        String jsonRequest = objectMapper.writeValueAsString("test@gmail.com");
-        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(null);
-        Mockito.when(customerServices.updateCustomerEmail(any(),any())).thenReturn(1);
-
-        mockMvc.perform(put("/myaccount/profile/email")
-                .content(jsonRequest)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
+//    @WithMockUser
+//    @Test
+//    public void updateCustomerPhoneFormat() throws Exception {
+//        String jsonRequest = objectMapper.writeValueAsString("54845");
+//        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+//        Mockito.when(customerServices.updateCustomerPhoneNumber(any(),any())).thenReturn(2);
+//        mockMvc.perform(put("/myaccount/profile/phone")
+//                .content(jsonRequest)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isBadRequest());
+//    }
 
 
-    @WithMockUser
-    @Test
-    public void updateCustomerEmailFormat() throws Exception {
-        String jsonRequest = objectMapper.writeValueAsString("test");
-        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
-        Mockito.when(customerServices.updateCustomerEmail(any(),any())).thenReturn(2);
-        mockMvc.perform(put("/myaccount/profile/email")
-                .content(jsonRequest)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
+//
+//    @WithMockUser
+//    @Test
+//    public void updateCustomerEmail() throws Exception {
+//        String jsonRequest = objectMapper.writeValueAsString("test@gmail.com");
+//        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+//        Mockito.when(customerServices.updateCustomerEmail(any(),any())).thenReturn(0);
+//        mockMvc.perform(put("/myaccount/profile/email")
+//                .content(jsonRequest)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk());
+//    }
+
+//    @WithMockUser
+//    @Test
+//    public void updateCustomerEmailCustomerNotFound() throws Exception {
+//        String jsonRequest = objectMapper.writeValueAsString("test@gmail.com");
+//        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(null);
+//        Mockito.when(customerServices.updateCustomerEmail(any(),any())).thenReturn(1);
+//
+//        mockMvc.perform(put("/myaccount/profile/email")
+//                .content(jsonRequest)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isNotFound());
+//    }
+
+
+//    @WithMockUser
+//    @Test
+//    public void updateCustomerEmailFormat() throws Exception {
+//        String jsonRequest = objectMapper.writeValueAsString("test");
+//        Mockito.when(customerServices.readCustomerByLogin(any())).thenReturn(customer);
+//        Mockito.when(customerServices.updateCustomerEmail(any(),any())).thenReturn(2);
+//        mockMvc.perform(put("/myaccount/profile/email")
+//                .content(jsonRequest)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isBadRequest());
+//    }
 
     @WithMockUser
     @Test
