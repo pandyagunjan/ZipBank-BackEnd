@@ -22,7 +22,7 @@ public class Account {
     @JsonView(Views.AccountNumber.class)
     private String accountNumber;
 
-    @JsonView(Views.AccountDetails.class)
+    @JsonView(Views.RoutingNumber.class)
     private String routingNumber = "091000022";
 
     @JsonView(Views.AccountType.class)
@@ -32,7 +32,7 @@ public class Account {
     @JsonView(Views.AccountActions.class)
     private Double balance;
 
-    @JsonView(Views.AccountDetails.class)
+    @JsonView(Views.AccountOpening.class)
     private LocalDate dateOfOpening;
 
     @JsonView(Views.AccountDetails.class)
