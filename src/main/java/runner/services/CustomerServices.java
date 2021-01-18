@@ -18,13 +18,16 @@ import java.util.stream.Collectors;
 public class CustomerServices {
     //object for logging information,warning,error
     private final static Logger loggerService = Logger.getLogger(CustomerServices.class.getName());
-    private CustomerRepo customerRepo;
+
     //Autowired the customerService
     @Autowired
-    public CustomerServices(CustomerRepo customerRepo) {
-        loggerService.log(Level.INFO, "The repository for customer has been autowired to services");
-        this.customerRepo = customerRepo;
-    }
+    private CustomerRepo customerRepo;
+
+//    public CustomerServices(CustomerRepo customerRepo) {
+//        loggerService.log(Level.INFO, "The repository for customer has been autowired to services");
+//        this.customerRepo = customerRepo;
+//    }
+
 //Can we try removing this below Autowired ??
     @Autowired
     private AccountServices accountServices;
@@ -60,7 +63,7 @@ public class CustomerServices {
     }
 
     //Find the customer from DB using id
-    public Customer readCustomer(Long id) {
+/*    public Customer readCustomer(Long id) {
         loggerService.log(Level.INFO, "The customer information is being read");
         Customer customer = customerRepo.findCustomerById(id);
         if (customer != null) {
@@ -70,7 +73,7 @@ public class CustomerServices {
             loggerService.log(Level.WARNING, "The customer could not be found, returned null");
             return null;
         }
-    }
+    }*/
 
     //Find Customer from DB using the logged in user name
     public Customer readCustomerByLogin(String name) {
@@ -121,7 +124,7 @@ public class CustomerServices {
         return 4;
     }
 
-    //Update the Customer (all fields) in the DB ,based on body of request
+/*    //Update the Customer (all fields) in the DB ,based on body of request
     public Customer updateCustomer(Long id, Customer customer) throws Exception {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
         Customer customerFromDB = customerRepo.findCustomerById(id);
@@ -145,16 +148,16 @@ public class CustomerServices {
             loggerService.log(Level.WARNING, "Customer with Id " + id + "not found in db");
             throw new Exception("id not found to be udapted");
         }
-    }
+    }*/
 
     //Update phone number ,check syntax based on the REGEX
     //Returns 0 = Updated , 1 : Customer not found , 2 : Phone number format not correct
     public Customer updateCustomerPhoneNumber(String username, Customer tempCustomer) throws ParseException {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
         Customer customer = customerRepo.findCustomerByLoginUsername(username);
-        loggerService.log(Level.INFO, "Customer with id " + customer.getId() + " found to be updated");
+        loggerService.log(Level.INFO, "Customer with"+username + "found to be updated");
         customer.setPhoneNumber(tempCustomer.getPhoneNumber());
-        loggerService.log(Level.INFO, "User with Id " + customer.getId() + " phone number has been updated");
+        loggerService.log(Level.INFO, "User with" +username + "phone number has been updated");
         return customerRepo.save(customer);
     }
 

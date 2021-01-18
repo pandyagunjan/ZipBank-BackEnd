@@ -8,10 +8,7 @@ import runner.views.Views;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Account {
@@ -47,7 +44,7 @@ public class Account {
             name = "account_transaction",
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "transaction_id"))
-    private Set<Transaction> transactions = new HashSet<>();
+    private List<Transaction> transactions = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -56,7 +53,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(Long id, String accountNumber, AccountType accountType, Double balance, String encryptedUrl, Set<Transaction> transactions) {
+    public Account(Long id, String accountNumber, AccountType accountType, Double balance, String encryptedUrl, List<Transaction> transactions) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.accountType = accountType;
@@ -125,11 +122,11 @@ public class Account {
         this.interestRate = this.accountType.getInterestRate();
     }
 
-    public Set<Transaction> getTransactions() {
+    public List<Transaction> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(Set<Transaction> transactionsList) {
+    public void setTransactions(List<Transaction> transactionsList) {
         this.transactions = transactionsList;
     }
 
