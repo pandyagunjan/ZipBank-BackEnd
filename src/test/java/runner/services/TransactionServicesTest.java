@@ -48,8 +48,8 @@ public class TransactionServicesTest {
         transactionAccount = new HashSet<Account>();
         transactionAccount.add(account1);
         transaction = new Transaction(1.00,transactionAccount);
-        account1 = new Account(1L,"12345", AccountType.CHECKING,100.00,"abcdefg", new HashSet<Transaction>());
-        account2 = new Account(2L,"54321", AccountType.SAVINGS,0.00,"gfedcba", new HashSet<Transaction>());
+        account1 = new Account(1L,"12345", AccountType.CHECKING,100.00,"abcdefg", new ArrayList<Transaction>());
+        account2 = new Account(2L,"54321", AccountType.SAVINGS,0.00,"gfedcba", new ArrayList<Transaction>());
     }
 
     @Test
