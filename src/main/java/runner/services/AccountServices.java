@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServices {
@@ -36,7 +38,7 @@ public class AccountServices {
 
     public Account createAccount(Account account, String username) throws Exception {
         loggerService.log(Level.INFO, "The customer's new account is being saved and given an account number.");
-        account.setCustomer(accountRepo.findAccountsByCustomer_LoginUsername(username).stream().findAny().orElse(null).getCustomer());
+        account.setCustomer(accountRepo.findAccountsByCustomer_LoginUsername(username).stream().findFirst().orElse(null).getCustomer());
         setUpAccount(account);
         transferMoneyToNewAccount(account);
         account.setEncryptedUrl(generateRandomUrl());
@@ -70,7 +72,11 @@ public class AccountServices {
     }
 
     public Account getAccountByEncryptedUrl(String encryptedUrl){
-        return accountRepo.findAccountByEncryptedUrl(encryptedUrl);
+        Account individualAccount = accountRepo.findAccountByEncryptedUrl(encryptedUrl);
+        List<Transaction> sortedList = accountRepo.findAccountByEncryptedUrl(encryptedUrl).getTransactions().stream()
+                .sorted(Comparator.comparingLong(Transaction::getId).reversed()).collect(Collectors.toList());
+        individualAccount.setTransactions(sortedList);
+        return individualAccount;
     }
 
     public Account getAccountByAccountNumber(String accountNumber){
@@ -151,8 +157,8 @@ public class AccountServices {
 
         //adding new transactions to account's transactions set
         ArrayList<Transaction> transactionsList = transactionServices.setAllTransactions(transaction, fromAccount, toAccount);
-        Set<Transaction> fromSet = fromAccount.getTransactions();
-        Set<Transaction> toSet = toAccount.getTransactions();
+        List<Transaction> fromSet = fromAccount.getTransactions();
+        List<Transaction> toSet = toAccount.getTransactions();
         fromSet.add(transactionsList.get(0));
         toSet.add(transactionsList.get(1));
         fromAccount.setTransactions(fromSet);

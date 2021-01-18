@@ -32,7 +32,9 @@ import runner.enums.AccountType;
 import runner.services.AccountServices;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 //@WebMvcTest(controllers = CustomerController.class)
@@ -53,14 +55,14 @@ public class AccountControllerTest {
     Account account1;
     Account account2;
     Transaction transaction;
-    Set<Transaction> transactionSet;
+    List<Transaction> transactionSet;
     String jsonString;
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
     public void setUp() throws JSONException {
         transaction = new Transaction("Withdrawal to CHECKING XXXXXXXX0987",10.00, 100.00, LocalDate.now());
-        transactionSet = new HashSet<>();
+        transactionSet = new ArrayList<Transaction>();
         transactionSet.add(transaction);
         account1 = new Account(1L,"12345", AccountType.CHECKING,100.00,"abcdefg", transactionSet);
         account2 = new Account(2L,"54321", AccountType.SAVINGS,0.00,"gfedcba", transactionSet);
