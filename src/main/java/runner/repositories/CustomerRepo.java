@@ -19,4 +19,5 @@ public interface CustomerRepo extends CrudRepository<Customer,Long> {
             value = "SELECT username FROM LOGIN",
             nativeQuery = true)
     List<String> findAllLoginsNative();
+    List<Customer> findAll();
 }
