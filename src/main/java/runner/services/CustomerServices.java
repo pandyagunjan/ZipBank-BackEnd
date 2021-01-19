@@ -58,7 +58,8 @@ public class CustomerServices {
     //Check if the username already exist
     public Boolean checkLogin(Login login) {
         loggerService.log(Level.INFO, "I am in first line of checkLogin");
-        List<String> logins= customerRepo.findAllLoginsNative();
+        //List<String> logins= customerRepo.findAllLoginsNative();
+        List<String> logins= customerRepo.findAll().stream().map(Customer::getLogin).map(Login::getUsername).collect(Collectors.toList());
         loggerService.log(Level.INFO, "I am have passed customerRepo.findAllLoginsNative");
         long count = logins.stream().filter(name -> name.equalsIgnoreCase(login.getUsername())).count();
         return count!=0 ? true:false;
