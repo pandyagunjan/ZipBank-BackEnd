@@ -13,7 +13,7 @@ import runner.views.Views;
 import java.util.Optional;
 import java.util.Set;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/myaccount")
 @RestController
 public class AccountController {
