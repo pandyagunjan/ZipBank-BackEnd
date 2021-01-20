@@ -11,7 +11,7 @@ import runner.entities.Customer;
 import runner.services.CustomerServices;
 import runner.views.Views;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class CustomerController {
 
