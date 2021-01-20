@@ -18,19 +18,21 @@ Use Spring Initializr to create an starting point for you application
 ### Money Management Application
 
 #### User Stories to Fulfill  
-* As a client, 
-	* can create new user account (Customer)
-	* can create new account for a customer
+* As a logged in client, 
+	* can create new client
+	* can create new account for a client
 	* deposit money to each account
 	* withdraw money from each account
 	* transfer money to and from any 2 accounts
+	* delete the client if accounts with Balance = 0
+	* display all account belonging to client
+	* display account details and transaction details of loaded account
 	
 
 ### Money Management Application
 
 #### User Stories to Fulfill  
 * As a client, (not logged in) I
-	* can create new accounts
-	* deposit money to each account
-	* withdraw money from each account
-	* transfer money to and from any 2 accounts
+	* can create new customer profile
+	* login
+	
