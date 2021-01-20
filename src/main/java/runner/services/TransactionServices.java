@@ -12,33 +12,7 @@ import java.util.*;
 
 @Service
 public class TransactionServices {
-    @Autowired
-    private TransactionRepo transactionRepo;
-    //CRUD methods
-    public Optional<Transaction> createTransaction()
-    {
-        //Used in POST for Transaction controller
-        return null;
-    }
-
-    public Optional<Transaction> readTransaction()
-    {
-        //Used in GET in Transaction controller
-        return null;
-    }
-    public Boolean removeTransaction()
-    {
-        //Used in DELETE in Transaction controller
-        return true;
-    }
-
-    public Optional<Transaction> updateTransaction()
-    {
-        //Used in PUT in Transaction controller
-        return null;
-    }
-
-    public ArrayList<Transaction> setAllTransactions(Transaction transaction, Account fromAccount, Account toAccount){
+       public ArrayList<Transaction> setAllTransactions(Transaction transaction, Account fromAccount, Account toAccount){
         //{0 = withdraw, 1 = deposit} money always leaves from 'fromAccount' to 'toAccount'
         ArrayList<Transaction> myList = new ArrayList<Transaction>();
 

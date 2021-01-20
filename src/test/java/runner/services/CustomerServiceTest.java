@@ -160,11 +160,10 @@ public class CustomerServiceTest {
 
     @Test
     public void checkLoginTest() throws Exception {
-        Boolean expected =true;
+        Boolean expected =false;
 
         Mockito.when(customerRepo.findAllLoginsNative()).thenReturn(logins);
         Boolean actual= customerServices.checkLogin(login);
-
         Assert.assertEquals(expected, actual);
     }
 
