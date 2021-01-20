@@ -9,7 +9,6 @@ import runner.entities.Account;
 import runner.entities.Transaction;
 import runner.services.AccountServices;
 import runner.views.Views;
-
 import java.util.Optional;
 import java.util.Set;
 
@@ -49,12 +48,12 @@ public class AccountController {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         return new ResponseEntity<>(accountServices.createAccount(account, currentPrincipalName), HttpStatus.CREATED);
     }
-
-    //REMOVE if not needed
-    @PutMapping(value = "/update/{id}")
-    public ResponseEntity<Optional<Account>> update(@RequestBody Account account, @PathVariable Long id) throws Exception {
-        return new ResponseEntity<>(accountServices.updateAccount(id,account), HttpStatus.OK);
-    }
+//
+//    //REMOVE if not needed
+//    @PutMapping(value = "/update/{id}")
+//    public ResponseEntity<Optional<Account>> update(@RequestBody Account account, @PathVariable Long id) throws Exception {
+//        return new ResponseEntity<>(accountServices.updateAccount(id,account), HttpStatus.OK);
+//    }
 
     //This needs to be rewritten with "encryptedUrl/delete", need to doublecheck if deleting account deletes User due to cascade.ALL
     @DeleteMapping(value = "/{encryptedUrl}/delete")
