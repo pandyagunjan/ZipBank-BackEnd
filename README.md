@@ -3,12 +3,17 @@
 * **Purpose** - to demonstrate the construction of a full-stacked web-application
 
 ## Developmental Notes
-### Technical Stack
+### Minimum Tech Stack
 * **Wireframe** - Mockflow
-* **Frontend** - Angular 
+* **Frontend** - Angular / React
 * **Business Logic** - Java
 * **Data Layer** - MySQL
-* **Cloud** - Heroku / AWS RDS 
+* **Cloud** - Heroku/AWS/Google
+
+### Installation
+
+Use Spring Initializr to create an starting point for you application
+
 
 ### Money Management Application
 
@@ -20,3 +25,12 @@
 	* withdraw money from each account
 	* transfer money to and from any 2 accounts
 	
+
+### Money Management Application
+
+#### User Stories to Fulfill  
+* As a client, (not logged in) I
+	* can create new accounts
+	* deposit money to each account
+	* withdraw money from each account
+	* transfer money to and from any 2 accounts

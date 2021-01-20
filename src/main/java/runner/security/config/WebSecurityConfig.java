@@ -98,8 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 registry.addMapping("/**")
                         .allowedMethods("GET","POST","PUT","DELETE")
                         .allowedHeaders("*")
-                        .allowedOrigins("http://zip-bank.herokuapp.com" ,"http://localhost:8080");
-
+                        .allowedOrigins("http://zip-bank.herokuapp.com"); //angular default port
             }
         };
     }
