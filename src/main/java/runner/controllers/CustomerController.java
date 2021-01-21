@@ -11,7 +11,7 @@ import runner.entities.Customer;
 import runner.services.CustomerServices;
 import runner.views.Views;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class CustomerController {
 
@@ -20,13 +20,9 @@ public class CustomerController {
 
     @JsonView(Views.Profile.class)
     @GetMapping(value = "/myaccount/profile")
-    public ResponseEntity<?> getCustomer() {
+    public ResponseEntity<Customer> getCustomer() {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName(); //needs JWT token in header
-        Customer customer =customerServices.readCustomerByLogin(currentPrincipalName); //<< for testing on angular, need to change back to currentPrincipalName
-          if( customer == null)
-            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
-        else
-            return new ResponseEntity<>(customer, HttpStatus.OK);
+        return new ResponseEntity<>(customerServices.readCustomerByLogin(currentPrincipalName), HttpStatus.OK);
     }
 
     @PostMapping(value = "/openaccount",consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -81,6 +77,12 @@ public class CustomerController {
             return new ResponseEntity<>("User has account with balance , cannot be deleted", HttpStatus.FORBIDDEN);
         else
             return new ResponseEntity<>("No accounts/user found", HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping(value = "myaccount/{encryptedUrl}/delete")
+    public ResponseEntity<Customer> deleteAccount(@PathVariable String encryptedUrl) throws Exception{
+        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return new ResponseEntity<>(customerServices.removeAccount(currentPrincipalName,encryptedUrl), HttpStatus.OK);
     }
 
 }

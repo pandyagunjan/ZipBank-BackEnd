@@ -6,6 +6,8 @@ import runner.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import runner.repositories.CustomerRepo;
+
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
@@ -23,12 +25,6 @@ public class CustomerServices {
     @Autowired
     private CustomerRepo customerRepo;
 
-//    public CustomerServices(CustomerRepo customerRepo) {
-//        loggerService.log(Level.INFO, "The repository for customer has been autowired to services");
-//        this.customerRepo = customerRepo;
-//    }
-
-//Can we try removing this below Autowired ??
     @Autowired
     private AccountServices accountServices;
 
@@ -64,19 +60,6 @@ public class CustomerServices {
         long count = logins.stream().filter(name -> name.equalsIgnoreCase(login.getUsername())).count();
         return count!=0 ? true:false;
     }
-
-    //Find the customer from DB using id
-/*    public Customer readCustomer(Long id) {
-        loggerService.log(Level.INFO, "The customer information is being read");
-        Customer customer = customerRepo.findCustomerById(id);
-        if (customer != null) {
-            loggerService.log(Level.INFO, "The customer is found and being returned");
-            return customer;
-        } else {
-            loggerService.log(Level.WARNING, "The customer could not be found, returned null");
-            return null;
-        }
-    }*/
 
     //Find Customer from DB using the logged in user name
     public Customer readCustomerByLogin(String name) {
@@ -127,32 +110,6 @@ public class CustomerServices {
         return 4;
     }
 
-/*    //Update the Customer (all fields) in the DB ,based on body of request
-    public Customer updateCustomer(Long id, Customer customer) throws Exception {
-        loggerService.log(Level.INFO, "Finding the customer to be updated");
-        Customer customerFromDB = customerRepo.findCustomerById(id);
-        Set<Account> accountSetFromDB ;
-        if (customerFromDB != null) {
-            loggerService.log(Level.INFO, "Customer with id to be updated found " + customerFromDB.getId());
-            customer.getAddress().setId(customerFromDB.getAddress().getId());
-            customer.setId(customerFromDB.getId());
-            accountSetFromDB = customerFromDB.getAccounts();
-            //Once the existing accounts are added , we will add more accounts from the request body
-            for (Account account : customer.getAccounts()) {
-                account.setCustomer(customerFromDB);
-                account.setEncryptedUrl(accountServices.generateRandomUrl()); // test-case fails as need to autowire this too.
-                accountSetFromDB.add(account);
-            }
-            customer.setAccounts(accountSetFromDB);
-            customerRepo.save(customer);
-            loggerService.log(Level.INFO, "Customer with Id " + customerFromDB.getId() + "has been updated");
-            return customerFromDB;
-        } else {
-            loggerService.log(Level.WARNING, "Customer with Id " + id + "not found in db");
-            throw new Exception("id not found to be udapted");
-        }
-    }*/
-
     //Update phone number ,check syntax based on the REGEX
     //Returns 0 = Updated , 1 : Customer not found , 2 : Phone number format not correct
     public Customer updateCustomerPhoneNumber(String username, Customer tempCustomer) throws ParseException {
@@ -196,6 +153,22 @@ public class CustomerServices {
              return customer.getAccounts();
         }
         return null;
+    }
+
+    @Transactional
+    public Customer removeAccount(String username, String encryptedUrl) throws Exception{
+        Customer customer = customerRepo.findCustomerByLoginUsername(username);
+        List<Account> testAcct= customer.getAccounts().stream()
+                .filter(account -> account.getEncryptedUrl().equals(encryptedUrl)).collect(Collectors.toList());
+        if(testAcct.get(0).getBalance()==0) {
+
+            Set<Account> myAccts = customer.getAccounts().stream()
+                    .filter(account -> !account.getEncryptedUrl().equals(encryptedUrl)).collect(Collectors.toSet());
+            customer.getAccounts().clear();
+            customer.getAccounts().addAll(myAccts);
+            return customerRepo.save(customer);
+        }
+        throw new Exception("Balance is not 0");
     }
 
 }

@@ -3,9 +3,11 @@ import com.mifmif.common.regex.Generex;
 import runner.entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import runner.entities.Customer;
 import runner.entities.Transaction;
 import runner.repositories.AccountRepo;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
@@ -13,6 +15,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 public class AccountServices {
     private final static Logger loggerService = Logger.getLogger(AccountServices.class.getName());
@@ -83,57 +86,38 @@ public class AccountServices {
         return accountRepo.findAccountByAccountNumber(accountNumber);
     }
 
-    //Remove if not needed
-/*    public Account readAccount(Long id) throws Exception{
-        loggerService.log(Level.INFO, "Attempting to read customer's account # " + id);
-        if (accountRepo.existsById(id) == true) {
-            loggerService.log(Level.INFO, "The customer's account #" + id + "is being read'");
-            return accountRepo.findAccountById(id);
-        }
-        loggerService.log(Level.WARNING, "The customer is trying to read account # " + id + "that doe not exist");
-        throw new Exception("Account does not exist");
-    }*/
+//    public Boolean removeAccount(String encryptedUrl){
+//        Account testAcct= accountRepo.findAccountByEncryptedUrl(encryptedUrl);
+//        Double testBalance = testAcct.getBalance();
+//        Customer customer = testAcct.getCustomer();
+//        if(accountRepo.findAccountByEncryptedUrl(encryptedUrl).getBalance()==0) {
+//            Integer testRemoveInt = accountRepo.deleteAccountByEncryptedUrl(encryptedUrl);
+//            //Integer myAcct = accountRepo.deleteByEncryptedUrl(encryptedUrl);
+//            Set<Account> myAccts = customer.getAccounts();
+//            myAccts.remove(testAcct);
+//
+//            return true;
+//        }
+//        return false;
+//    }
 
-    //Remove if not needed
-/*    public Boolean removeAccount(Long id) throws Exception{
-        loggerService.log(Level.INFO, "Attempting to remove customer's account # " + id);
-        if (accountRepo.findAccountById(id).getBalance() == 0) {
-            loggerService.log(Level.INFO, "The customer is removing the account # " + id);
-            Account accountFromDB = accountRepo.findAccountById(id);
-            accountRepo.delete(accountFromDB);
-            return accountRepo.existsById(id);
-        } else {
-
-            loggerService.log(Level.WARNING, "The customer had a balance greater than 0 and could not remove the account # " + id);
-            throw new Exception("Balance not 0 cannot be closed");
-        }
-    }*/
-
-    public Boolean removeAccount(String encryptedUrl){
-        if(accountRepo.findAccountByEncryptedUrl(encryptedUrl).getBalance()==0) {
-            accountRepo.deleteAccountByEncryptedUrl(encryptedUrl);
-            return true;
-        }
-        return false;
-    }
-
-    //REMOVE if not used
-    public Optional<Account> updateAccount(Long id, Account account) throws Exception{
-        loggerService.log(Level.INFO, "Attempting to update customer's account # " + id);
-        if (accountRepo.existsById(id) == true) {
-            loggerService.log(Level.INFO, "The customer is updating their account # " + id);
-            Account accountFromDB = accountRepo.findAccountById(id);
-            accountFromDB.setAccountType(account.getAccountType());
-            accountFromDB.setAccountNumber(account.getAccountNumber());
-            accountFromDB.setInterestRate(account.getInterestRate());
-            accountFromDB.setDateOfOpening(account.getDateOfOpening());
-            accountFromDB.setRoutingNumber(account.getRoutingNumber());
-            accountFromDB.setBalance(account.getBalance());
-            return Optional.of(accountFromDB);
-        }
-        loggerService.log(Level.WARNING, "The account # " + id + "does not exist to be updated");
-        throw new Exception("Account does not exist");
-    }
+//    //REMOVE if not used
+//    public Optional<Account> updateAccount(Long id, Account account) throws Exception{
+//        loggerService.log(Level.INFO, "Attempting to update customer's account # " + id);
+//        if (accountRepo.existsById(id) == true) {
+//            loggerService.log(Level.INFO, "The customer is updating their account # " + id);
+//            Account accountFromDB = accountRepo.findAccountById(id);
+//            accountFromDB.setAccountType(account.getAccountType());
+//            accountFromDB.setAccountNumber(account.getAccountNumber());
+//            accountFromDB.setInterestRate(account.getInterestRate());
+//            accountFromDB.setDateOfOpening(account.getDateOfOpening());
+//            accountFromDB.setRoutingNumber(account.getRoutingNumber());
+//            accountFromDB.setBalance(account.getBalance());
+//            return Optional.of(accountFromDB);
+//        }
+//        loggerService.log(Level.WARNING, "The account # " + id + "does not exist to be updated");
+//        throw new Exception("Account does not exist");
+//    }
 
     //iterate through set to get accounts but should only be one at any time
     public Account iteratorReturn(Iterator<Account> iterator){
@@ -211,18 +195,6 @@ public class AccountServices {
         return randomString;
     }
 
-    // Not needed, transfer and withdraw have same JSON payload; so use withdraw method
-/*    public Account transfer(Double amount, Long fromId, Long toId) throws Exception {
-        if (accountRepo.findAccountById(fromId).getBalance() > amount) {
-            loggerService.log(Level.INFO, "The customer is making a transfer");
-            accountRepo.findAccountById(fromId).setBalance(accountRepo.findAccountById(fromId).getBalance() - amount);
-            accountRepo.findAccountById(toId).setBalance(accountRepo.findAccountById(toId).getBalance() + amount);
-            accountRepo.save(readAccount(toId));
-            return accountRepo.save(readAccount(fromId));
-        } else {
-            loggerService.log(Level.WARNING, "The customer did not have sufficient funds to make the transfer");
-            throw new Exception("Insufficient funds");
-        }
-    }*/
+
 
 }

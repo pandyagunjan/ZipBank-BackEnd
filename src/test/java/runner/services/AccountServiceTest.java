@@ -117,27 +117,6 @@ public class AccountServiceTest {
 //        Assert.assertTrue(expectedAccount.getAccountNumber().length()==10);
 //    }
 
-    @Test
-    public void removeAccountTestFalse() {
-        String encryptedUrl = account1.getEncryptedUrl();
-        Mockito.when(accountRepo.deleteAccountByEncryptedUrl(any())).thenReturn(account1);
-        Mockito.when(accountRepo.findAccountByEncryptedUrl(any())).thenReturn(account1);
-
-        Boolean deleted = accountServices.removeAccount(encryptedUrl);
-
-        Assert.assertFalse(deleted);
-    }
-
-    @Test
-    public void removeAccountTestTrue() {
-        String encryptedUrl = account2.getEncryptedUrl();
-        Mockito.when(accountRepo.deleteAccountByEncryptedUrl(any())).thenReturn(account2);
-        Mockito.when(accountRepo.findAccountByEncryptedUrl(any())).thenReturn(account2);
-
-        Boolean deleted = accountServices.removeAccount(encryptedUrl);
-
-        Assert.assertTrue(deleted);
-    }
 
     @Test
     public void transferMoneyTestTrue() throws Exception {

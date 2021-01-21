@@ -108,4 +108,5 @@ public class Login implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
+
 }
