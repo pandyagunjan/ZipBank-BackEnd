@@ -3,8 +3,11 @@ import com.mifmif.common.regex.Generex;
 import runner.entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import runner.entities.Customer;
 import runner.entities.Transaction;
 import runner.repositories.AccountRepo;
+
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
@@ -12,6 +15,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 public class AccountServices {
     private final static Logger loggerService = Logger.getLogger(AccountServices.class.getName());
@@ -82,14 +86,20 @@ public class AccountServices {
         return accountRepo.findAccountByAccountNumber(accountNumber);
     }
 
-
-    public Boolean removeAccount(String encryptedUrl){
-        if(accountRepo.findAccountByEncryptedUrl(encryptedUrl).getBalance()==0) {
-            accountRepo.deleteAccountByEncryptedUrl(encryptedUrl);
-            return true;
-        }
-        return false;
-    }
+//    public Boolean removeAccount(String encryptedUrl){
+//        Account testAcct= accountRepo.findAccountByEncryptedUrl(encryptedUrl);
+//        Double testBalance = testAcct.getBalance();
+//        Customer customer = testAcct.getCustomer();
+//        if(accountRepo.findAccountByEncryptedUrl(encryptedUrl).getBalance()==0) {
+//            Integer testRemoveInt = accountRepo.deleteAccountByEncryptedUrl(encryptedUrl);
+//            //Integer myAcct = accountRepo.deleteByEncryptedUrl(encryptedUrl);
+//            Set<Account> myAccts = customer.getAccounts();
+//            myAccts.remove(testAcct);
+//
+//            return true;
+//        }
+//        return false;
+//    }
 
 //    //REMOVE if not used
 //    public Optional<Account> updateAccount(Long id, Account account) throws Exception{

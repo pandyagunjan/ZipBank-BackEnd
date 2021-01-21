@@ -16,5 +16,6 @@ public interface AccountRepo extends CrudRepository<Account,Long> {
     Account findAccountByEncryptedUrl(String encryptedUrl);
     Account findAccountByAccountNumber(String accountNumber);
     Set<Account> findAccountsByCustomer_LoginUsername (String login);
-    Account deleteAccountByEncryptedUrl(String encryptedUrl);
+    Integer deleteAccountByEncryptedUrl(String encryptedUrl);
+    Integer deleteByEncryptedUrl(String encryptedUrl);
 }

@@ -174,5 +174,27 @@ public class CustomerServiceTest {
         Assert.assertEquals(testAccounts.size(), actualAccounts.size());
     }
 
+    @Test
+    public void removeAccountTestTrue()throws Exception {
+        String username = customer.getLogin().getUsername();
+        String encryptedUrl = account2.getEncryptedUrl();
+        Mockito.when(customerRepo.findCustomerByLoginUsername(any())).thenReturn(customer);
+        Mockito.when(customerRepo.save(any())).thenReturn(customer);
+
+        customerServices.removeAccount(username,encryptedUrl);
+
+        Assert.assertTrue(customer.getAccounts().size()==1);
+    }
+
+
+    @Test(expected = Exception.class)
+    public void removeAccountTest() throws Exception {
+        String username = customer.getLogin().getUsername();
+        String encryptedUrl = account1.getEncryptedUrl();
+        Mockito.when(customerRepo.findCustomerByLoginUsername(any())).thenReturn(customer);
+        Mockito.when(customerRepo.save(any())).thenReturn(customer);
+
+        customerServices.removeAccount(username,encryptedUrl);
+    }
 
 }
