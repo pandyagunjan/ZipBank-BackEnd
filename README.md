@@ -37,4 +37,18 @@ Use Spring Initializr to create an starting point for you application
 	* login
 	
 	![Image](/ZipBank_UI_Snapshots/1.png)
+	![Image](/ZipBank_UI_Snapshots/2.png)
+	![Image](/ZipBank_UI_Snapshots/3.png)
+	![Image](/ZipBank_UI_Snapshots/4.png)
+	![Image](/ZipBank_UI_Snapshots/5.png)
+	![Image](/ZipBank_UI_Snapshots/6.png)
+	![Image](/ZipBank_UI_Snapshots/7.png)
+	![Image](/ZipBank_UI_Snapshots/8.png)
+	![Image](/ZipBank_UI_Snapshots/9.png)
+	![Image](/ZipBank_UI_Snapshots/10.png)
+	![Image](/ZipBank_UI_Snapshots/11.png)
+	![Image](/ZipBank_UI_Snapshots/12.png)
+	![Image](/ZipBank_UI_Snapshots/13.png)
+	![Image](/ZipBank_UI_Snapshots/14.png)
+	![Image](/ZipBank_UI_Snapshots/15.png)
 	
