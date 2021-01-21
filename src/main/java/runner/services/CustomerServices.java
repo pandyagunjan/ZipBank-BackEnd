@@ -6,6 +6,8 @@ import runner.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import runner.repositories.CustomerRepo;
+
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
@@ -151,6 +153,22 @@ public class CustomerServices {
              return customer.getAccounts();
         }
         return null;
+    }
+
+    @Transactional
+    public Customer removeAccount(String username, String encryptedUrl) throws Exception{
+        Customer customer = customerRepo.findCustomerByLoginUsername(username);
+        List<Account> testAcct= customer.getAccounts().stream()
+                .filter(account -> account.getEncryptedUrl().equals(encryptedUrl)).collect(Collectors.toList());
+        if(testAcct.get(0).getBalance()==0) {
+
+            Set<Account> myAccts = customer.getAccounts().stream()
+                    .filter(account -> !account.getEncryptedUrl().equals(encryptedUrl)).collect(Collectors.toSet());
+            customer.getAccounts().clear();
+            customer.getAccounts().addAll(myAccts);
+            return customerRepo.save(customer);
+        }
+        throw new Exception("Balance is not 0");
     }
 
 }

@@ -108,14 +108,14 @@ public class AccountControllerTest {
     public void createAccountTest(){
     }
 
-    @WithMockUser
-    @Test
-    public void deleteAccountTest() throws Exception {
-        Mockito.when(accountServices.removeAccount(any())).thenReturn(true);
-
-        mockMvc.perform(delete("/myaccount/{encryptedUrl}/delete","12345"))
-                .andExpect(status().isOk());
-    }
+//    @WithMockUser
+//    @Test
+//    public void deleteAccountTest() throws Exception {
+//        Mockito.when(accountServices.removeAccount(any())).thenReturn(true);
+//
+//        mockMvc.perform(delete("/myaccount/{encryptedUrl}/delete","12345"))
+//                .andExpect(status().isOk());
+//    }
 
     @WithMockUser
     @Test

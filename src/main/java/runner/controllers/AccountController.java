@@ -9,6 +9,8 @@ import runner.entities.Account;
 import runner.entities.Transaction;
 import runner.services.AccountServices;
 import runner.views.Views;
+
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.Set;
 
@@ -56,10 +58,10 @@ public class AccountController {
 //    }
 
     //This needs to be rewritten with "encryptedUrl/delete", need to doublecheck if deleting account deletes User due to cascade.ALL
-    @DeleteMapping(value = "/{encryptedUrl}/delete")
-    public ResponseEntity<Boolean> deleteById(@PathVariable String encryptedUrl){
-        return new ResponseEntity<>(accountServices.removeAccount(encryptedUrl), HttpStatus.OK);
-    }
+//    @DeleteMapping(value = "/{encryptedUrl}/delete")
+//    public ResponseEntity<Boolean> deleteAccount(@PathVariable String encryptedUrl){
+//        return new ResponseEntity<>(accountServices.removeAccount(encryptedUrl), HttpStatus.OK);
+//    }
 
     @JsonView(Views.AccountSpecific.class)
     @PutMapping(value = "/{encryptedUrl}/deposit")

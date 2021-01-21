@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
 
-
 @Entity
 public class Customer {
     @Id
@@ -53,7 +52,7 @@ public class Customer {
     private Login login;
 
     @JsonView(Views.Profile.class) //delete in production
-    @OneToMany(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", cascade = ALL,fetch = FetchType.EAGER, orphanRemoval = true)
     @OrderBy
     @JsonBackReference
     private Set<Account> accounts;
