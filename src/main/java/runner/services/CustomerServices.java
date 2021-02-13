@@ -39,7 +39,6 @@ public class CustomerServices {
             customer.setSocialSecurity(bCryptPasswordEncoder.encode(customer.getSocialSecurity())); //encrypts the SSN before saving
             //get the accounts from the customer and set the customer id in accounts table before saving the Customer.
             Account newAccount = customer.getAccounts().stream().findFirst().orElse(null);
-            //customer.getAccounts().stream().forEach(account -> account.setCustomer(customer)); -Gunjan's method
             newAccount.setCustomer(customer);
             //passing the account to "createAccount" in accountServices to generate the account number
             accountServices.setUpAccount(newAccount);
@@ -54,10 +53,12 @@ public class CustomerServices {
     //Check if the username already exist
     public Boolean checkLogin(Login login) {
         loggerService.log(Level.INFO, "I am in first line of checkLogin");
-        //List<String> logins= customerRepo.findAllLoginsNative();
+        // Get all the usernames into a list Customer > Login > getUsername
         List<String> logins= customerRepo.findAll().stream().map(Customer::getLogin).map(Login::getUsername).collect(Collectors.toList());
         loggerService.log(Level.INFO, "I am have passed customerRepo.findAllLoginsNative");
+        //browse through al username to see if the current username already exist
         long count = logins.stream().filter(name -> name.equalsIgnoreCase(login.getUsername())).count();
+        //if the count !=0 , the user exists so return true , else false
         return count!=0 ? true:false;
     }
 
@@ -110,8 +111,7 @@ public class CustomerServices {
         return 4;
     }
 
-    //Update phone number ,check syntax based on the REGEX
-    //Returns 0 = Updated , 1 : Customer not found , 2 : Phone number format not correct
+    //Find the user by username and set the phoneNumber
     public Customer updateCustomerPhoneNumber(String username, Customer tempCustomer) throws ParseException {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
         Customer customer = customerRepo.findCustomerByLoginUsername(username);
@@ -121,8 +121,7 @@ public class CustomerServices {
         return customerRepo.save(customer);
     }
 
-    //Update Email number ,check syntax based on the REGEX
-    //Returns 0 = Updated , 1 : Customer not found , 2 : Email format not correct
+    //Find the user by username and set the email
     public Customer updateCustomerEmail(String username, Customer tempCustomer) {
         loggerService.log(Level.INFO, "Finding the user to be updated");
         Customer customer = customerRepo.findCustomerByLoginUsername(username);
@@ -132,7 +131,8 @@ public class CustomerServices {
         return customerRepo.save(customer);
     }
 
-    //Update Customer address
+    //Find the user by username and set the address
+    //Important to set the Id to same of existing address in the customer
     public Customer updateCustomerAddress(String username, Address address) {
         loggerService.log(Level.INFO, "Finding the customer to be updated");
         Customer customer = customerRepo.findCustomerByLoginUsername(username);
@@ -154,6 +154,8 @@ public class CustomerServices {
         }
         return null;
     }
+
+   // If account baclance =0 , then user can delete a specific account
 
     @Transactional
     public Customer removeAccount(String username, String encryptedUrl) throws Exception{
