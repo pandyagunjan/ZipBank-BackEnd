@@ -3,7 +3,6 @@ package runner.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import runner.views.Views;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;

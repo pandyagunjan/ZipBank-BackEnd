@@ -29,22 +29,5 @@ public class TestHomePageDeleteLater {
         return "Hello World";
     }
 
-    //get accounts for the authenticated user only: THIS METHOD HAS BEEN MOVED TO ACCOUNTCONTROLLER
-/*    @GetMapping(value = "/myaccount")
-    public ResponseEntity<Set<Account>> readAllAccount(){
-        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return new ResponseEntity<>(customerServices.getAllAccounts(currentPrincipalName), HttpStatus.OK);
-    }*/
-
-
-    //get account for specific encrypted URL: THIS METHOD HAS BEEN MOVED TO ACCOUNTCONTROLLER
-/*    @GetMapping(value = "/{accountEncryptedUrl}")
-    public ResponseEntity<Account> readAccountById(@PathVariable String accountEncryptedUrl) throws Exception {
-        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long accountId = accountServices.getAllAccounts(currentPrincipalName).stream()
-                .filter(a->a.getEncryptedUrl().equals(accountEncryptedUrl))
-                .collect(Collectors.toList()).get(0).getId();
-        return new ResponseEntity<>(accountServices.readAccount(accountId), HttpStatus.OK);
-    }*/
 
 }

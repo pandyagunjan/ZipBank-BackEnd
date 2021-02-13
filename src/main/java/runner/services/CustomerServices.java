@@ -1,19 +1,14 @@
 package runner.services;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.mifmif.common.regex.Generex;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import runner.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import runner.repositories.CustomerRepo;
-
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -155,7 +150,7 @@ public class CustomerServices {
         return null;
     }
 
-   // If account baclance =0 , then user can delete a specific account
+   // If account balance =0 , then user can delete a specific account
 
     @Transactional
     public Customer removeAccount(String username, String encryptedUrl) throws Exception{

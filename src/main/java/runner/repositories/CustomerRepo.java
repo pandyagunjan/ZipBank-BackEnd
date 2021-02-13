@@ -4,9 +4,6 @@ import org.springframework.data.jpa.repository.Query;
 import runner.entities.Customer;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import runner.entities.Login;
-
-import java.util.Collection;
 import java.util.List;
 
 
@@ -15,9 +12,12 @@ public interface CustomerRepo extends CrudRepository<Customer,Long> {
 
     Customer findCustomerById(Long Id);
     Customer findCustomerByLoginUsername(String name);
+
+    //Below query was not used and hence the streams operations where modified
     @Query(
             value = "SELECT username FROM LOGIN",
             nativeQuery = true)
+
     List<String> findAllLoginsNative();
     List<Customer> findAll();
 }

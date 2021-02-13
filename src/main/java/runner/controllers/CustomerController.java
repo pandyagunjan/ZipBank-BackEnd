@@ -36,13 +36,6 @@ public class CustomerController {
             return new ResponseEntity<>("Login user name already exist", HttpStatus.CONFLICT);
     }
 
-/*    @PutMapping(value = "myaccount/profile")
-    public ResponseEntity<Customer> update(@RequestBody Customer customer) throws Exception {
-        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Customer customerReturned =customerServices.readCustomerByLogin(*//*currentPrincipalName*//* "user1");
-        Long id = customerReturned.getId();
-        return new ResponseEntity<>(customerServices.updateCustomer(id,customer), HttpStatus.OK);
-    }*/
 
     @JsonView(Views.PhoneNumber.class)
     @PutMapping(value = "myaccount/profile/phone")
