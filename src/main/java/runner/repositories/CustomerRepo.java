@@ -13,7 +13,7 @@ public interface CustomerRepo extends CrudRepository<Customer,Long> {
     Customer findCustomerById(Long Id);
     Customer findCustomerByLoginUsername(String name);
 
-    //Below query was not used and hence the streams operations where modified
+    //Below query was not used and hence the streams operations were modified
     @Query(
             value = "SELECT username FROM LOGIN",
             nativeQuery = true)

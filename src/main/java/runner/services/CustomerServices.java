@@ -51,7 +51,7 @@ public class CustomerServices {
         // Get all the usernames into a list Customer > Login > getUsername
         List<String> logins= customerRepo.findAll().stream().map(Customer::getLogin).map(Login::getUsername).collect(Collectors.toList());
         loggerService.log(Level.INFO, "I am have passed customerRepo.findAllLoginsNative");
-        //browse through al username to see if the current username already exist
+        //browse through all username to see if the current username already exist
         long count = logins.stream().filter(name -> name.equalsIgnoreCase(login.getUsername())).count();
         //if the count !=0 , the user exists so return true , else false
         return count!=0 ? true:false;
@@ -95,6 +95,8 @@ public class CustomerServices {
         accounts = getAllAccounts(id);
         result = accounts.stream().filter((account) -> account.getBalance() > 0).collect(Collectors.toList());
         loggerService.log(Level.INFO, "Account list size " + result.size());
+
+        //if no accounts with > 0 found AND there are accounts present , then only delete.
         if (result.size() == 0 && accounts.size() != 0) {
             customerRepo.delete(customer);
             loggerService.log(Level.INFO, "User has been deleted as account balance for all accounts 0 , All accounts are deleted as well.");
